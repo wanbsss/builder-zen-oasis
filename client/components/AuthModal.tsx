@@ -11,6 +11,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useLanguage } from "@/lib/i18n";
+import { useAuth } from "@/lib/auth";
+import { toast } from "@/hooks/use-toast";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -21,29 +24,75 @@ interface AuthModalProps {
 export default function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalProps) {
   const [mode, setMode] = useState<"login" | "register">(initialMode);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     username: "",
     confirmPassword: "",
   });
+  const { t } = useLanguage();
+  const { login, register } = useAuth();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle authentication logic here
-    console.log("Auth attempt:", mode, formData);
-    // For demo purposes, just close the modal
-    onClose();
+    setIsLoading(true);
+
+    try {
+      if (mode === "login") {
+        const success = await login(formData.email, formData.password);
+        if (success) {
+          toast({
+            title: t.loginSuccess,
+            description: "Hoş geldiniz!",
+          });
+          onClose();
+        } else {
+          toast({
+            title: "Hata",
+            description: t.invalidCredentials,
+            variant: "destructive",
+          });
+        }
+      } else {
+        if (formData.password !== formData.confirmPassword) {
+          toast({
+            title: "Hata",
+            description: "Şifreler eşleşmiyor",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const success = await register(formData.username, formData.email, formData.password);
+        if (success) {
+          toast({
+            title: t.registrationSuccess,
+            description: "Hesabınız oluşturuldu ve giriş yaptınız!",
+          });
+          onClose();
+        } else {
+          toast({
+            title: "Hata",
+            description: "Bu e-posta adresi zaten kullanılıyor",
+            variant: "destructive",
+          });
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSocialAuth = (provider: string) => {
-    console.log("Social auth with:", provider);
-    // Handle social authentication
-    onClose();
+    toast({
+      title: "Yakında Geliyor",
+      description: `${provider} ile giri\u015f özelli\u011fi yak\u0131nda eklenecek`,
+    });
   };
 
   const toggleMode = () => {
@@ -56,26 +105,23 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
       <DialogContent className="sm:max-w-md bg-anime-card border-white/10 text-white">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
-            {mode === "login" ? "Welcome Back" : "Join AnimeStream"}
+            {mode === "login" ? t.welcomeBack : t.joinAnimewa}
           </DialogTitle>
           <DialogDescription className="text-center text-gray-400">
-            {mode === "login" 
-              ? "Sign in to continue your anime journey" 
-              : "Create an account to unlock unlimited anime streaming"
-            }
+            {mode === "login" ? t.signInMessage : t.createAccountMessage}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {mode === "register" && (
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-gray-300">Username</Label>
+              <Label htmlFor="username" className="text-gray-300">{t.username}</Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
                   id="username"
                   type="text"
-                  placeholder="Enter your username"
+                  placeholder={t.username}
                   value={formData.username}
                   onChange={(e) => handleInputChange("username", e.target.value)}
                   className="pl-10 bg-black/50 border-white/20 text-white placeholder:text-gray-400 focus:border-neon-blue"
@@ -86,13 +132,13 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-300">Email</Label>
+            <Label htmlFor="email" className="text-gray-300">{t.email}</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input
                 id="email"
                 type="email"
-                placeholder="Enter your email"
+                placeholder={t.email}
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
                 className="pl-10 bg-black/50 border-white/20 text-white placeholder:text-gray-400 focus:border-neon-blue"
@@ -102,13 +148,13 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-300">Password</Label>
+            <Label htmlFor="password" className="text-gray-300">{t.password}</Label>
             <div className="relative">
               <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
+                placeholder={t.password}
                 value={formData.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
                 className="pl-10 pr-10 bg-black/50 border-white/20 text-white placeholder:text-gray-400 focus:border-neon-blue"
@@ -126,13 +172,13 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
 
           {mode === "register" && (
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-gray-300">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-gray-300">{t.confirmPassword}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
                   id="confirmPassword"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Confirm your password"
+                  placeholder={t.confirmPassword}
                   value={formData.confirmPassword}
                   onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
                   className="pl-10 bg-black/50 border-white/20 text-white placeholder:text-gray-400 focus:border-neon-blue"
@@ -148,20 +194,20 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
                 type="button"
                 className="text-sm text-neon-blue hover:text-neon-purple transition-colors"
               >
-                Forgot password?
+                {t.forgotPassword}
               </button>
             </div>
           )}
 
-          <Button type="submit" className="w-full btn-primary text-lg py-3">
-            {mode === "login" ? "Sign In" : "Create Account"}
+          <Button type="submit" className="w-full btn-primary text-lg py-3" disabled={isLoading}>
+            {isLoading ? "Yükleniyor..." : mode === "login" ? t.signIn : t.createAccount}
           </Button>
         </form>
 
         <div className="relative">
           <Separator className="bg-white/20" />
           <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-anime-card px-4 text-gray-400 text-sm">
-            or continue with
+            {t.orContinueWith}
           </span>
         </div>
 
@@ -214,23 +260,23 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
 
         <div className="text-center text-sm">
           <span className="text-gray-400">
-            {mode === "login" ? "Don't have an account?" : "Already have an account?"}
+            {mode === "login" ? t.dontHaveAccount : t.alreadyHaveAccount}
           </span>
           <button
             type="button"
             onClick={toggleMode}
             className="ml-2 text-neon-blue hover:text-neon-purple transition-colors font-medium"
           >
-            {mode === "login" ? "Sign up" : "Sign in"}
+            {mode === "login" ? t.signUp : t.signIn}
           </button>
         </div>
 
         {mode === "register" && (
           <p className="text-xs text-gray-400 text-center">
-            By creating an account, you agree to our{" "}
-            <a href="#" className="text-neon-blue hover:underline">Terms of Service</a>{" "}
-            and{" "}
-            <a href="#" className="text-neon-blue hover:underline">Privacy Policy</a>.
+            {t.byCreatingAccount}{" "}
+            <a href="#" className="text-neon-blue hover:underline">{t.termsOfService}</a>{" "}
+            ve{" "}
+            <a href="#" className="text-neon-blue hover:underline">{t.privacyPolicy}</a> kabuletmiş olursunuz.
           </p>
         )}
       </DialogContent>

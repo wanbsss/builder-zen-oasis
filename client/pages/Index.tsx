@@ -5,45 +5,49 @@ import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import AnimeCard, { sampleAnimes } from "@/components/AnimeCard";
 import AuthModal from "@/components/AuthModal";
+import { useLanguage } from "@/lib/i18n";
+import { useAuth } from "@/lib/auth";
 
 export default function Index() {
   const [currentHero, setCurrentHero] = useState(0);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const { t } = useLanguage();
+  const { isAuthenticated } = useAuth();
 
   // Featured anime for hero section
   const featuredAnimes = [
     {
       id: "hero-1",
       title: "Attack on Titan Final Season",
-      description: "Humanity's last stand against the titans. The truth behind the walls is finally revealed in this epic conclusion to the legendary series.",
-      poster: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920&h=1080&fit=crop",
+      description: "İnsanlığın titanlara karşı son duruşu. Duvarların arkasındaki gerçek, bu efsanevi serinin destansı finalinde sonunda ortaya çıkıyor.",
+      poster: "https://wallpaperaccess.com/full/1088163.jpg",
       rating: 9.0,
       year: 2023,
-      genres: ["Action", "Drama", "Fantasy"],
+      genres: ["Aksiyon", "Drama", "Fantastik"],
       episodes: 87,
-      duration: "24min",
+      duration: "24dk",
     },
     {
       id: "hero-2", 
       title: "Jujutsu Kaisen Shibuya Arc",
-      description: "The most intense arc yet. Follow Yuji and friends as they face their greatest challenge in the heart of Shibuya during Halloween night.",
-      poster: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?w=1920&h=1080&fit=crop",
+      description: "Şimdiye kadarki en yoğun bölüm. Yuji ve arkadaşlarının Cadılar Bayramı gecesi Shibuya'nın kalbinde karşılaştıkları en büyük meydan okumayı takip edin.",
+      poster: "https://wallpaperaccess.com/full/2792930.jpg",
       rating: 8.9,
       year: 2023,
-      genres: ["Action", "Supernatural", "School"],
+      genres: ["Aksiyon", "Doğaüstü", "Okul"],
       episodes: 24,
-      duration: "23min",
+      duration: "23dk",
     },
     {
       id: "hero-3",
       title: "Demon Slayer: Hashira Training Arc", 
-      description: "The Hashira prepare for the final battle. Witness intense training sequences and character development in this thrilling arc.",
-      poster: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=1920&h=1080&fit=crop",
+      description: "Hashira'lar son savaşa hazırlanıyor. Bu heyecan verici bölümde yoğun antrenman sahneleri ve karakter gelişimi izleyin.",
+      poster: "https://wallpaperaccess.com/full/2532191.jpg",
       rating: 8.8,
       year: 2024,
-      genres: ["Action", "Historical", "Supernatural"],
+      genres: ["Aksiyon", "Tarihi", "Doğaüstü"],
       episodes: 11,
-      duration: "23min",
+      duration: "23dk",
     },
   ];
 
@@ -67,12 +71,20 @@ export default function Index() {
 
   // Sample data for different sections
   const trendingAnimes = sampleAnimes.slice(0, 6);
-  const newReleases = sampleAnimes.slice(2, 8);
+  const newReleases = sampleAnimes.slice(3, 9);
   const topRated = sampleAnimes.filter(anime => anime.rating >= 8.5);
   const continueWatching = sampleAnimes.slice(0, 4).map(anime => ({
     ...anime,
     progress: Math.floor(Math.random() * 80) + 10,
   }));
+
+  const handleWatchClick = () => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
+    // Navigate to watch page
+  };
 
   return (
     <div className="min-h-screen bg-anime-dark">
@@ -94,7 +106,7 @@ export default function Index() {
           <div className="max-w-2xl space-y-6 animate-slide-up">
             <div className="flex items-center space-x-4 mb-4">
               <Badge className="bg-neon-blue/20 text-neon-blue border-neon-blue/50">
-                Featured
+                {t.featured}
               </Badge>
               <div className="flex items-center space-x-2 text-gray-300">
                 <Star className="h-4 w-4 fill-neon-blue text-neon-blue" />
@@ -103,7 +115,7 @@ export default function Index() {
                 <span>{currentFeature.year}</span>
                 <span>•</span>
                 <Clock className="h-4 w-4" />
-                <span>{currentFeature.episodes} episodes</span>
+                <span>{currentFeature.episodes} {t.episodes}</span>
               </div>
             </div>
 
@@ -124,13 +136,17 @@ export default function Index() {
             </div>
 
             <div className="flex items-center space-x-4">
-              <Button size="lg" className="btn-primary">
+              <Button 
+                size="lg" 
+                className="btn-primary"
+                onClick={handleWatchClick}
+              >
                 <Play className="h-5 w-5 mr-2" />
-                Watch Now
+                {t.watchNow}
               </Button>
               <Button size="lg" className="btn-secondary">
                 <Info className="h-5 w-5 mr-2" />
-                More Info
+                {t.moreInfo}
               </Button>
             </div>
           </div>
@@ -170,30 +186,32 @@ export default function Index() {
 
       {/* Content Sections */}
       <div className="container mx-auto px-4 py-16 space-y-16">
-        {/* Continue Watching */}
-        <section>
-          <h2 className="section-title flex items-center">
-            <Clock className="h-8 w-8 mr-3 text-neon-blue" />
-            Continue Watching
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            {continueWatching.map((anime) => (
-              <AnimeCard
-                key={anime.id}
-                {...anime}
-                size="sm"
-                showProgress={true}
-                progress={anime.progress}
-              />
-            ))}
-          </div>
-        </section>
+        {/* Continue Watching - Only show for authenticated users */}
+        {isAuthenticated && (
+          <section>
+            <h2 className="section-title flex items-center">
+              <Clock className="h-8 w-8 mr-3 text-neon-blue" />
+              {t.continueWatching}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+              {continueWatching.map((anime) => (
+                <AnimeCard
+                  key={anime.id}
+                  {...anime}
+                  size="sm"
+                  showProgress={true}
+                  progress={anime.progress}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Trending Now */}
         <section>
           <h2 className="section-title flex items-center">
             <TrendingUp className="h-8 w-8 mr-3 text-neon-purple" />
-            Trending Now
+            {t.trendingNow}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {trendingAnimes.map((anime) => (
@@ -206,9 +224,9 @@ export default function Index() {
         <section>
           <h2 className="section-title flex items-center">
             <span className="w-8 h-8 mr-3 bg-gradient-to-r from-neon-blue to-neon-purple rounded flex items-center justify-center text-black font-bold">
-              N
+              Y
             </span>
-            New Releases
+            {t.newReleases}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {newReleases.map((anime) => (
@@ -221,7 +239,7 @@ export default function Index() {
         <section>
           <h2 className="section-title flex items-center">
             <Star className="h-8 w-8 mr-3 text-yellow-400 fill-current" />
-            Top Rated
+            {t.topRated}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {topRated.map((anime) => (
@@ -229,6 +247,27 @@ export default function Index() {
             ))}
           </div>
         </section>
+
+        {/* Login Prompt for Unauthenticated Users */}
+        {!isAuthenticated && (
+          <section className="text-center py-16">
+            <div className="max-w-2xl mx-auto">
+              <h2 className="text-4xl font-bold text-white mb-6">
+                {t.mustLoginToWatch}
+              </h2>
+              <p className="text-xl text-gray-300 mb-8">
+                Binlerce anime ve film için giriş yapın. Kaldığınız yerden devam edin, favorilerinizi kaydedin.
+              </p>
+              <Button 
+                size="lg" 
+                className="btn-primary text-xl px-8 py-4"
+                onClick={() => setShowAuthModal(true)}
+              >
+                {t.signIn}
+              </Button>
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Footer */}
@@ -236,41 +275,41 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="text-2xl font-bold neon-text mb-4">AnimeStream</div>
+              <div className="text-2xl font-bold neon-text mb-4">Animewa</div>
               <p className="text-gray-400">
-                The ultimate destination for anime streaming. Watch your favorite shows in HD quality.
+                Anime izleme deneyimi için en iyi destinasyon. Favori dizilerinizi HD kalitede izleyin.
               </p>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-4">Browse</h3>
+              <h3 className="text-white font-semibold mb-4">{t.browse}</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-neon-blue transition-colors">Popular</a></li>
-                <li><a href="#" className="hover:text-neon-blue transition-colors">New Releases</a></li>
-                <li><a href="#" className="hover:text-neon-blue transition-colors">Top Rated</a></li>
-                <li><a href="#" className="hover:text-neon-blue transition-colors">Genres</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.popular}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.newReleases}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.topRated}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.genres}</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-4">Support</h3>
+              <h3 className="text-white font-semibold mb-4">{t.support}</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-neon-blue transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-neon-blue transition-colors">Contact Us</a></li>
-                <li><a href="#" className="hover:text-neon-blue transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-neon-blue transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.helpCenter}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.contactUs}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.termsOfService}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.privacyPolicy}</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-4">Connect</h3>
+              <h3 className="text-white font-semibold mb-4">{t.connect}</h3>
               <ul className="space-y-2 text-gray-400">
                 <li><a href="#" className="hover:text-neon-blue transition-colors">Discord</a></li>
                 <li><a href="#" className="hover:text-neon-blue transition-colors">Twitter</a></li>
                 <li><a href="#" className="hover:text-neon-blue transition-colors">Reddit</a></li>
-                <li><a href="#" className="hover:text-neon-blue transition-colors">Newsletter</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.newsletter}</a></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-white/10 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 AnimeStream. All rights reserved.</p>
+            <p>&copy; 2024 Animewa. {t.allRightsReserved}</p>
           </div>
         </div>
       </footer>

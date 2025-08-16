@@ -115,10 +115,10 @@ export default function Browse() {
           {/* Page Header */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-white mb-4">
-              Anime Koleksiyonu
+              {getPageTitle()}
             </h1>
             <p className="text-gray-400 text-lg">
-              Geniş anime koleksiyonumuzu keşfedin. Filtreleme ve arama özellikleri ile aradığınızı kolayca bulun.
+              {getPageDescription()}
             </p>
           </div>
 

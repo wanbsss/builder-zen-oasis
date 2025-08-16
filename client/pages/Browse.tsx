@@ -24,13 +24,35 @@ export default function Browse() {
   const [sortBy, setSortBy] = useState("rating");
   const [viewMode, setViewMode] = useState("grid");
 
-  const genres = ["Aksiyon", "Macera", "Komedi", "Drama", "Fantastik", "Romantik", "Spor"];
+  // Get category from URL parameters
+  const category = searchParams.get('category') || 'all';
+
+  useEffect(() => {
+    // Update page title based on category
+    const categoryTitles = {
+      'anime': language === 'en' ? 'Anime Series' : 'Anime Serileri',
+      'movie': language === 'en' ? 'Anime Movies' : 'Anime Filmleri',
+      'trending': language === 'en' ? 'Trending Anime' : 'Trend Animeler',
+      'all': language === 'en' ? 'All Anime' : 'Tüm Animeler'
+    };
+    document.title = `${categoryTitles[category as keyof typeof categoryTitles]} - Animewa`;
+  }, [category, language]);
+
+  const genres = language === 'en'
+    ? ["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Romance", "Sports"]
+    : ["Aksiyon", "Macera", "Komedi", "Drama", "Fantastik", "Romantik", "Spor"];
   const years = ["2024", "2023", "2022", "2021", "2020", "2019", "2018"];
 
+  // Get base anime list based on category
+  const baseAnimes = category === 'all' ? sampleAnimes : getAnimeByCategory(category as any);
+
   // Filter animes
-  const filteredAnimes = sampleAnimes.filter(anime => {
-    const matchesSearch = anime.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesGenre = selectedGenre === "all" || anime.genre.some(g => g.includes(selectedGenre));
+  const filteredAnimes = baseAnimes.filter(anime => {
+    const searchTitle = language === 'en' ? anime.titleEn : anime.title;
+    const searchGenres = language === 'en' ? anime.genreEn : anime.genre;
+
+    const matchesSearch = searchTitle.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesGenre = selectedGenre === "all" || searchGenres.some(g => g.includes(selectedGenre));
     const matchesYear = selectedYear === "all" || anime.year.toString() === selectedYear;
 
     return matchesSearch && matchesGenre && matchesYear;
@@ -41,11 +63,48 @@ export default function Browse() {
       case "year":
         return b.year - a.year;
       case "title":
-        return a.title.localeCompare(b.title);
+        const titleA = language === 'en' ? a.titleEn : a.title;
+        const titleB = language === 'en' ? b.titleEn : b.title;
+        return titleA.localeCompare(titleB);
       default:
         return 0;
     }
   });
+
+  // Page title based on category
+  const getPageTitle = () => {
+    switch (category) {
+      case 'anime':
+        return language === 'en' ? 'Anime Series' : 'Anime Serileri';
+      case 'movie':
+        return language === 'en' ? 'Anime Movies' : 'Anime Filmleri';
+      case 'trending':
+        return language === 'en' ? 'Trending Anime' : 'Trend Animeler';
+      default:
+        return language === 'en' ? 'Browse Anime' : 'Anime Koleksiyonu';
+    }
+  };
+
+  const getPageDescription = () => {
+    switch (category) {
+      case 'anime':
+        return language === 'en'
+          ? 'Discover amazing anime series with our vast collection.'
+          : 'Geniş koleksiyonumuzla muhteşem anime serileri keşfedin.';
+      case 'movie':
+        return language === 'en'
+          ? 'Watch the best anime movies in high quality.'
+          : 'En iyi anime filmlerini yüksek kalitede izleyin.';
+      case 'trending':
+        return language === 'en'
+          ? 'Currently popular and trending anime you should not miss.'
+          : 'Şu anda popüler olan ve kaçırmamanız gereken trend animeler.';
+      default:
+        return language === 'en'
+          ? 'Explore our vast anime collection with advanced filters and search capabilities.'
+          : 'Geniş anime koleksiyonumuzu keşfedin. Filtreleme ve arama özellikleri ile aradığınızı kolayca bulun.';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-anime-dark">

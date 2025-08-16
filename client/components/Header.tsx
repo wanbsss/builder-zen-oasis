@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Search, Menu, X, User, Bell, Settings, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SearchDropdown from "@/components/SearchDropdown";
 import { useLanguage } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 

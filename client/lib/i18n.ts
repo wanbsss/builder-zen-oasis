@@ -1,3 +1,5 @@
+import { createContext, useContext, useState, ReactNode } from 'react';
+
 export interface Translations {
   // Navigation
   home: string;
@@ -281,8 +283,6 @@ export const en: Translations = {
 };
 
 // Language context
-import { createContext, useContext, useState, ReactNode } from 'react';
-
 export type Language = 'tr' | 'en';
 
 interface LanguageContextType {

@@ -59,24 +59,10 @@ export default function Header({ onAuthClick }: HeaderProps) {
             {/* Search */}
             <div className="relative">
               {isSearchOpen ? (
-                <div className="flex items-center space-x-2">
-                  <Input
-                    type="text"
-                    placeholder={t.searchAnime}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-64 bg-black/50 border-white/20 text-white placeholder:text-gray-400 focus:border-neon-blue"
-                    autoFocus
-                  />
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsSearchOpen(false)}
-                    className="text-gray-400 hover:text-white"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
+                <SearchDropdown
+                  onClose={() => setIsSearchOpen(false)}
+                  className="w-80"
+                />
               ) : (
                 <Button
                   variant="ghost"

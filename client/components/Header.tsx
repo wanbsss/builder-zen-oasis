@@ -24,9 +24,9 @@ export default function Header({ onAuthClick }: HeaderProps) {
 
   const navItems = [
     { name: t.home, href: "/" },
-    { name: t.anime, href: "/anime" },
-    { name: t.movies, href: "/movies" },
-    { name: t.trending, href: "/trending" },
+    { name: t.anime, href: "/anime?category=anime" },
+    { name: t.movies, href: "/anime?category=movie" },
+    { name: t.trending, href: "/anime?category=trending" },
     { name: t.myList, href: "/my-list" },
   ];
 

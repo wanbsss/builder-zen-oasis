@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Search, Filter, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,11 +12,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Header from "@/components/Header";
-import AnimeCard, { sampleAnimes } from "@/components/AnimeCard";
+import AnimeCard, { sampleAnimes, getAnimeByCategory } from "@/components/AnimeCard";
 import { useLanguage } from "@/lib/i18n";
 
 export default function Browse() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("all");
   const [selectedYear, setSelectedYear] = useState("all");

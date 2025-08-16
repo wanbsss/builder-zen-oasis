@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import AnimeCard, { sampleAnimes } from "@/components/AnimeCard";
+import AuthModal from "@/components/AuthModal";
 
 export default function Index() {
   const [currentHero, setCurrentHero] = useState(0);

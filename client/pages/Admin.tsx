@@ -104,6 +104,7 @@ export default function Admin() {
   const [apiSearchResults, setApiSearchResults] = useState<any[]>([]);
   const [isApiLoading, setIsApiLoading] = useState(false);
   const [selectedApiAnimes, setSelectedApiAnimes] = useState<Set<number>>(new Set());
+  const [isCheckingImages, setIsCheckingImages] = useState(false);
   
   const [newAnime, setNewAnime] = useState<NewAnime>({
     title: "",
@@ -280,7 +281,7 @@ export default function Admin() {
   const handleDeleteAnime = (id: string) => {
     storeDeleteAnime(id);
     toast({
-      title: "Ba��arılı",
+      title: "Başarılı",
       description: "Anime silindi!",
     });
   };
@@ -647,7 +648,7 @@ export default function Admin() {
                       {isApiLoading ? "Aranıyor..." : "Ara"}
                     </Button>
                     <Button onClick={handleLoadPopularAnime} disabled={isApiLoading} variant="outline" className="border-white/20">
-                      Pop��ler
+                      Popüler
                     </Button>
                   </div>
 
@@ -1504,7 +1505,7 @@ One Piece`}
               <div className="bg-anime-card p-6 rounded-lg border border-white/10">
                 <h2 className="text-2xl font-bold text-white mb-4">Anime İstekleri</h2>
                 <p className="text-gray-400 mb-6">
-                  Kullanıcıların gönderdiği anime isteklerini burada görüntüleyebilir ve yönetebilirsiniz.
+                  Kullanıcıların gönderdiği anime isteklerini burada gör��ntüleyebilir ve yönetebilirsiniz.
                 </p>
 
                 <div className="grid gap-4">

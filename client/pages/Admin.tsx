@@ -96,6 +96,9 @@ export default function Admin() {
     getEpisodesByAnimeId,
     notifications,
     addNotification,
+    loading,
+    fetchAnimes,
+    fetchNotifications,
   } = useAnimeStore();
 
   const [selectedAnime, setSelectedAnime] = useState<string | null>(null);

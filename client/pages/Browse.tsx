@@ -18,6 +18,7 @@ import { useLanguage } from "@/lib/i18n";
 
 export default function Browse() {
   const { t, language } = useLanguage();
+  const { animes } = useAnimeStore();
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("all");

@@ -24,7 +24,8 @@ export default function Index() {
       description: language === 'en' 
         ? "Humanity's last stand against the titans. The truth behind the walls is finally revealed in this epic conclusion to the legendary series."
         : "İnsanlığın titanlara karşı son duruşu. Duvarların arkasındaki gerçek, bu efsanevi serinin destansı finalinde sonunda ortaya çıkıyor.",
-      poster: "https://wallpaperaccess.com/full/1088163.jpg",
+      poster: "https://cdn.myanimelist.net/images/anime/10/47347.jpg",
+      banner: "https://wallpaperaccess.com/full/1088163.jpg",
       rating: 9.0,
       year: 2023,
       genres: language === 'en' ? ["Action", "Drama", "Fantasy"] : ["Aksiyon", "Drama", "Fantastik"],
@@ -37,7 +38,8 @@ export default function Index() {
       description: language === 'en'
         ? "The most intense arc yet. Follow Yuji and friends as they face their greatest challenge in the heart of Shibuya during Halloween night."
         : "Şimdiye kadarki en yoğun bölüm. Yuji ve arkadaşlarının Cadılar Bayramı gecesi Shibuya'nın kalbinde karşılaştıkları en büyük meydan okumayı takip edin.",
-      poster: "https://wallpaperaccess.com/full/2792930.jpg",
+      poster: "https://cdn.myanimelist.net/images/anime/1171/109222.jpg",
+      banner: "https://wallpaperaccess.com/full/2792930.jpg",
       rating: 8.9,
       year: 2023,
       genres: language === 'en' ? ["Action", "Supernatural", "School"] : ["Aksiyon", "Doğaüstü", "Okul"],
@@ -50,7 +52,8 @@ export default function Index() {
       description: language === 'en'
         ? "The Hashira prepare for the final battle. Witness intense training sequences and character development in this thrilling arc."
         : "Hashira'lar son savaşa hazırlanıyor. Bu heyecan verici bölümde yoğun antrenman sahneleri ve karakter gelişimi izleyin.",
-      poster: "https://wallpaperaccess.com/full/2532191.jpg",
+      poster: "https://cdn.myanimelist.net/images/anime/1286/99889.jpg",
+      banner: "https://wallpaperaccess.com/full/2532191.jpg",
       rating: 8.8,
       year: 2024,
       genres: language === 'en' ? ["Action", "Historical", "Supernatural"] : ["Aksiyon", "Tarihi", "Doğaüstü"],

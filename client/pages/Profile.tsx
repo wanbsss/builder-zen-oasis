@@ -81,7 +81,7 @@ export default function Profile() {
 
   useEffect(() => {
     // Load user preferences from localStorage
-    const savedPrefs = localStorage.getItem(`animewa_preferences_${user?.id}`);
+    const savedPrefs = localStorage.getItem(`aniwa_preferences_${user?.id}`);
     if (savedPrefs) {
       try {
         setPreferences(JSON.parse(savedPrefs));
@@ -92,7 +92,7 @@ export default function Profile() {
   }, [user?.id]);
 
   const savePreferences = () => {
-    localStorage.setItem(`animewa_preferences_${user?.id}`, JSON.stringify(preferences));
+    localStorage.setItem(`aniwa_preferences_${user?.id}`, JSON.stringify(preferences));
     toast({
       title: "Ayarlar Kaydedildi",
       description: "Tercihleriniz başarıyla güncellendi",

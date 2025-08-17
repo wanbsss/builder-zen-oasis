@@ -108,6 +108,14 @@ export default function Admin() {
   const [showAddNotification, setShowAddNotification] = useState(false);
   const [expandedAnimes, setExpandedAnimes] = useState<Set<string>>(new Set());
   const [lastUpdate, setLastUpdate] = useState(new Date());
+  const [stats, setStats] = useState({
+    totalAnimes: 0,
+    totalEpisodes: 0,
+    totalUsers: 0,
+    todayWatches: 0
+  });
+  const [users, setUsers] = useState<any[]>([]);
+  const [statsLoading, setStatsLoading] = useState(false);
 
   const [newNotification, setNewNotification] = useState({
     title: "",
@@ -778,7 +786,7 @@ export default function Admin() {
                 <div className="bg-anime-card p-6 rounded-lg border border-white/10 hover:border-neon-pink/30 transition-all">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-gray-400 text-sm">Toplam Kullanıcı</p>
+                      <p className="text-gray-400 text-sm">Toplam Kullan��cı</p>
                       <p className="text-2xl font-bold text-white">
                         {stats.totalUsers}
                       </p>

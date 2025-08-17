@@ -915,7 +915,7 @@ export default function Admin() {
                           <div>
                             <div className="flex items-center justify-between mb-2">
                               <h4 className="text-white font-semibold">
-                                Bölümler ({animeEpisodes[anime.id]?.length || 0})
+                                Bölümler ({getEpisodesByAnimeId(anime.id).length})
                               </h4>
                               <Button
                                 variant="outline"
@@ -930,10 +930,10 @@ export default function Admin() {
                                 Bölüm Ekle
                               </Button>
                             </div>
-                            
-                            {animeEpisodes[anime.id]?.length ? (
+
+                            {getEpisodesByAnimeId(anime.id).length ? (
                               <div className="grid gap-2">
-                                {animeEpisodes[anime.id].map((episode) => (
+                                {getEpisodesByAnimeId(anime.id).map((episode) => (
                                   <div key={episode.id} className="bg-black/30 p-3 rounded border border-white/10">
                                     <div className="flex items-center justify-between">
                                       <div>
@@ -943,17 +943,22 @@ export default function Admin() {
                                         <p className="text-gray-400 text-xs">
                                           {episode.duration} • {new Date(episode.airDate).toLocaleDateString('tr-TR')}
                                         </p>
+                                        {episode.videoUrl && (
+                                          <p className="text-neon-blue text-xs truncate mt-1">
+                                            📹 {episode.videoUrl}
+                                          </p>
+                                        )}
                                       </div>
                                       <div className="flex items-center space-x-1">
-                                        <Button 
-                                          variant="outline" 
+                                        <Button
+                                          variant="outline"
                                           size="sm"
                                           className="border-white/20 text-white hover:bg-white/10 h-6 w-6 p-0"
                                         >
                                           <Edit className="h-3 w-3" />
                                         </Button>
-                                        <Button 
-                                          variant="outline" 
+                                        <Button
+                                          variant="outline"
                                           size="sm"
                                           className="border-red-500/20 text-red-400 hover:bg-red-500/10 h-6 w-6 p-0"
                                         >

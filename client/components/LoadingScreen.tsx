@@ -40,7 +40,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                 {/* Logo Image */}
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F9429ade95d6d46d2b6c25d61897ecb74%2F6f7ee262ff5a4c2996d49af22cbd1997?format=webp&width=800"
-                  alt="Animewa"
+                  alt="Aniwa"
                   className="relative z-10 w-64 h-32 md:w-96 md:h-48 object-contain animate-float"
                 />
               </div>

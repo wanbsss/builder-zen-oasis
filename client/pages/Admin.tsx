@@ -533,6 +533,84 @@ export default function Admin() {
               </div>
             </TabsContent>
 
+            {/* Bulk Import Dialog */}
+            <Dialog open={showBulkImport} onOpenChange={setShowBulkImport}>
+              <DialogContent className="max-w-2xl bg-anime-card border-white/10 text-white">
+                <DialogHeader>
+                  <DialogTitle>Toplu Anime İçe Aktarma</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="bulk-import">Anime Listesi</Label>
+                    <p className="text-sm text-gray-400 mb-2">
+                      Her satıra bir anime adı yazın. Otomatik olarak temel bilgilerle eklenecek.
+                    </p>
+                    <Textarea
+                      id="bulk-import"
+                      value={bulkImportText}
+                      onChange={(e) => setBulkImportText(e.target.value)}
+                      className="bg-black/50 border-white/20 text-white min-h-48"
+                      placeholder={`Attack on Titan
+Demon Slayer
+Your Name
+Spirited Away
+One Piece`}
+                    />
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowBulkImport(false)}
+                      className="border-white/20 text-white hover:bg-white/10"
+                    >
+                      İptal
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        const animeList = bulkImportText
+                          .split('\n')
+                          .map(line => line.trim())
+                          .filter(line => line.length > 0);
+
+                        let addedCount = 0;
+                        animeList.forEach(title => {
+                          const animeData = {
+                            title: title,
+                            titleEn: title,
+                            poster: "https://via.placeholder.com/400x600",
+                            rating: 7.0 + Math.random() * 2,
+                            year: new Date().getFullYear() - Math.floor(Math.random() * 5),
+                            episodes: Math.floor(Math.random() * 50) + 12,
+                            genre: ["Aksiyon"],
+                            genreEn: ["Action"],
+                            duration: "24min",
+                            description: `${title} - Açıklama yakında eklenecek`,
+                            descriptionEn: `${title} - Description coming soon`,
+                            status: "upcoming" as const,
+                            category: "anime" as const
+                          };
+                          storeAddAnime(animeData);
+                          addedCount++;
+                        });
+
+                        setBulkImportText("");
+                        setShowBulkImport(false);
+
+                        toast({
+                          title: "Toplu İçe Aktarma Tamamlandı",
+                          description: `${addedCount} anime başarıyla eklendi`,
+                        });
+                      }}
+                      className="btn-primary"
+                      disabled={!bulkImportText.trim()}
+                    >
+                      {bulkImportText.split('\n').filter(line => line.trim()).length} Anime Ekle
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+
             {/* Add Notification Dialog */}
             <Dialog open={showAddNotification} onOpenChange={setShowAddNotification}>
               <DialogContent className="max-w-md bg-anime-card border-white/10 text-white">
@@ -1106,7 +1184,7 @@ export default function Admin() {
                                     <div className="flex items-center justify-between">
                                       <div>
                                         <h5 className="text-white font-medium text-sm">
-                                          Bölüm {episode.episodeNumber}: {language === 'en' ? episode.titleEn : episode.title}
+                                          Böl��m {episode.episodeNumber}: {language === 'en' ? episode.titleEn : episode.title}
                                         </h5>
                                         <p className="text-gray-400 text-xs">
                                           {episode.duration} • {new Date(episode.airDate).toLocaleDateString('tr-TR')}

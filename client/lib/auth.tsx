@@ -24,14 +24,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // LocalStorage'de kullanıcıları saklama
-const USERS_KEY = 'animewa_users';
-const CURRENT_USER_KEY = 'animewa_current_user';
+const USERS_KEY = 'aniwa_users';
+const CURRENT_USER_KEY = 'aniwa_current_user';
 
 // Demo admin kullanıcısı
 const DEMO_ADMIN = {
   id: 'admin_001',
   username: 'admin',
-  email: 'admin@animewa.com',
+  email: 'admin@aniwa.com',
   password: 'admin123', // Gerçek uygulamada hash'lenmeli
   isAdmin: true,
   watchHistory: [],
@@ -87,7 +87,7 @@ function setCurrentUser(user: User | null) {
 
 // Basit şifre hash'leme (gerçek uygulamada bcrypt kullanılmalı)
 function hashPassword(password: string): string {
-  return btoa(password + 'animewa_salt');
+  return btoa(password + 'aniwa_salt');
 }
 
 // Auth Provider

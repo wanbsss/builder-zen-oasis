@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -29,127 +28,57 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   }, [onComplete]);
 
   return (
-    <AnimatePresence>
-      {isLoading && (
-        <motion.div
-          className="fixed inset-0 z-50 bg-black flex items-center justify-center"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+    (
+        <div className={`fixed inset-0 z-50 bg-black flex items-center justify-center transition-opacity duration-500 ${isLoading ? 'opacity-100' : 'opacity-0'}`}>
           <div className="text-center">
             {/* Main Logo */}
-            <motion.div
-              className="mb-8"
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
-              <div className="relative">
+            <div className="mb-8 animate-pulse-glow">
+              <div className="relative flex items-center justify-center">
                 {/* Glow effect */}
-                <motion.div
-                  className="absolute inset-0 blur-xl"
-                  animate={{ 
-                    boxShadow: [
-                      "0 0 50px #00d4ff",
-                      "0 0 80px #ff0080", 
-                      "0 0 50px #00d4ff"
-                    ]
-                  }}
-                  transition={{ 
-                    duration: 2, 
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
+                <div className="absolute inset-0 blur-2xl bg-gradient-to-r from-neon-blue via-neon-purple to-neon-pink opacity-60 animate-pulse-color" />
+
+                {/* Logo Image */}
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F9429ade95d6d46d2b6c25d61897ecb74%2F6f7ee262ff5a4c2996d49af22cbd1997?format=webp&width=800"
+                  alt="Animewa"
+                  className="relative z-10 w-64 h-32 md:w-96 md:h-48 object-contain animate-float"
                 />
-                
-                {/* Logo Text */}
-                <h1 className="text-8xl md:text-9xl font-bold relative z-10">
-                  <motion.span
-                    className="inline-block bg-gradient-to-r from-neon-blue via-neon-purple to-neon-pink bg-clip-text text-transparent"
-                    animate={{ 
-                      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-                    }}
-                    transition={{ 
-                      duration: 3, 
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                    style={{ backgroundSize: "200% 200%" }}
-                  >
-                    ANIMEWA
-                  </motion.span>
-                </h1>
               </div>
-            </motion.div>
+            </div>
 
             {/* Subtitle */}
-            <motion.p
-              className="text-gray-400 text-xl md:text-2xl mb-12 font-light"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-            >
+            <p className="text-gray-400 text-xl md:text-2xl mb-12 font-light animate-fade-in-delayed">
               Ultimate Anime Streaming Experience
-            </motion.p>
+            </p>
 
             {/* Loading Bar */}
-            <motion.div
-              className="w-96 max-w-full mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-            >
+            <div className="w-96 max-w-full mx-auto animate-fade-in-delayed-2">
               <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
-                <motion.div
-                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-neon-blue to-neon-purple rounded-full"
+                <div
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-neon-blue to-neon-purple rounded-full transition-all duration-300"
                   style={{ width: `${progress}%` }}
-                  transition={{ duration: 0.1 }}
                 />
-                
+
                 {/* Shimmer effect */}
-                <motion.div
-                  className="absolute top-0 left-0 h-full w-20 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                  animate={{ x: [-80, 400] }}
-                  transition={{ 
-                    duration: 1.5, 
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                />
+                <div className="absolute top-0 left-0 h-full w-20 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
               </div>
-              
+
               {/* Loading percentage */}
-              <motion.p
-                className="text-center text-neon-blue text-sm mt-3 font-medium"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
+              <p className="text-center text-neon-blue text-sm mt-3 font-medium animate-pulse">
                 {Math.round(progress)}%
-              </motion.p>
-            </motion.div>
+              </p>
+            </div>
 
             {/* Animated particles */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               {[...Array(12)].map((_, i) => (
-                <motion.div
+                <div
                   key={i}
-                  className="absolute w-1 h-1 bg-neon-blue rounded-full"
-                  initial={{ 
-                    opacity: 0,
-                    x: Math.random() * window.innerWidth,
-                    y: window.innerHeight + 50
-                  }}
-                  animate={{
-                    opacity: [0, 1, 0],
-                    y: -50,
-                    x: Math.random() * window.innerWidth
-                  }}
-                  transition={{
-                    duration: Math.random() * 3 + 2,
-                    repeat: Infinity,
-                    delay: Math.random() * 2,
-                    ease: "easeOut"
+                  className="absolute w-1 h-1 bg-neon-blue rounded-full animate-float-particles"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    animationDuration: `${Math.random() * 3 + 2}s`
                   }}
                 />
               ))}
@@ -158,30 +87,17 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
             {/* Pulsing rings */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               {[...Array(3)].map((_, i) => (
-                <motion.div
+                <div
                   key={i}
-                  className="absolute border border-neon-blue/20 rounded-full"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ 
-                    scale: [0, 2, 3],
-                    opacity: [0, 0.6, 0]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    delay: i * 1,
-                    ease: "easeOut"
-                  }}
+                  className="absolute border border-neon-blue/20 rounded-full w-48 h-48 animate-pulse-rings"
                   style={{
-                    width: "200px",
-                    height: "200px",
+                    animationDelay: `${i * 1}s`
                   }}
                 />
               ))}
             </div>
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        </div>
+    )
   );
 }

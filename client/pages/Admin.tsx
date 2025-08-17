@@ -290,20 +290,16 @@ export default function Admin() {
       return;
     }
 
-    const episodes = animeEpisodes[selectedAnime] || [];
-    const episode: Episode = {
+    const existingEpisodes = getEpisodesByAnimeId(selectedAnime);
+    const episodeData = {
       ...newEpisode,
-      id: episodes.length + 1,
-      episodeNumber: episodes.length + 1
+      animeId: selectedAnime,
+      episodeNumber: existingEpisodes.length + 1
     };
 
-    setAnimeEpisodes(prev => ({
-      ...prev,
-      [selectedAnime]: [...(prev[selectedAnime] || []), episode]
-    }));
+    storeAddEpisode(episodeData);
 
     setNewEpisode({
-      id: 1,
       title: "",
       titleEn: "",
       description: "",
@@ -311,7 +307,8 @@ export default function Admin() {
       videoUrl: "",
       duration: "24min",
       episodeNumber: 1,
-      airDate: new Date().toISOString().split('T')[0]
+      airDate: new Date().toISOString().split('T')[0],
+      animeId: ""
     });
     setShowAddEpisode(false);
 

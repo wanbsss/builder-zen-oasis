@@ -524,32 +524,97 @@ export default function Admin() {
     });
   };
 
-  const handleQuickAdd = () => {
+  const handleQuickAdd = async () => {
     if (!quickAddTitle.trim()) return;
 
-    const animeData = {
-      title: quickAddTitle.trim(),
-      titleEn: quickAddTitle.trim(),
-      poster: "https://via.placeholder.com/400x600",
-      rating: 7.5,
-      year: new Date().getFullYear(),
-      episodes: 12,
-      genre: ["Aksiyon"],
-      genreEn: ["Action"],
-      duration: "24min",
-      description: `${quickAddTitle} - Açıklama yakında eklenecek`,
-      descriptionEn: `${quickAddTitle} - Description coming soon`,
-      status: "upcoming" as const,
-      category: "anime" as const
-    };
-
-    storeAddAnime(animeData);
-    setQuickAddTitle("");
+    const title = quickAddTitle.trim();
 
     toast({
-      title: "Hızlı Ekleme Başarılı",
-      description: `${quickAddTitle} temel bilgilerle eklendi. Detayları düzenleyebilirsiniz.`,
+      title: "Hızlı Ekleme Başlatıldı",
+      description: `${title} için otomatik veri toplama yapılıyor...`,
     });
+
+    try {
+      // Try to find the anime in the API first
+      const searchResults = await animeApi.searchAnime(title, 1);
+
+      let animeData;
+      if (searchResults.length > 0) {
+        // Use API data with banner fetching
+        const bannerUrl = await animeApi.searchBannerImage(title);
+        animeData = animeApi.convertToAnimeData(searchResults[0], bannerUrl || undefined);
+
+        toast({
+          title: "API Verisi Bulundu",
+          description: `${title} için tam veri ve resimler alındı!`,
+        });
+      } else {
+        // Fallback to basic data but try to get better images
+        const posterUrl = await animeApi.getHighQualityPoster(title);
+        const bannerUrl = await animeApi.searchBannerImage(title);
+
+        animeData = {
+          title: title,
+          titleEn: title,
+          poster: posterUrl || "https://via.placeholder.com/400x600",
+          banner: bannerUrl,
+          rating: 7.5,
+          year: new Date().getFullYear(),
+          episodes: 12,
+          genre: ["Aksiyon"],
+          genreEn: ["Action"],
+          duration: "24min",
+          description: `${title} - Açıklama yakında eklenecek`,
+          descriptionEn: `${title} - Description coming soon`,
+          status: "upcoming" as const,
+          category: "anime" as const
+        };
+
+        toast({
+          title: "Temel Veri Oluşturuldu",
+          description: `${title} için ${posterUrl ? 'yüksek kaliteli poster' : 'temel'} veriler eklendi.`,
+        });
+      }
+
+      storeAddAnime(animeData);
+      setQuickAddTitle("");
+
+      // Add success notification
+      addNotification({
+        title: 'Yeni Anime Eklendi',
+        message: `${title} otomatik veri toplama ile eklendi`,
+        type: 'success'
+      });
+
+    } catch (error) {
+      console.error('Quick add error:', error);
+
+      // Fallback to basic addition if API fails
+      const basicAnimeData = {
+        title: title,
+        titleEn: title,
+        poster: "https://via.placeholder.com/400x600",
+        rating: 7.5,
+        year: new Date().getFullYear(),
+        episodes: 12,
+        genre: ["Aksiyon"],
+        genreEn: ["Action"],
+        duration: "24min",
+        description: `${title} - Açıklama yakında eklenecek`,
+        descriptionEn: `${title} - Description coming soon`,
+        status: "upcoming" as const,
+        category: "anime" as const
+      };
+
+      storeAddAnime(basicAnimeData);
+      setQuickAddTitle("");
+
+      toast({
+        title: "Temel Ekleme Tamamlandı",
+        description: `${title} temel bilgilerle eklendi. API'den veri alınamadı, daha sonra resim kalitesi kontrolü yapabilirsiniz.`,
+        variant: "destructive"
+      });
+    }
   };
 
   return (

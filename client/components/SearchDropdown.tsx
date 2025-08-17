@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { sampleAnimes } from "@/components/AnimeCard";
+import { useAnimeStore } from "@/lib/animeStore";
 import { useLanguage } from "@/lib/i18n";
 
 interface SearchDropdownProps {

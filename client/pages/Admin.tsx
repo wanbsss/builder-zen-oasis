@@ -48,10 +48,10 @@ import {
 import Header from "@/components/Header";
 import { useAnimeStore } from "@/lib/animeStore";
 import type { AnimeData } from "@/lib/animeStore";
-import { animeApi } from "@/lib/animeApi";
 import { useLanguage } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/hooks/use-toast";
+import { adminAPI } from "@/lib/apiClient";
 
 interface NewAnime {
   title: string;
@@ -513,7 +513,7 @@ export default function Admin() {
       console.error("Image quality check error:", error);
       toast({
         title: "Hata",
-        description: "Resim kalitesi kontrolü sırasında bir hata oluştu",
+        description: "Resim kalitesi kontrolü sırasında bir hata olu��tu",
         variant: "destructive",
       });
     } finally {

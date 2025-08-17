@@ -394,10 +394,12 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
   const value: AnimeStoreContextType = {
     animes,
     episodes,
+    loading,
     addAnime,
     updateAnime,
     deleteAnime,
     getAnimeById,
+    fetchAnimes,
     addEpisode,
     updateEpisode,
     deleteEpisode,
@@ -413,6 +415,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
     addNotification,
     markNotificationRead,
     clearNotifications,
+    fetchNotifications,
   };
 
   return (

@@ -92,6 +92,46 @@ export interface Translations {
   invalidCredentials: string;
   registrationSuccess: string;
   loginSuccess: string;
+
+  // Additional UI
+  requests: string;
+  notifications: string;
+  unreadNotifications: string;
+  noNotifications: string;
+  watchHistory: string;
+  settings: string;
+  logout: string;
+  imageQualityCheck: string;
+  quickAdd: string;
+  dashboard: string;
+  statistics: string;
+  manageAnime: string;
+  bulkImport: string;
+  apiImport: string;
+  popular: string;
+  completed: string;
+  ongoing: string;
+  upcoming: string;
+  total: string;
+  today: string;
+  lastUpdate: string;
+  title: string;
+  description: string;
+  poster: string;
+  banner: string;
+  status: string;
+  category: string;
+  save: string;
+  cancel: string;
+  edit: string;
+  delete: string;
+  add: string;
+  search: string;
+  loading: string;
+  success: string;
+  error: string;
+  warning: string;
+  info: string;
 }
 
 export const tr: Translations = {
@@ -121,7 +161,7 @@ export const tr: Translations = {
   orContinueWith: "veya şununla devam et",
   dontHaveAccount: "Hesabın yok mu?",
   alreadyHaveAccount: "Zaten hesabın var mı?",
-  termsOfService: "Kullanım Şartları",
+  termsOfService: "Kullanım Şartlar��",
   privacyPolicy: "Gizlilik Politikası",
   byCreatingAccount: "Hesap oluşturarak",
 
@@ -187,6 +227,46 @@ export const tr: Translations = {
   invalidCredentials: "Geçersiz kullanıcı bilgileri",
   registrationSuccess: "Kayıt başarılı!",
   loginSuccess: "Giriş başarılı!",
+
+  // Additional UI
+  requests: "İstekler",
+  notifications: "Bildirimler",
+  unreadNotifications: "okunmamış bildirim",
+  noNotifications: "Henüz bildirim yok",
+  watchHistory: "İzleme Geçmişi",
+  settings: "Ayarlar",
+  logout: "Çıkış Yap",
+  imageQualityCheck: "Resim Kalitesi Kontrolü",
+  quickAdd: "Hızlı Ekle",
+  dashboard: "Panel",
+  statistics: "İstatistikler",
+  manageAnime: "Anime Yönetimi",
+  bulkImport: "Toplu İçe Aktarma",
+  apiImport: "API İçe Aktarma",
+  popular: "Popüler",
+  completed: "Tamamlandı",
+  ongoing: "Devam Ediyor",
+  upcoming: "Yakında",
+  total: "Toplam",
+  today: "Bugün",
+  lastUpdate: "Son Güncelleme",
+  title: "Başlık",
+  description: "Açıklama",
+  poster: "Poster",
+  banner: "Banner",
+  status: "Durum",
+  category: "Kategori",
+  save: "Kaydet",
+  cancel: "İptal",
+  edit: "Düzenle",
+  delete: "Sil",
+  add: "Ekle",
+  search: "Ara",
+  loading: "Yükleniyor",
+  success: "Başarılı",
+  error: "Hata",
+  warning: "Uyarı",
+  info: "Bilgi",
 };
 
 export const en: Translations = {
@@ -282,6 +362,46 @@ export const en: Translations = {
   invalidCredentials: "Invalid credentials",
   registrationSuccess: "Registration successful!",
   loginSuccess: "Login successful!",
+
+  // Additional UI
+  requests: "Requests",
+  notifications: "Notifications",
+  unreadNotifications: "unread notifications",
+  noNotifications: "No notifications yet",
+  watchHistory: "Watch History",
+  settings: "Settings",
+  logout: "Logout",
+  imageQualityCheck: "Image Quality Check",
+  quickAdd: "Quick Add",
+  dashboard: "Dashboard",
+  statistics: "Statistics",
+  manageAnime: "Manage Anime",
+  bulkImport: "Bulk Import",
+  apiImport: "API Import",
+  popular: "Popular",
+  completed: "Completed",
+  ongoing: "Ongoing",
+  upcoming: "Upcoming",
+  total: "Total",
+  today: "Today",
+  lastUpdate: "Last Update",
+  title: "Title",
+  description: "Description",
+  poster: "Poster",
+  banner: "Banner",
+  status: "Status",
+  category: "Category",
+  save: "Save",
+  cancel: "Cancel",
+  edit: "Edit",
+  delete: "Delete",
+  add: "Add",
+  search: "Search",
+  loading: "Loading",
+  success: "Success",
+  error: "Error",
+  warning: "Warning",
+  info: "Info",
 };
 
 // Language context

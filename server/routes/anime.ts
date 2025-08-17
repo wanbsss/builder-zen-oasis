@@ -1,22 +1,22 @@
 import { RequestHandler } from "express";
-import { 
-  getAllAnimes, 
-  getAnimeById, 
-  createAnime, 
-  updateAnime, 
+import {
+  getAllAnimes,
+  getAnimeById,
+  createAnime,
+  updateAnime,
   deleteAnime,
   getEpisodesByAnimeId,
   createEpisode,
-  createNotification
+  createNotification,
 } from "../lib/database";
 
 // Get all animes
 export const handleGetAnimes: RequestHandler = async (req, res) => {
   try {
     const animes = await getAllAnimes();
-    
+
     // Transform database format to frontend format
-    const transformedAnimes = animes.map(anime => ({
+    const transformedAnimes = animes.map((anime) => ({
       id: anime.id.toString(),
       title: anime.title,
       titleEn: anime.title_en,
@@ -31,18 +31,18 @@ export const handleGetAnimes: RequestHandler = async (req, res) => {
       description: anime.description,
       descriptionEn: anime.description_en,
       status: anime.status,
-      category: anime.category
+      category: anime.category,
     }));
 
     res.json({
       success: true,
-      data: transformedAnimes
+      data: transformedAnimes,
     });
   } catch (error) {
-    console.error('Get animes error:', error);
+    console.error("Get animes error:", error);
     res.status(500).json({
       success: false,
-      message: "Anime listesi alınamadı"
+      message: "Anime listesi alınamadı",
     });
   }
 };
@@ -56,16 +56,16 @@ export const handleGetAnime: RequestHandler = async (req, res) => {
     if (!animeId) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz anime ID"
+        message: "Geçersiz anime ID",
       });
     }
 
     const anime = await getAnimeById(animeId);
-    
+
     if (!anime) {
       return res.status(404).json({
         success: false,
-        message: "Anime bulunamadı"
+        message: "Anime bulunamadı",
       });
     }
 
@@ -87,10 +87,10 @@ export const handleGetAnime: RequestHandler = async (req, res) => {
       description: anime.description,
       descriptionEn: anime.description_en,
       status: anime.status,
-      category: anime.category
+      category: anime.category,
     };
 
-    const transformedEpisodes = episodes.map(ep => ({
+    const transformedEpisodes = episodes.map((ep) => ({
       id: ep.id,
       title: ep.title,
       titleEn: ep.title_en,
@@ -100,21 +100,21 @@ export const handleGetAnime: RequestHandler = async (req, res) => {
       duration: ep.duration,
       episodeNumber: ep.episode_number,
       airDate: ep.air_date,
-      animeId: ep.anime_id.toString()
+      animeId: ep.anime_id.toString(),
     }));
 
     res.json({
       success: true,
       data: {
         anime: transformedAnime,
-        episodes: transformedEpisodes
-      }
+        episodes: transformedEpisodes,
+      },
     });
   } catch (error) {
-    console.error('Get anime error:', error);
+    console.error("Get anime error:", error);
     res.status(500).json({
       success: false,
-      message: "Anime bilgisi alınamadı"
+      message: "Anime bilgisi alınamadı",
     });
   }
 };
@@ -128,7 +128,7 @@ export const handleCreateAnime: RequestHandler = async (req, res) => {
     if (!animeData.title) {
       return res.status(400).json({
         success: false,
-        message: "Anime başlığı gerekli"
+        message: "Anime başlığı gerekli",
       });
     }
 
@@ -142,18 +142,18 @@ export const handleCreateAnime: RequestHandler = async (req, res) => {
       episodes: animeData.episodes || 0,
       genre: animeData.genre || [],
       genreEn: animeData.genreEn || [],
-      duration: animeData.duration || '24 min',
-      description: animeData.description || '',
-      descriptionEn: animeData.descriptionEn || '',
-      status: animeData.status || 'ongoing',
-      category: animeData.category || 'anime'
+      duration: animeData.duration || "24 min",
+      description: animeData.description || "",
+      descriptionEn: animeData.descriptionEn || "",
+      status: animeData.status || "ongoing",
+      category: animeData.category || "anime",
     });
 
     // Create notification
     await createNotification(
-      'Yeni Anime Eklendi',
+      "Yeni Anime Eklendi",
       `${animeData.title} başarıyla eklendi`,
-      'success'
+      "success",
     );
 
     res.status(201).json({
@@ -174,14 +174,14 @@ export const handleCreateAnime: RequestHandler = async (req, res) => {
         description: newAnime.description,
         descriptionEn: newAnime.description_en,
         status: newAnime.status,
-        category: newAnime.category
-      }
+        category: newAnime.category,
+      },
     });
   } catch (error) {
-    console.error('Create anime error:', error);
+    console.error("Create anime error:", error);
     res.status(500).json({
       success: false,
-      message: "Anime oluşturulamadı"
+      message: "Anime oluşturulamadı",
     });
   }
 };
@@ -196,7 +196,7 @@ export const handleUpdateAnime: RequestHandler = async (req, res) => {
     if (!animeId) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz anime ID"
+        message: "Geçersiz anime ID",
       });
     }
 
@@ -214,21 +214,21 @@ export const handleUpdateAnime: RequestHandler = async (req, res) => {
       description: animeData.description,
       descriptionEn: animeData.descriptionEn,
       status: animeData.status,
-      category: animeData.category
+      category: animeData.category,
     });
 
     if (!updatedAnime) {
       return res.status(404).json({
         success: false,
-        message: "Anime bulunamadı"
+        message: "Anime bulunamadı",
       });
     }
 
     // Create notification
     await createNotification(
-      'Anime Güncellendi',
+      "Anime Güncellendi",
       `${animeData.title} başarıyla güncellendi`,
-      'info'
+      "info",
     );
 
     res.json({
@@ -249,14 +249,14 @@ export const handleUpdateAnime: RequestHandler = async (req, res) => {
         description: updatedAnime.description,
         descriptionEn: updatedAnime.description_en,
         status: updatedAnime.status,
-        category: updatedAnime.category
-      }
+        category: updatedAnime.category,
+      },
     });
   } catch (error) {
-    console.error('Update anime error:', error);
+    console.error("Update anime error:", error);
     res.status(500).json({
       success: false,
-      message: "Anime güncellenemedi"
+      message: "Anime güncellenemedi",
     });
   }
 };
@@ -270,17 +270,17 @@ export const handleDeleteAnime: RequestHandler = async (req, res) => {
     if (!animeId) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz anime ID"
+        message: "Geçersiz anime ID",
       });
     }
 
     // Get anime info for notification
     const anime = await getAnimeById(animeId);
-    
+
     if (!anime) {
       return res.status(404).json({
         success: false,
-        message: "Anime bulunamadı"
+        message: "Anime bulunamadı",
       });
     }
 
@@ -288,20 +288,20 @@ export const handleDeleteAnime: RequestHandler = async (req, res) => {
 
     // Create notification
     await createNotification(
-      'Anime Silindi',
+      "Anime Silindi",
       `${anime.title} silindi`,
-      'warning'
+      "warning",
     );
 
     res.json({
       success: true,
-      message: "Anime başarıyla silindi"
+      message: "Anime başarıyla silindi",
     });
   } catch (error) {
-    console.error('Delete anime error:', error);
+    console.error("Delete anime error:", error);
     res.status(500).json({
       success: false,
-      message: "Anime silinemedi"
+      message: "Anime silinemedi",
     });
   }
 };
@@ -316,14 +316,14 @@ export const handleAddEpisode: RequestHandler = async (req, res) => {
     if (!animeId) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz anime ID"
+        message: "Geçersiz anime ID",
       });
     }
 
     if (!episodeData.title || !episodeData.episodeNumber) {
       return res.status(400).json({
         success: false,
-        message: "Bölüm başlığı ve numarası gerekli"
+        message: "Bölüm başlığı ve numarası gerekli",
       });
     }
 
@@ -331,22 +331,22 @@ export const handleAddEpisode: RequestHandler = async (req, res) => {
       animeId: animeId,
       title: episodeData.title,
       titleEn: episodeData.titleEn || null,
-      description: episodeData.description || '',
-      descriptionEn: episodeData.descriptionEn || '',
-      videoUrl: episodeData.videoUrl || '',
-      duration: episodeData.duration || '24 min',
+      description: episodeData.description || "",
+      descriptionEn: episodeData.descriptionEn || "",
+      videoUrl: episodeData.videoUrl || "",
+      duration: episodeData.duration || "24 min",
       episodeNumber: episodeData.episodeNumber,
-      airDate: episodeData.airDate || new Date().toISOString().split('T')[0]
+      airDate: episodeData.airDate || new Date().toISOString().split("T")[0],
     });
 
     // Get anime info for notification
     const anime = await getAnimeById(animeId);
-    
+
     // Create notification
     await createNotification(
-      'Yeni Bölüm Eklendi',
+      "Yeni Bölüm Eklendi",
       `${anime?.title} - Bölüm ${episodeData.episodeNumber} eklendi`,
-      'success'
+      "success",
     );
 
     res.status(201).json({
@@ -362,14 +362,14 @@ export const handleAddEpisode: RequestHandler = async (req, res) => {
         duration: newEpisode.duration,
         episodeNumber: newEpisode.episode_number,
         airDate: newEpisode.air_date,
-        animeId: newEpisode.anime_id.toString()
-      }
+        animeId: newEpisode.anime_id.toString(),
+      },
     });
   } catch (error) {
-    console.error('Add episode error:', error);
+    console.error("Add episode error:", error);
     res.status(500).json({
       success: false,
-      message: "Bölüm eklenemedi"
+      message: "Bölüm eklenemedi",
     });
   }
 };

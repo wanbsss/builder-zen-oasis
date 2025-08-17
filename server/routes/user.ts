@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
-import { 
-  getUserList, 
-  addToUserList, 
+import {
+  getUserList,
+  addToUserList,
   removeFromUserList,
   getUserWatchProgress,
-  updateWatchProgress
+  updateWatchProgress,
 } from "../lib/database";
 
 // Get user's watch progress
@@ -16,13 +16,13 @@ export const handleGetWatchProgress: RequestHandler = async (req, res) => {
     if (!userIdNum) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz kullanıcı ID"
+        message: "Geçersiz kullanıcı ID",
       });
     }
 
     const progress = await getUserWatchProgress(userIdNum);
-    
-    const transformedProgress = progress.map(p => ({
+
+    const transformedProgress = progress.map((p) => ({
       animeId: p.anime_id.toString(),
       episodeId: p.episode_id,
       progress: p.progress,
@@ -30,23 +30,23 @@ export const handleGetWatchProgress: RequestHandler = async (req, res) => {
       lastWatched: p.last_watched,
       anime: {
         title: p.title,
-        poster: p.poster
+        poster: p.poster,
       },
       episode: {
         title: p.episode_title,
-        number: p.episode_number
-      }
+        number: p.episode_number,
+      },
     }));
 
     res.json({
       success: true,
-      data: transformedProgress
+      data: transformedProgress,
     });
   } catch (error) {
-    console.error('Get watch progress error:', error);
+    console.error("Get watch progress error:", error);
     res.status(500).json({
       success: false,
-      message: "İzleme geçmişi alınamadı"
+      message: "İzleme geçmişi alınamadı",
     });
   }
 };
@@ -56,7 +56,7 @@ export const handleUpdateWatchProgress: RequestHandler = async (req, res) => {
   try {
     const { userId } = req.params;
     const { animeId, episodeId, progress } = req.body;
-    
+
     const userIdNum = parseInt(userId);
     const animeIdNum = parseInt(animeId);
     const episodeIdNum = parseInt(episodeId);
@@ -64,7 +64,7 @@ export const handleUpdateWatchProgress: RequestHandler = async (req, res) => {
     if (!userIdNum || !animeIdNum || !episodeIdNum || progress === undefined) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz parametreler"
+        message: "Geçersiz parametreler",
       });
     }
 
@@ -72,13 +72,13 @@ export const handleUpdateWatchProgress: RequestHandler = async (req, res) => {
 
     res.json({
       success: true,
-      message: "İzleme ilerlemesi güncellendi"
+      message: "İzleme ilerlemesi güncellendi",
     });
   } catch (error) {
-    console.error('Update watch progress error:', error);
+    console.error("Update watch progress error:", error);
     res.status(500).json({
       success: false,
-      message: "İzleme ilerlemesi güncellenemedi"
+      message: "İzleme ilerlemesi güncellenemedi",
     });
   }
 };
@@ -92,39 +92,39 @@ export const handleGetUserList: RequestHandler = async (req, res) => {
     if (!userIdNum || !listType) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz parametreler"
+        message: "Geçersiz parametreler",
       });
     }
 
-    if (!['watchlist', 'favorites', 'completed'].includes(listType)) {
+    if (!["watchlist", "favorites", "completed"].includes(listType)) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz liste tipi"
+        message: "Geçersiz liste tipi",
       });
     }
 
     const userList = await getUserList(userIdNum, listType);
-    
-    const transformedList = userList.map(item => ({
+
+    const transformedList = userList.map((item) => ({
       animeId: item.anime_id.toString(),
       addedAt: item.added_at,
       anime: {
         title: item.title,
         poster: item.poster,
         rating: item.rating,
-        year: item.year
-      }
+        year: item.year,
+      },
     }));
 
     res.json({
       success: true,
-      data: transformedList
+      data: transformedList,
     });
   } catch (error) {
-    console.error('Get user list error:', error);
+    console.error("Get user list error:", error);
     res.status(500).json({
       success: false,
-      message: "Kullanıcı listesi alınamadı"
+      message: "Kullanıcı listesi alınamadı",
     });
   }
 };
@@ -134,21 +134,21 @@ export const handleAddToUserList: RequestHandler = async (req, res) => {
   try {
     const { userId } = req.params;
     const { animeId, listType } = req.body;
-    
+
     const userIdNum = parseInt(userId);
     const animeIdNum = parseInt(animeId);
 
     if (!userIdNum || !animeIdNum || !listType) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz parametreler"
+        message: "Geçersiz parametreler",
       });
     }
 
-    if (!['watchlist', 'favorites', 'completed'].includes(listType)) {
+    if (!["watchlist", "favorites", "completed"].includes(listType)) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz liste tipi"
+        message: "Geçersiz liste tipi",
       });
     }
 
@@ -156,13 +156,13 @@ export const handleAddToUserList: RequestHandler = async (req, res) => {
 
     res.json({
       success: true,
-      message: "Anime listeye eklendi"
+      message: "Anime listeye eklendi",
     });
   } catch (error) {
-    console.error('Add to user list error:', error);
+    console.error("Add to user list error:", error);
     res.status(500).json({
       success: false,
-      message: "Anime listeye eklenemedi"
+      message: "Anime listeye eklenemedi",
     });
   }
 };
@@ -172,21 +172,21 @@ export const handleRemoveFromUserList: RequestHandler = async (req, res) => {
   try {
     const { userId } = req.params;
     const { animeId, listType } = req.body;
-    
+
     const userIdNum = parseInt(userId);
     const animeIdNum = parseInt(animeId);
 
     if (!userIdNum || !animeIdNum || !listType) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz parametreler"
+        message: "Geçersiz parametreler",
       });
     }
 
-    if (!['watchlist', 'favorites', 'completed'].includes(listType)) {
+    if (!["watchlist", "favorites", "completed"].includes(listType)) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz liste tipi"
+        message: "Geçersiz liste tipi",
       });
     }
 
@@ -194,13 +194,13 @@ export const handleRemoveFromUserList: RequestHandler = async (req, res) => {
 
     res.json({
       success: true,
-      message: "Anime listeden çıkarıldı"
+      message: "Anime listeden çıkarıldı",
     });
   } catch (error) {
-    console.error('Remove from user list error:', error);
+    console.error("Remove from user list error:", error);
     res.status(500).json({
       success: false,
-      message: "Anime listeden çıkarılamadı"
+      message: "Anime listeden çıkarılamadı",
     });
   }
 };

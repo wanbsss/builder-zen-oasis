@@ -81,7 +81,11 @@ interface AnimeStoreContextType {
 
   // User lists
   userLists: UserList[];
-  addToList: (userId: string, animeId: string, type: UserList["type"]) => Promise<void>;
+  addToList: (
+    userId: string,
+    animeId: string,
+    type: UserList["type"],
+  ) => Promise<void>;
   removeFromList: (
     userId: string,
     animeId: string,
@@ -130,7 +134,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
         setAnimes(response.data);
       }
     } catch (error) {
-      console.error('Failed to fetch animes:', error);
+      console.error("Failed to fetch animes:", error);
     } finally {
       setLoading(false);
     }
@@ -144,7 +148,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
         setNotifications(response.data);
       }
     } catch (error) {
-      console.error('Failed to fetch notifications:', error);
+      console.error("Failed to fetch notifications:", error);
     }
   };
 

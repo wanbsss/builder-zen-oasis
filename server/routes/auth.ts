@@ -22,32 +22,34 @@ export const handleLogin: RequestHandler = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Email ve şifre gerekli"
+        message: "Email ve şifre gerekli",
       } as AuthResponse);
     }
 
     // Find user by email
     const user = await getUserByEmail(email);
-    
+
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz email veya şifre"
+        message: "Geçersiz email veya şifre",
       } as AuthResponse);
     }
 
     // Check password
     const isValidPassword = await bcrypt.compare(password, user.password_hash);
-    
+
     if (!isValidPassword) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz email veya şifre"
+        message: "Geçersiz email veya şifre",
       } as AuthResponse);
     }
 
     // Create simple session token (in production, use JWT)
-    const token = Buffer.from(`${user.id}:${user.email}:${Date.now()}`).toString('base64');
+    const token = Buffer.from(
+      `${user.id}:${user.email}:${Date.now()}`,
+    ).toString("base64");
 
     res.json({
       success: true,
@@ -56,16 +58,15 @@ export const handleLogin: RequestHandler = async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        isAdmin: user.is_admin
+        isAdmin: user.is_admin,
       },
-      token
+      token,
     } as AuthResponse);
-
   } catch (error) {
-    console.error('Login error:', error);
+    console.error("Login error:", error);
     res.status(500).json({
       success: false,
-      message: "Sunucu hatası"
+      message: "Sunucu hatası",
     } as AuthResponse);
   }
 };
@@ -78,17 +79,17 @@ export const handleRegister: RequestHandler = async (req, res) => {
     if (!username || !email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Kullanıcı adı, email ve şifre gerekli"
+        message: "Kullanıcı adı, email ve şifre gerekli",
       } as AuthResponse);
     }
 
     // Check if user already exists
     const existingUser = await getUserByEmail(email);
-    
+
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message: "Bu email zaten kayıtlı"
+        message: "Bu email zaten kayıtlı",
       } as AuthResponse);
     }
 
@@ -99,7 +100,9 @@ export const handleRegister: RequestHandler = async (req, res) => {
     const newUser = await createUser(username, email, passwordHash);
 
     // Create simple session token
-    const token = Buffer.from(`${newUser.id}:${newUser.email}:${Date.now()}`).toString('base64');
+    const token = Buffer.from(
+      `${newUser.id}:${newUser.email}:${Date.now()}`,
+    ).toString("base64");
 
     res.status(201).json({
       success: true,
@@ -108,16 +111,15 @@ export const handleRegister: RequestHandler = async (req, res) => {
         id: newUser.id,
         username: newUser.username,
         email: newUser.email,
-        isAdmin: newUser.is_admin
+        isAdmin: newUser.is_admin,
       },
-      token
+      token,
     } as AuthResponse);
-
   } catch (error) {
-    console.error('Register error:', error);
+    console.error("Register error:", error);
     res.status(500).json({
       success: false,
-      message: "Sunucu hatası"
+      message: "Sunucu hatası",
     } as AuthResponse);
   }
 };
@@ -130,29 +132,29 @@ export const handleVerifyToken: RequestHandler = async (req, res) => {
     if (!token) {
       return res.status(400).json({
         success: false,
-        message: "Token gerekli"
+        message: "Token gerekli",
       } as AuthResponse);
     }
 
     // Decode token
-    const decoded = Buffer.from(token, 'base64').toString();
-    const [userIdStr, email] = decoded.split(':');
+    const decoded = Buffer.from(token, "base64").toString();
+    const [userIdStr, email] = decoded.split(":");
     const userId = parseInt(userIdStr);
 
     if (!userId || !email) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz token"
+        message: "Geçersiz token",
       } as AuthResponse);
     }
 
     // Get user from database
     const user = await getUserByEmail(email);
-    
+
     if (!user || user.id !== userId) {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz token"
+        message: "Geçersiz token",
       } as AuthResponse);
     }
 
@@ -162,15 +164,14 @@ export const handleVerifyToken: RequestHandler = async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        isAdmin: user.is_admin
-      }
+        isAdmin: user.is_admin,
+      },
     } as AuthResponse);
-
   } catch (error) {
-    console.error('Token verification error:', error);
+    console.error("Token verification error:", error);
     res.status(500).json({
       success: false,
-      message: "Sunucu hatası"
+      message: "Sunucu hatası",
     } as AuthResponse);
   }
 };

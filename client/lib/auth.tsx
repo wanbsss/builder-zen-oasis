@@ -49,13 +49,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               id: response.user.id,
               username: response.user.username,
               email: response.user.email,
-              isAdmin: response.user.isAdmin
+              isAdmin: response.user.isAdmin,
             });
           } else {
             authToken.remove();
           }
         } catch (error) {
-          console.error('Token verification failed:', error);
+          console.error("Token verification failed:", error);
           authToken.remove();
         }
       }
@@ -74,14 +74,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           id: response.user.id,
           username: response.user.username,
           email: response.user.email,
-          isAdmin: response.user.isAdmin
+          isAdmin: response.user.isAdmin,
         });
         return true;
       }
 
       return false;
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
       return false;
     }
   };
@@ -99,14 +99,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           id: response.user.id,
           username: response.user.username,
           email: response.user.email,
-          isAdmin: response.user.isAdmin
+          isAdmin: response.user.isAdmin,
         });
         return true;
       }
 
       return false;
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error("Registration failed:", error);
       return false;
     }
   };

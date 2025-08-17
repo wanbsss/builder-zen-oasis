@@ -11,7 +11,7 @@ import {
   handleCreateAnime,
   handleUpdateAnime,
   handleDeleteAnime,
-  handleAddEpisode
+  handleAddEpisode,
 } from "./routes/anime";
 import {
   handleGetStats,
@@ -19,14 +19,14 @@ import {
   handleGetNotifications,
   handleMarkNotificationRead,
   handleCreateNotification,
-  handleClearNotifications
+  handleClearNotifications,
 } from "./routes/admin";
 import {
   handleGetWatchProgress,
   handleUpdateWatchProgress,
   handleGetUserList,
   handleAddToUserList,
-  handleRemoveFromUserList
+  handleRemoveFromUserList,
 } from "./routes/user";
 
 export function createServer() {

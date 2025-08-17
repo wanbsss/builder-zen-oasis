@@ -1,21 +1,24 @@
 // API Client for communicating with backend
 
-const API_BASE = '/api';
+const API_BASE = "/api";
 
 // Auth token management
 export const authToken = {
-  get: () => localStorage.getItem('aniwa_auth_token'),
-  set: (token: string) => localStorage.setItem('aniwa_auth_token', token),
-  remove: () => localStorage.removeItem('aniwa_auth_token')
+  get: () => localStorage.getItem("aniwa_auth_token"),
+  set: (token: string) => localStorage.setItem("aniwa_auth_token", token),
+  remove: () => localStorage.removeItem("aniwa_auth_token"),
 };
 
 // Base API request function
-async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+async function apiRequest<T>(
+  endpoint: string,
+  options: RequestInit = {},
+): Promise<T> {
   const url = `${API_BASE}${endpoint}`;
-  
+
   const config: RequestInit = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...options.headers,
     },
     ...options,
@@ -24,17 +27,18 @@ async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promi
   // Add auth token if available
   const token = authToken.get();
   if (token && config.headers) {
-    (config.headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
+    (config.headers as Record<string, string>)["Authorization"] =
+      `Bearer ${token}`;
   }
 
   try {
     const response = await fetch(url, config);
     const data = await response.json();
-    
+
     if (!response.ok) {
-      throw new Error(data.message || 'API request failed');
+      throw new Error(data.message || "API request failed");
     }
-    
+
     return data;
   } catch (error) {
     console.error(`API Error (${endpoint}):`, error);
@@ -50,15 +54,15 @@ export const authAPI = {
       message?: string;
       user?: any;
       token?: string;
-    }>('/auth/login', {
-      method: 'POST',
+    }>("/auth/login", {
+      method: "POST",
       body: JSON.stringify({ email, password }),
     });
-    
+
     if (response.success && response.token) {
       authToken.set(response.token);
     }
-    
+
     return response;
   },
 
@@ -68,15 +72,15 @@ export const authAPI = {
       message?: string;
       user?: any;
       token?: string;
-    }>('/auth/register', {
-      method: 'POST',
+    }>("/auth/register", {
+      method: "POST",
       body: JSON.stringify({ username, email, password }),
     });
-    
+
     if (response.success && response.token) {
       authToken.set(response.token);
     }
-    
+
     return response;
   },
 
@@ -85,15 +89,15 @@ export const authAPI = {
       success: boolean;
       message?: string;
       user?: any;
-    }>('/auth/verify', {
-      method: 'POST',
+    }>("/auth/verify", {
+      method: "POST",
       body: JSON.stringify({ token }),
     });
   },
 
   logout: () => {
     authToken.remove();
-  }
+  },
 };
 
 // Anime API
@@ -102,7 +106,7 @@ export const animeAPI = {
     return await apiRequest<{
       success: boolean;
       data: any[];
-    }>('/animes');
+    }>("/animes");
   },
 
   getById: async (id: string) => {
@@ -120,8 +124,8 @@ export const animeAPI = {
       success: boolean;
       message?: string;
       data: any;
-    }>('/animes', {
-      method: 'POST',
+    }>("/animes", {
+      method: "POST",
       body: JSON.stringify(animeData),
     });
   },
@@ -132,7 +136,7 @@ export const animeAPI = {
       message?: string;
       data: any;
     }>(`/animes/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(animeData),
     });
   },
@@ -142,7 +146,7 @@ export const animeAPI = {
       success: boolean;
       message?: string;
     }>(`/animes/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   },
 
@@ -152,10 +156,10 @@ export const animeAPI = {
       message?: string;
       data: any;
     }>(`/animes/${animeId}/episodes`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(episodeData),
     });
-  }
+  },
 };
 
 // Admin API
@@ -169,21 +173,21 @@ export const adminAPI = {
         totalEpisodes: number;
         todayWatches: number;
       };
-    }>('/admin/stats');
+    }>("/admin/stats");
   },
 
   getUsers: async () => {
     return await apiRequest<{
       success: boolean;
       data: any[];
-    }>('/admin/users');
+    }>("/admin/users");
   },
 
   getNotifications: async () => {
     return await apiRequest<{
       success: boolean;
       data: any[];
-    }>('/admin/notifications');
+    }>("/admin/notifications");
   },
 
   markNotificationRead: async (id: string) => {
@@ -191,7 +195,7 @@ export const adminAPI = {
       success: boolean;
       message?: string;
     }>(`/admin/notifications/${id}/read`, {
-      method: 'PUT',
+      method: "PUT",
     });
   },
 
@@ -200,8 +204,8 @@ export const adminAPI = {
       success: boolean;
       message?: string;
       data: any;
-    }>('/admin/notifications', {
-      method: 'POST',
+    }>("/admin/notifications", {
+      method: "POST",
       body: JSON.stringify({ title, message, type }),
     });
   },
@@ -210,10 +214,10 @@ export const adminAPI = {
     return await apiRequest<{
       success: boolean;
       message?: string;
-    }>('/admin/notifications', {
-      method: 'DELETE',
+    }>("/admin/notifications", {
+      method: "DELETE",
     });
-  }
+  },
 };
 
 // User API
@@ -225,12 +229,17 @@ export const userAPI = {
     }>(`/users/${userId}/progress`);
   },
 
-  updateWatchProgress: async (userId: string, animeId: string, episodeId: string, progress: number) => {
+  updateWatchProgress: async (
+    userId: string,
+    animeId: string,
+    episodeId: string,
+    progress: number,
+  ) => {
     return await apiRequest<{
       success: boolean;
       message?: string;
     }>(`/users/${userId}/progress`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify({ animeId, episodeId, progress }),
     });
   },
@@ -247,7 +256,7 @@ export const userAPI = {
       success: boolean;
       message?: string;
     }>(`/users/${userId}/list`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ animeId, listType }),
     });
   },
@@ -257,8 +266,8 @@ export const userAPI = {
       success: boolean;
       message?: string;
     }>(`/users/${userId}/list`, {
-      method: 'DELETE',
+      method: "DELETE",
       body: JSON.stringify({ animeId, listType }),
     });
-  }
+  },
 };

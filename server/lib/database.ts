@@ -1,7 +1,9 @@
-import { neon } from '@neondatabase/serverless';
+import { neon } from "@neondatabase/serverless";
 
 // Database connection
-const connectionString = process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_UOqmtxn2y4hE@ep-orange-math-aelrf30d-pooler.c-2.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require';
+const connectionString =
+  process.env.DATABASE_URL ||
+  "postgresql://neondb_owner:npg_UOqmtxn2y4hE@ep-orange-math-aelrf30d-pooler.c-2.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require";
 
 export const sql = neon(connectionString);
 
@@ -16,7 +18,11 @@ export async function getUserByEmail(email: string) {
   return users[0] || null;
 }
 
-export async function createUser(username: string, email: string, passwordHash: string) {
+export async function createUser(
+  username: string,
+  email: string,
+  passwordHash: string,
+) {
   const users = await sql`
     INSERT INTO users (username, email, password_hash, is_admin)
     VALUES (${username}, ${email}, ${passwordHash}, false)
@@ -147,7 +153,12 @@ export async function getUserWatchProgress(userId: number) {
   `;
 }
 
-export async function updateWatchProgress(userId: number, animeId: number, episodeId: number, progress: number) {
+export async function updateWatchProgress(
+  userId: number,
+  animeId: number,
+  episodeId: number,
+  progress: number,
+) {
   const existing = await sql`
     SELECT id FROM watch_progress 
     WHERE user_id = ${userId} AND episode_id = ${episodeId}
@@ -182,7 +193,11 @@ export async function getUserList(userId: number, listType: string) {
   `;
 }
 
-export async function addToUserList(userId: number, animeId: number, listType: string) {
+export async function addToUserList(
+  userId: number,
+  animeId: number,
+  listType: string,
+) {
   await sql`
     INSERT INTO user_lists (user_id, anime_id, list_type)
     VALUES (${userId}, ${animeId}, ${listType})
@@ -191,7 +206,11 @@ export async function addToUserList(userId: number, animeId: number, listType: s
   return true;
 }
 
-export async function removeFromUserList(userId: number, animeId: number, listType: string) {
+export async function removeFromUserList(
+  userId: number,
+  animeId: number,
+  listType: string,
+) {
   await sql`
     DELETE FROM user_lists 
     WHERE user_id = ${userId} AND anime_id = ${animeId} AND list_type = ${listType}
@@ -208,7 +227,11 @@ export async function getAdminNotifications() {
   `;
 }
 
-export async function createNotification(title: string, message: string, type: string) {
+export async function createNotification(
+  title: string,
+  message: string,
+  type: string,
+) {
   const notifications = await sql`
     INSERT INTO admin_notifications (title, message, type)
     VALUES (${title}, ${message}, ${type})

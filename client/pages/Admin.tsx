@@ -339,12 +339,30 @@ export default function Admin() {
     let successCount = 0;
 
     try {
+      toast({
+        title: "API İçe Aktarma Başlatıldı",
+        description: `${selectedApiAnimes.size} anime için banner ve resim arama yapılıyor...`,
+      });
+
       for (const index of selectedApiAnimes) {
         const externalAnime = apiSearchResults[index];
         if (externalAnime) {
-          const animeData = animeApi.convertToAnimeData(externalAnime);
+          // Get banner for each anime
+          const bannerUrl = await animeApi.searchBannerImage(externalAnime.title);
+          const animeData = animeApi.convertToAnimeData(externalAnime, bannerUrl || undefined);
+
           storeAddAnime(animeData);
           successCount++;
+
+          // Add notification for each import
+          addNotification({
+            title: 'API İçe Aktarma',
+            message: `${externalAnime.title} banner${bannerUrl ? ' ve resim' : ''} ile eklendi`,
+            type: 'success'
+          });
+
+          // Rate limiting
+          await new Promise(resolve => setTimeout(resolve, 1000));
         }
       }
 
@@ -353,9 +371,10 @@ export default function Admin() {
 
       toast({
         title: "API İçe Aktarma Tamamlandı",
-        description: `${successCount} anime başarıyla eklendi`,
+        description: `${successCount} anime yüksek kaliteli resim ve banner ile eklendi`,
       });
     } catch (error) {
+      console.error('API import error:', error);
       toast({
         title: "İçe Aktarma Hatası",
         description: "Anime içe aktarma sırasında bir hata oluştu",

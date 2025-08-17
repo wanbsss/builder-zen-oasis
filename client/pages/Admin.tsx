@@ -30,7 +30,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import Header from "@/components/Header";
-import { sampleAnimes } from "@/components/AnimeCard";
+import { useAnimeStore } from "@/lib/animeStore";
+import type { AnimeData } from "@/lib/animeStore";
 import { useLanguage } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/hooks/use-toast";

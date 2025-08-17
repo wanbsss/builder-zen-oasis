@@ -90,11 +90,11 @@ export interface AdminNotification {
 const AnimeStoreContext = createContext<AnimeStoreContextType | undefined>(undefined);
 
 const STORAGE_KEYS = {
-  animes: 'animewa_animes',
-  episodes: 'animewa_episodes',
-  watchProgress: 'animewa_watch_progress',
-  userLists: 'animewa_user_lists',
-  notifications: 'animewa_notifications'
+  animes: 'aniwa_animes',
+  episodes: 'aniwa_episodes',
+  watchProgress: 'aniwa_watch_progress',
+  userLists: 'aniwa_user_lists',
+  notifications: 'aniwa_notifications'
 };
 
 export function AnimeStoreProvider({ children }: { children: ReactNode }) {

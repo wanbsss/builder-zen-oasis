@@ -217,7 +217,10 @@ export default function Header({ onAuthClick }: HeaderProps) {
                         {t.admin}
                       </DropdownMenuItem>
                     )}
-                    <DropdownMenuItem className="text-white hover:bg-white/10">
+                    <DropdownMenuItem
+                      onClick={() => window.location.href = '/profile?tab=settings'}
+                      className="text-white hover:bg-white/10 cursor-pointer"
+                    >
                       <Settings className="h-4 w-4 mr-2" />
                       Ayarlar
                     </DropdownMenuItem>

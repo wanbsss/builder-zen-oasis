@@ -236,6 +236,7 @@ export default function Admin() {
       rating: 0,
       duration: "24min",
       poster: "",
+      banner: "",
       status: "ongoing",
       category: "anime"
     });

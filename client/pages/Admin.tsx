@@ -580,6 +580,29 @@ export default function Admin() {
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-white">Anime Yönetimi</h2>
                 <div className="flex space-x-2">
+                  {/* Quick Add Form */}
+                  <div className="flex items-center space-x-2 bg-black/30 p-2 rounded-lg border border-white/10">
+                    <Input
+                      placeholder="Hızlı ekle: Anime adı"
+                      value={quickAddTitle}
+                      onChange={(e) => setQuickAddTitle(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && quickAddTitle.trim()) {
+                          handleQuickAdd();
+                        }
+                      }}
+                      className="w-48 h-8 bg-black/50 border-white/20 text-white text-sm"
+                    />
+                    <Button
+                      size="sm"
+                      onClick={handleQuickAdd}
+                      disabled={!quickAddTitle.trim()}
+                      className="h-8 px-3 btn-primary"
+                    >
+                      Hızlı Ekle
+                    </Button>
+                  </div>
+
                   <Dialog open={showAddEpisode} onOpenChange={setShowAddEpisode}>
                     <DialogTrigger asChild>
                       <Button 

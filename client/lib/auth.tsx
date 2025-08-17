@@ -5,16 +5,14 @@ import {
   useEffect,
   ReactNode,
 } from "react";
+import { authAPI, authToken } from "./apiClient";
 
 // Kullanıcı tipi
 export interface User {
-  id: string;
+  id: number;
   username: string;
   email: string;
   isAdmin: boolean;
-  watchHistory: string[];
-  watchlist: string[];
-  createdAt: string;
 }
 
 // Auth context tipi
@@ -29,114 +27,63 @@ interface AuthContextType {
   logout: () => void;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// LocalStorage'de kullanıcıları saklama
-const USERS_KEY = "aniwa_users";
-const CURRENT_USER_KEY = "aniwa_current_user";
-
-// Demo admin kullanıcısı
-const DEMO_ADMIN = {
-  id: "admin_001",
-  username: "admin",
-  email: "admin@aniwa.com",
-  password: "admin123", // Gerçek uygulamada hash'lenmeli
-  isAdmin: true,
-  watchHistory: [],
-  watchlist: [],
-  createdAt: new Date().toISOString(),
-};
-
-// Kullanıcıları localStorage'den al
-function getUsers(): (User & { password: string })[] {
-  try {
-    const stored = localStorage.getItem(USERS_KEY);
-    const users = stored ? JSON.parse(stored) : [];
-
-    // Demo admin'i ekle eğer yoksa
-    const hasAdmin = users.some((u: any) => u.email === DEMO_ADMIN.email);
-    if (!hasAdmin) {
-      users.push(DEMO_ADMIN);
-      localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    }
-
-    return users;
-  } catch {
-    // Hata durumunda demo admin'i döndür
-    const users = [DEMO_ADMIN];
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    return users;
-  }
-}
-
-// Kullanıcıları localStorage'e kaydet
-function saveUsers(users: (User & { password: string })[]) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
-
-// Mevcut kullanıcıyı al
-function getCurrentUser(): User | null {
-  try {
-    const stored = localStorage.getItem(CURRENT_USER_KEY);
-    return stored ? JSON.parse(stored) : null;
-  } catch {
-    return null;
-  }
-}
-
-// Mevcut kullanıcıyı kaydet
-function setCurrentUser(user: User | null) {
-  if (user) {
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-  } else {
-    localStorage.removeItem(CURRENT_USER_KEY);
-  }
-}
-
-// Basit şifre hash'leme (gerçek uygulamada bcrypt kullanılmalı)
-function hashPassword(password: string): string {
-  return btoa(password + "aniwa_salt");
-}
-
 // Auth Provider
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Sayfa yüklendiğinde kullanıcıyı kontrol et
-    const currentUser = getCurrentUser();
-    setUser(currentUser);
+    // Sayfa yüklendiğinde token'ı kontrol et
+    const checkAuth = async () => {
+      const token = authToken.get();
+      if (token) {
+        try {
+          const response = await authAPI.verifyToken(token);
+          if (response.success && response.user) {
+            setUser({
+              id: response.user.id,
+              username: response.user.username,
+              email: response.user.email,
+              isAdmin: response.user.isAdmin
+            });
+          } else {
+            authToken.remove();
+          }
+        } catch (error) {
+          console.error('Token verification failed:', error);
+          authToken.remove();
+        }
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    const users = getUsers();
-    const hashedPassword = hashPassword(password);
+    try {
+      const response = await authAPI.login(email, password);
 
-    const foundUser = users.find(
-      (u) =>
-        u.email === email &&
-        (u.password === hashedPassword || u.password === password),
-    );
+      if (response.success && response.user) {
+        setUser({
+          id: response.user.id,
+          username: response.user.username,
+          email: response.user.email,
+          isAdmin: response.user.isAdmin
+        });
+        return true;
+      }
 
-    if (foundUser) {
-      const userWithoutPassword = {
-        id: foundUser.id,
-        username: foundUser.username,
-        email: foundUser.email,
-        isAdmin: foundUser.isAdmin,
-        watchHistory: foundUser.watchHistory,
-        watchlist: foundUser.watchlist,
-        createdAt: foundUser.createdAt,
-      };
-
-      setUser(userWithoutPassword);
-      setCurrentUser(userWithoutPassword);
-      return true;
+      return false;
+    } catch (error) {
+      console.error('Login failed:', error);
+      return false;
     }
-
-    return false;
   };
 
   const register = async (
@@ -144,42 +91,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     email: string,
     password: string,
   ): Promise<boolean> => {
-    const users = getUsers();
+    try {
+      const response = await authAPI.register(username, email, password);
 
-    // E-posta zaten kayıtlı mı kontrol et
-    const existingUser = users.find((u) => u.email === email);
-    if (existingUser) {
+      if (response.success && response.user) {
+        setUser({
+          id: response.user.id,
+          username: response.user.username,
+          email: response.user.email,
+          isAdmin: response.user.isAdmin
+        });
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error('Registration failed:', error);
       return false;
     }
-
-    // Yeni kullanıcı oluştur
-    const newUser = {
-      id: `user_${Date.now()}`,
-      username,
-      email,
-      password: hashPassword(password),
-      isAdmin: false,
-      watchHistory: [],
-      watchlist: [],
-      createdAt: new Date().toISOString(),
-    };
-
-    users.push(newUser);
-    saveUsers(users);
-
-    // Kullanıcıyı otomatik giriş yap
-    const userWithoutPassword = { ...newUser };
-    delete (userWithoutPassword as any).password;
-
-    setUser(userWithoutPassword);
-    setCurrentUser(userWithoutPassword);
-
-    return true;
   };
 
   const logout = () => {
+    authAPI.logout();
     setUser(null);
-    setCurrentUser(null);
   };
 
   const value = {
@@ -189,6 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     logout,
     isAuthenticated: !!user,
     isAdmin: user?.isAdmin || false,
+    loading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -36,23 +36,6 @@ import { useLanguage } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/hooks/use-toast";
 
-interface AnimeData {
-  id: string;
-  title: string;
-  titleEn: string;
-  poster: string;
-  rating: number;
-  year: number;
-  episodes: number;
-  genre: string[];
-  genreEn: string[];
-  duration: string;
-  description: string;
-  descriptionEn: string;
-  status: 'ongoing' | 'completed' | 'upcoming';
-  category: 'anime' | 'movie';
-}
-
 interface NewAnime {
   title: string;
   titleEn: string;
@@ -69,8 +52,7 @@ interface NewAnime {
   category: 'anime' | 'movie';
 }
 
-interface Episode {
-  id: number;
+interface NewEpisode {
   title: string;
   titleEn: string;
   description: string;
@@ -79,6 +61,7 @@ interface Episode {
   duration: string;
   episodeNumber: number;
   airDate: string;
+  animeId: string;
 }
 
 export default function Admin() {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { 
   User, Clock, Heart, Settings, Trash2, Play, 
   Star, Calendar, Download, Bookmark, History,

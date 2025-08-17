@@ -429,19 +429,42 @@ export default function Admin() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-anime-card p-6 rounded-lg border border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-4">Son Aktiviteler</h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold text-white">Son Aktiviteler</h3>
+                    <Button
+                      size="sm"
+                      onClick={() => setShowAddNotification(true)}
+                      className="btn-primary"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Duyuru Ekle
+                    </Button>
+                  </div>
                   <div className="space-y-3">
-                    {[
-                      `Yeni kullanıcı kaydı: otaku_${Math.floor(Math.random() * 1000)}`,
-                      `${animes[Math.floor(Math.random() * animes.length)]?.title} - Bölüm ${Math.floor(Math.random() * 10) + 1} yüklendi`,
-                      `${animes[Math.floor(Math.random() * animes.length)]?.title} puanı güncellendi: ${(Math.random() * 2 + 8).toFixed(1)}`,
-                      `${Math.floor(Math.random() * 10) + 1} yeni yorum eklendi`
-                    ].map((activity, index) => (
-                      <div key={index} className="text-gray-300 text-sm border-b border-white/10 pb-2 last:border-b-0">
-                        <span className="text-neon-blue text-xs mr-2">{new Date().toLocaleTimeString('tr-TR')}</span>
-                        {activity}
+                    {notifications.slice(0, 5).map((notification) => (
+                      <div key={notification.id} className="text-gray-300 text-sm border-b border-white/10 pb-2 last:border-b-0">
+                        <div className="flex items-center justify-between">
+                          <span className={`text-xs mr-2 ${
+                            notification.type === 'success' ? 'text-green-400' :
+                            notification.type === 'warning' ? 'text-yellow-400' :
+                            notification.type === 'error' ? 'text-red-400' :
+                            'text-neon-blue'
+                          }`}>
+                            {new Date(notification.timestamp).toLocaleTimeString('tr-TR')}
+                          </span>
+                          {!notification.read && (
+                            <div className="w-2 h-2 bg-neon-blue rounded-full"></div>
+                          )}
+                        </div>
+                        <div className="font-medium text-white">{notification.title}</div>
+                        <div>{notification.message}</div>
                       </div>
                     ))}
+                    {notifications.length === 0 && (
+                      <div className="text-center py-4 text-gray-500">
+                        Henüz bildirim yok
+                      </div>
+                    )}
                   </div>
                 </div>
 

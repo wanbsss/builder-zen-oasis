@@ -280,7 +280,7 @@ export default function Admin() {
   const handleDeleteAnime = (id: string) => {
     storeDeleteAnime(id);
     toast({
-      title: "Başarılı",
+      title: "Ba��arılı",
       description: "Anime silindi!",
     });
   };
@@ -647,7 +647,7 @@ export default function Admin() {
                       {isApiLoading ? "Aranıyor..." : "Ara"}
                     </Button>
                     <Button onClick={handleLoadPopularAnime} disabled={isApiLoading} variant="outline" className="border-white/20">
-                      Popüler
+                      Pop��ler
                     </Button>
                   </div>
 
@@ -1061,6 +1061,16 @@ One Piece`}
                   >
                     <Download className="h-4 w-4 mr-2" />
                     API'den İçe Aktar
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    onClick={handleCheckImageQuality}
+                    className="border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10"
+                    disabled={isCheckingImages}
+                  >
+                    <RefreshCw className={`h-4 w-4 mr-2 ${isCheckingImages ? 'animate-spin' : ''}`} />
+                    {isCheckingImages ? 'Kontrol Ediliyor...' : 'Resim Kalitesi Kontrol'}
                   </Button>
 
                   <Dialog open={showAddAnime} onOpenChange={setShowAddAnime}>

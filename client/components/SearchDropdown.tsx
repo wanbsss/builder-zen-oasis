@@ -17,6 +17,7 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { language } = useLanguage();
+  const { animes } = useAnimeStore();
 
   // Filter anime based on search query
   const filteredAnimes = query.length > 0 

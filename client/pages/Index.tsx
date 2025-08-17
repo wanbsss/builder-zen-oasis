@@ -284,7 +284,7 @@ export default function Index() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             <div className="col-span-1 sm:col-span-2 md:col-span-1">
-              <div className="text-2xl font-bold neon-text mb-4">Animewa</div>
+              <div className="text-2xl font-bold neon-text mb-4">Aniwa</div>
               <p className="text-gray-400 text-sm md:text-base">
                 {language === 'en'
                   ? 'The ultimate destination for anime streaming. Watch your favorite shows in HD quality.'
@@ -321,7 +321,7 @@ export default function Index() {
             </div>
           </div>
           <div className="border-t border-white/10 mt-6 md:mt-8 pt-6 md:pt-8 text-center text-gray-400 text-sm md:text-base">
-            <p>&copy; 2024 Animewa. {t.allRightsReserved}</p>
+            <p>&copy; 2024 Aniwa. {t.allRightsReserved}</p>
           </div>
         </div>
       </footer>

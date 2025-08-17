@@ -157,8 +157,7 @@ export default function Admin() {
   useEffect(() => {
     const interval = setInterval(() => {
       setLastUpdate(new Date());
-      // Simulate real-time data updates
-      setAnimes(prev => [...prev]);
+      // Real-time data updates handled by store
     }, 60000); // 1 minute
 
     return () => clearInterval(interval);

@@ -194,7 +194,7 @@ export const sampleAnimes = [
     id: "1",
     title: "Shingeki no Kyojin",
     titleEn: "Attack on Titan",
-    poster: "https://img1.ak.crunchyroll.com/i/spire1/0662fbc7fb13e2ea5d6eac2c9edd68161682580325_full.jpg",
+    poster: "https://cdn.myanimelist.net/images/anime/10/47347.jpg",
     rating: 9.0,
     year: 2013,
     episodes: 87,

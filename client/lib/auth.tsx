@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 // Kullanıcı tipi
 export interface User {
@@ -15,7 +21,11 @@ export interface User {
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<boolean>;
-  register: (username: string, email: string, password: string) => Promise<boolean>;
+  register: (
+    username: string,
+    email: string,
+    password: string,
+  ) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
   isAdmin: boolean;
@@ -24,19 +34,19 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // LocalStorage'de kullanıcıları saklama
-const USERS_KEY = 'aniwa_users';
-const CURRENT_USER_KEY = 'aniwa_current_user';
+const USERS_KEY = "aniwa_users";
+const CURRENT_USER_KEY = "aniwa_current_user";
 
 // Demo admin kullanıcısı
 const DEMO_ADMIN = {
-  id: 'admin_001',
-  username: 'admin',
-  email: 'admin@aniwa.com',
-  password: 'admin123', // Gerçek uygulamada hash'lenmeli
+  id: "admin_001",
+  username: "admin",
+  email: "admin@aniwa.com",
+  password: "admin123", // Gerçek uygulamada hash'lenmeli
   isAdmin: true,
   watchHistory: [],
   watchlist: [],
-  createdAt: new Date().toISOString()
+  createdAt: new Date().toISOString(),
 };
 
 // Kullanıcıları localStorage'den al
@@ -44,14 +54,14 @@ function getUsers(): (User & { password: string })[] {
   try {
     const stored = localStorage.getItem(USERS_KEY);
     const users = stored ? JSON.parse(stored) : [];
-    
+
     // Demo admin'i ekle eğer yoksa
     const hasAdmin = users.some((u: any) => u.email === DEMO_ADMIN.email);
     if (!hasAdmin) {
       users.push(DEMO_ADMIN);
       localStorage.setItem(USERS_KEY, JSON.stringify(users));
     }
-    
+
     return users;
   } catch {
     // Hata durumunda demo admin'i döndür
@@ -87,13 +97,13 @@ function setCurrentUser(user: User | null) {
 
 // Basit şifre hash'leme (gerçek uygulamada bcrypt kullanılmalı)
 function hashPassword(password: string): string {
-  return btoa(password + 'aniwa_salt');
+  return btoa(password + "aniwa_salt");
 }
 
 // Auth Provider
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  
+
   useEffect(() => {
     // Sayfa yüklendiğinde kullanıcıyı kontrol et
     const currentUser = getCurrentUser();
@@ -103,11 +113,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<boolean> => {
     const users = getUsers();
     const hashedPassword = hashPassword(password);
-    
-    const foundUser = users.find(u => 
-      u.email === email && (u.password === hashedPassword || u.password === password)
+
+    const foundUser = users.find(
+      (u) =>
+        u.email === email &&
+        (u.password === hashedPassword || u.password === password),
     );
-    
+
     if (foundUser) {
       const userWithoutPassword = {
         id: foundUser.id,
@@ -116,26 +128,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAdmin: foundUser.isAdmin,
         watchHistory: foundUser.watchHistory,
         watchlist: foundUser.watchlist,
-        createdAt: foundUser.createdAt
+        createdAt: foundUser.createdAt,
       };
-      
+
       setUser(userWithoutPassword);
       setCurrentUser(userWithoutPassword);
       return true;
     }
-    
+
     return false;
   };
 
-  const register = async (username: string, email: string, password: string): Promise<boolean> => {
+  const register = async (
+    username: string,
+    email: string,
+    password: string,
+  ): Promise<boolean> => {
     const users = getUsers();
-    
+
     // E-posta zaten kayıtlı mı kontrol et
-    const existingUser = users.find(u => u.email === email);
+    const existingUser = users.find((u) => u.email === email);
     if (existingUser) {
       return false;
     }
-    
+
     // Yeni kullanıcı oluştur
     const newUser = {
       id: `user_${Date.now()}`,
@@ -145,19 +161,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAdmin: false,
       watchHistory: [],
       watchlist: [],
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
-    
+
     users.push(newUser);
     saveUsers(users);
-    
+
     // Kullanıcıyı otomatik giriş yap
     const userWithoutPassword = { ...newUser };
     delete (userWithoutPassword as any).password;
-    
+
     setUser(userWithoutPassword);
     setCurrentUser(userWithoutPassword);
-    
+
     return true;
   };
 
@@ -172,39 +188,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     register,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.isAdmin || false
+    isAdmin: user?.isAdmin || false,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
 
 // Protected Route component
-export function ProtectedRoute({ children, requireAdmin = false }: { 
-  children: ReactNode; 
-  requireAdmin?: boolean; 
+export function ProtectedRoute({
+  children,
+  requireAdmin = false,
+}: {
+  children: ReactNode;
+  requireAdmin?: boolean;
 }) {
   const { isAuthenticated, isAdmin } = useAuth();
-  
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-anime-dark flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Giriş Gerekli</h1>
-          <p className="text-gray-400 mb-6">Bu sayfayı görmek için giriş yapmalısınız.</p>
-          <button 
-            onClick={() => window.location.href = '/'}
+          <p className="text-gray-400 mb-6">
+            Bu sayfayı görmek için giriş yapmalısınız.
+          </p>
+          <button
+            onClick={() => (window.location.href = "/")}
             className="btn-primary"
           >
             Ana Sayfaya Git
@@ -213,15 +230,17 @@ export function ProtectedRoute({ children, requireAdmin = false }: {
       </div>
     );
   }
-  
+
   if (requireAdmin && !isAdmin) {
     return (
       <div className="min-h-screen bg-anime-dark flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Yetkisiz Erişim</h1>
+          <h1 className="text-2xl font-bold text-white mb-4">
+            Yetkisiz Erişim
+          </h1>
           <p className="text-gray-400 mb-6">Bu sayfaya erişim yetkiniz yok.</p>
-          <button 
-            onClick={() => window.location.href = '/'}
+          <button
+            onClick={() => (window.location.href = "/")}
             className="btn-primary"
           >
             Ana Sayfaya Git
@@ -230,6 +249,6 @@ export function ProtectedRoute({ children, requireAdmin = false }: {
       </div>
     );
   }
-  
+
   return <>{children}</>;
 }

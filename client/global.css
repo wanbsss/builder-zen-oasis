@@ -126,7 +126,7 @@
 
   .neon-text {
     @apply text-transparent bg-clip-text;
-    background-image: linear-gradient(45deg, #00F5FF, #B026FF);
+    background-image: linear-gradient(45deg, #00f5ff, #b026ff);
   }
 
   .glass-morphism {
@@ -135,7 +135,7 @@
 
   .hero-text {
     @apply text-6xl md:text-8xl font-bold leading-tight;
-    background: linear-gradient(135deg, #ffffff 0%, #00F5FF 50%, #B026FF 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #00f5ff 50%, #b026ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -208,12 +208,18 @@
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0px) scale(1); }
-    50% { transform: translateY(-10px) scale(1.02); }
+    0%,
+    100% {
+      transform: translateY(0px) scale(1);
+    }
+    50% {
+      transform: translateY(-10px) scale(1.02);
+    }
   }
 
   @keyframes pulse-glow {
-    0%, 100% {
+    0%,
+    100% {
       box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
       filter: brightness(1);
     }
@@ -224,23 +230,44 @@
   }
 
   @keyframes pulse-color {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.8; }
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.8;
+    }
   }
 
   @keyframes shimmer {
-    0% { transform: translateX(-100px); }
-    100% { transform: translateX(400px); }
+    0% {
+      transform: translateX(-100px);
+    }
+    100% {
+      transform: translateX(400px);
+    }
   }
 
   @keyframes fade-in-delayed {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes fade-in-delayed-2 {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes float-particles {
@@ -248,8 +275,12 @@
       opacity: 0;
       transform: translateY(100vh) translateX(0);
     }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
     100% {
       opacity: 0;
       transform: translateY(-50px) translateX(50px);
@@ -286,13 +317,24 @@
   }
 
   @keyframes netflix-gradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
 
   @keyframes fade-in {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .animate-fade-in {

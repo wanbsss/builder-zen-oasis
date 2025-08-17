@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from "react";
 
 export interface Translations {
   // Navigation
@@ -9,7 +9,7 @@ export interface Translations {
   myList: string;
   profile: string;
   admin: string;
-  
+
   // Auth
   signIn: string;
   signUp: string;
@@ -30,7 +30,7 @@ export interface Translations {
   termsOfService: string;
   privacyPolicy: string;
   byCreatingAccount: string;
-  
+
   // Homepage sections
   featured: string;
   continueWatching: string;
@@ -40,7 +40,7 @@ export interface Translations {
   watchNow: string;
   moreInfo: string;
   episodes: string;
-  
+
   // General
   search: string;
   searchAnime: string;
@@ -48,7 +48,7 @@ export interface Translations {
   rating: string;
   genre: string;
   duration: string;
-  
+
   // Footer
   browse: string;
   popular: string;
@@ -59,14 +59,14 @@ export interface Translations {
   connect: string;
   newsletter: string;
   allRightsReserved: string;
-  
+
   // Placeholders
   comingSoon: string;
   underConstruction: string;
   backToHome: string;
   goBack: string;
   continueConversation: string;
-  
+
   // Admin
   adminPanel: string;
   addAnime: string;
@@ -75,7 +75,7 @@ export interface Translations {
   manageContent: string;
   userAnalytics: string;
   moderationTools: string;
-  
+
   // Player
   play: string;
   pause: string;
@@ -85,7 +85,7 @@ export interface Translations {
   quality: string;
   speed: string;
   subtitles: string;
-  
+
   // Errors & Messages
   loginRequired: string;
   mustLoginToWatch: string;
@@ -98,12 +98,12 @@ export const tr: Translations = {
   // Navigation
   home: "Ana Sayfa",
   anime: "Anime",
-  movies: "Filmler", 
+  movies: "Filmler",
   trending: "Trend",
   myList: "Listem",
   profile: "Profil",
   admin: "Admin",
-  
+
   // Auth
   signIn: "Giriş Yap",
   signUp: "Kayıt Ol",
@@ -124,7 +124,7 @@ export const tr: Translations = {
   termsOfService: "Kullanım Şartları",
   privacyPolicy: "Gizlilik Politikası",
   byCreatingAccount: "Hesap oluşturarak",
-  
+
   // Homepage sections
   featured: "Öne Çıkan",
   continueWatching: "İzlemeye Devam Et",
@@ -134,7 +134,7 @@ export const tr: Translations = {
   watchNow: "İzle",
   moreInfo: "Detaylar",
   episodes: "bölüm",
-  
+
   // General
   search: "Ara",
   searchAnime: "Anime ara...",
@@ -142,7 +142,7 @@ export const tr: Translations = {
   rating: "Puan",
   genre: "Tür",
   duration: "Süre",
-  
+
   // Footer
   browse: "Gözat",
   popular: "Popüler",
@@ -153,14 +153,15 @@ export const tr: Translations = {
   connect: "Bağlan",
   newsletter: "Haber Bülteni",
   allRightsReserved: "Tüm hakları saklıdır.",
-  
+
   // Placeholders
   comingSoon: "Yakında Geliyor",
   underConstruction: "Bu sayfa yakında hazır olacak!",
   backToHome: "Ana Sayfaya Dön",
   goBack: "Geri Git",
-  continueConversation: "Bu sayfa için fikirleriniz var mı? Bu özellikleri oluşturmaya yardımcı olmak için AI asistanımızla konuşmaya devam edin!",
-  
+  continueConversation:
+    "Bu sayfa için fikirleriniz var mı? Bu özellikleri oluşturmaya yardımcı olmak için AI asistanımızla konuşmaya devam edin!",
+
   // Admin
   adminPanel: "Admin Paneli",
   addAnime: "Anime Ekle",
@@ -169,7 +170,7 @@ export const tr: Translations = {
   manageContent: "İçerik Yönetimi",
   userAnalytics: "Kullanıcı Analitikleri",
   moderationTools: "Moderasyon Araçları",
-  
+
   // Player
   play: "Oynat",
   pause: "Duraklat",
@@ -179,28 +180,28 @@ export const tr: Translations = {
   quality: "Kalite",
   speed: "Hız",
   subtitles: "Altyazı",
-  
+
   // Errors & Messages
   loginRequired: "Giriş Gerekli",
   mustLoginToWatch: "Anime izlemek için giriş yapmalısınız",
   invalidCredentials: "Geçersiz kullanıcı bilgileri",
   registrationSuccess: "Kayıt başarılı!",
-  loginSuccess: "Giriş başarılı!"
+  loginSuccess: "Giriş başarılı!",
 };
 
 export const en: Translations = {
   // Navigation
   home: "Home",
-  anime: "Anime", 
+  anime: "Anime",
   movies: "Movies",
   trending: "Trending",
   myList: "My List",
   profile: "Profile",
   admin: "Admin",
-  
+
   // Auth
   signIn: "Sign In",
-  signUp: "Sign Up", 
+  signUp: "Sign Up",
   register: "Register",
   welcomeBack: "Welcome Back",
   joinAniwa: "Join Aniwa",
@@ -216,9 +217,9 @@ export const en: Translations = {
   dontHaveAccount: "Don't have an account?",
   alreadyHaveAccount: "Already have an account?",
   termsOfService: "Terms of Service",
-  privacyPolicy: "Privacy Policy", 
+  privacyPolicy: "Privacy Policy",
   byCreatingAccount: "By creating an account, you agree to our",
-  
+
   // Homepage sections
   featured: "Featured",
   continueWatching: "Continue Watching",
@@ -228,15 +229,15 @@ export const en: Translations = {
   watchNow: "Watch Now",
   moreInfo: "More Info",
   episodes: "episodes",
-  
+
   // General
   search: "Search",
   searchAnime: "Search anime...",
   year: "Year",
   rating: "Rating",
-  genre: "Genre", 
+  genre: "Genre",
   duration: "Duration",
-  
+
   // Footer
   browse: "Browse",
   popular: "Popular",
@@ -247,14 +248,15 @@ export const en: Translations = {
   connect: "Connect",
   newsletter: "Newsletter",
   allRightsReserved: "All rights reserved.",
-  
+
   // Placeholders
   comingSoon: "Coming Soon",
   underConstruction: "This page will be ready soon!",
   backToHome: "Back to Home",
   goBack: "Go Back",
-  continueConversation: "Have ideas for this page? Continue the conversation with our AI assistant to help build out these features!",
-  
+  continueConversation:
+    "Have ideas for this page? Continue the conversation with our AI assistant to help build out these features!",
+
   // Admin
   adminPanel: "Admin Panel",
   addAnime: "Add Anime",
@@ -263,7 +265,7 @@ export const en: Translations = {
   manageContent: "Manage Content",
   userAnalytics: "User Analytics",
   moderationTools: "Moderation Tools",
-  
+
   // Player
   play: "Play",
   pause: "Pause",
@@ -273,17 +275,17 @@ export const en: Translations = {
   quality: "Quality",
   speed: "Speed",
   subtitles: "Subtitles",
-  
+
   // Errors & Messages
   loginRequired: "Login Required",
   mustLoginToWatch: "You must login to watch anime",
   invalidCredentials: "Invalid credentials",
   registrationSuccess: "Registration successful!",
-  loginSuccess: "Login successful!"
+  loginSuccess: "Login successful!",
 };
 
 // Language context
-export type Language = 'tr' | 'en';
+export type Language = "tr" | "en";
 
 interface LanguageContextType {
   language: Language;
@@ -291,15 +293,19 @@ interface LanguageContextType {
   t: Translations;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined,
+);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('tr'); // Varsayılan Türkçe
-  
-  const translations = language === 'tr' ? tr : en;
-  
+  const [language, setLanguage] = useState<Language>("tr"); // Varsayılan Türkçe
+
+  const translations = language === "tr" ? tr : en;
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t: translations }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage, t: translations }}
+    >
       {children}
     </LanguageContext.Provider>
   );
@@ -308,7 +314,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 export function useLanguage() {
   const context = useContext(LanguageContext);
   if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
+    throw new Error("useLanguage must be used within a LanguageProvider");
   }
   return context;
 }

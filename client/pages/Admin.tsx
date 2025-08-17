@@ -98,6 +98,11 @@ export default function Admin() {
   const [quickAddTitle, setQuickAddTitle] = useState("");
   const [showBulkImport, setShowBulkImport] = useState(false);
   const [bulkImportText, setBulkImportText] = useState("");
+  const [showApiImport, setShowApiImport] = useState(false);
+  const [apiSearchQuery, setApiSearchQuery] = useState("");
+  const [apiSearchResults, setApiSearchResults] = useState<any[]>([]);
+  const [isApiLoading, setIsApiLoading] = useState(false);
+  const [selectedApiAnimes, setSelectedApiAnimes] = useState<Set<number>>(new Set());
   
   const [newAnime, setNewAnime] = useState<NewAnime>({
     title: "",

@@ -80,6 +80,73 @@ export default function Header({ onAuthClick }: HeaderProps) {
               )}
             </div>
 
+            {/* Notifications */}
+            {isAuthenticated && (
+              <DropdownMenu open={showNotifications} onOpenChange={setShowNotifications}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="relative text-gray-400 hover:text-neon-blue transition-colors"
+                  >
+                    <Bell className="h-5 w-5" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                      </span>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80 bg-anime-card border-white/10 max-h-96 overflow-y-auto">
+                  <div className="p-3 border-b border-white/10">
+                    <h3 className="text-white font-semibold">Bildirimler</h3>
+                    <p className="text-gray-400 text-sm">{unreadCount} okunmamış bildirim</p>
+                  </div>
+                  {notifications.length > 0 ? (
+                    <div className="max-h-80 overflow-y-auto">
+                      {notifications.slice(0, 10).map((notification) => (
+                        <div
+                          key={notification.id}
+                          className={`p-3 border-b border-white/10 hover:bg-white/5 cursor-pointer ${
+                            !notification.read ? 'bg-neon-blue/5' : ''
+                          }`}
+                          onClick={() => markNotificationRead(notification.id)}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <h4 className={`text-sm font-medium ${!notification.read ? 'text-white' : 'text-gray-300'}`}>
+                                {notification.title}
+                              </h4>
+                              <p className="text-xs text-gray-400 mt-1">
+                                {notification.message}
+                              </p>
+                              <p className="text-xs text-gray-500 mt-2">
+                                {new Date(notification.timestamp).toLocaleDateString('tr-TR')} • {new Date(notification.timestamp).toLocaleTimeString('tr-TR')}
+                              </p>
+                            </div>
+                            <div className={`ml-2 w-2 h-2 rounded-full ${
+                              notification.type === 'success' ? 'bg-green-400' :
+                              notification.type === 'warning' ? 'bg-yellow-400' :
+                              notification.type === 'error' ? 'bg-red-400' :
+                              'bg-neon-blue'
+                            }`} />
+                          </div>
+                          {!notification.read && (
+                            <div className="absolute left-1 top-1/2 transform -translate-y-1/2 w-1 h-1 bg-neon-blue rounded-full" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-6 text-center text-gray-400">
+                      <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">Henüz bildirim yok</p>
+                    </div>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
             {/* Language Switcher */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

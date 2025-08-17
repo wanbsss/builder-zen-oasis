@@ -93,6 +93,8 @@ export default function Admin() {
     message: "",
     type: "info" as "info" | "success" | "warning" | "error"
   });
+
+  const [quickAddTitle, setQuickAddTitle] = useState("");
   
   const [newAnime, setNewAnime] = useState<NewAnime>({
     title: "",

@@ -85,7 +85,18 @@ export default function Admin() {
   const { t, language } = useLanguage();
   const { user, isAdmin } = useAuth();
   const [selectedTab, setSelectedTab] = useState("dashboard");
-  const [animes, setAnimes] = useState<AnimeData[]>(sampleAnimes as AnimeData[]);
+  const {
+    animes,
+    addAnime: storeAddAnime,
+    updateAnime: storeUpdateAnime,
+    deleteAnime: storeDeleteAnime,
+    episodes,
+    addEpisode: storeAddEpisode,
+    getEpisodesByAnimeId,
+    notifications,
+    addNotification
+  } = useAnimeStore();
+
   const [selectedAnime, setSelectedAnime] = useState<string | null>(null);
   const [editingAnime, setEditingAnime] = useState<string | null>(null);
   const [showAddAnime, setShowAddAnime] = useState(false);

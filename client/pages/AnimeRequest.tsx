@@ -1,11 +1,24 @@
 import { useState } from "react";
-import { MessageSquare, Send, Star, Clock, Users, CheckCircle } from "lucide-react";
+import {
+  MessageSquare,
+  Send,
+  Star,
+  Clock,
+  Users,
+  CheckCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import Header from "@/components/Header";
 import { useLanguage } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
@@ -18,7 +31,7 @@ interface AnimeRequest {
   requestedBy: string;
   timestamp: string;
   votes: number;
-  status: 'pending' | 'approved' | 'rejected' | 'added';
+  status: "pending" | "approved" | "rejected" | "added";
   userVoted?: boolean;
 }
 
@@ -39,28 +52,28 @@ export default function AnimeRequest() {
       timestamp: "2024-01-15T10:30:00Z",
       votes: 45,
       status: "approved",
-      userVoted: false
+      userVoted: false,
     },
     {
-      id: "2", 
+      id: "2",
       animeName: "Jujutsu Kaisen Season 3",
       description: "Jujutsu Kaisen'in yeni sezonunu bekliyoruz",
       requestedBy: "MangaFan",
       timestamp: "2024-01-14T15:45:00Z",
       votes: 38,
       status: "pending",
-      userVoted: true
+      userVoted: true,
     },
     {
       id: "3",
       animeName: "Studio Ghibli Collection",
       description: "Miyazaki filmlerinin tamamını ekleyebilir misiniz?",
       requestedBy: "GhibliFan",
-      timestamp: "2024-01-13T09:20:00Z", 
+      timestamp: "2024-01-13T09:20:00Z",
       votes: 62,
       status: "added",
-      userVoted: false
-    }
+      userVoted: false,
+    },
   ]);
 
   const handleSubmitRequest = async () => {
@@ -68,7 +81,7 @@ export default function AnimeRequest() {
       toast({
         title: "Giriş Yapın",
         description: "Anime isteği göndermek için giriş yapmanız gerekiyor",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -77,7 +90,7 @@ export default function AnimeRequest() {
       toast({
         title: "Anime Adı Gerekli",
         description: "Lütfen istemek istediğiniz anime adını girin",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -94,10 +107,10 @@ export default function AnimeRequest() {
         timestamp: new Date().toISOString(),
         votes: 1,
         status: "pending",
-        userVoted: true
+        userVoted: true,
       };
 
-      setRequests(prev => [newRequest, ...prev]);
+      setRequests((prev) => [newRequest, ...prev]);
       setAnimeName("");
       setDescription("");
       setIsSubmitting(false);
@@ -114,22 +127,24 @@ export default function AnimeRequest() {
       toast({
         title: "Giriş Yapın",
         description: "Oy vermek için giriş yapmanız gerekiyor",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
-    setRequests(prev => prev.map(req => {
-      if (req.id === requestId) {
-        const wasVoted = req.userVoted;
-        return {
-          ...req,
-          votes: wasVoted ? req.votes - 1 : req.votes + 1,
-          userVoted: !wasVoted
-        };
-      }
-      return req;
-    }));
+    setRequests((prev) =>
+      prev.map((req) => {
+        if (req.id === requestId) {
+          const wasVoted = req.userVoted;
+          return {
+            ...req,
+            votes: wasVoted ? req.votes - 1 : req.votes + 1,
+            userVoted: !wasVoted,
+          };
+        }
+        return req;
+      }),
+    );
 
     toast({
       title: "Oy Kaydedildi",
@@ -137,16 +152,32 @@ export default function AnimeRequest() {
     });
   };
 
-  const getStatusBadge = (status: AnimeRequest['status']) => {
+  const getStatusBadge = (status: AnimeRequest["status"]) => {
     switch (status) {
-      case 'pending':
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Beklemede</Badge>;
-      case 'approved':
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Onaylandı</Badge>;
-      case 'rejected':
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Reddedildi</Badge>;
-      case 'added':
-        return <Badge className="bg-neon-blue/20 text-neon-blue border-neon-blue/30">Eklendi</Badge>;
+      case "pending":
+        return (
+          <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
+            Beklemede
+          </Badge>
+        );
+      case "approved":
+        return (
+          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+            Onaylandı
+          </Badge>
+        );
+      case "rejected":
+        return (
+          <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+            Reddedildi
+          </Badge>
+        );
+      case "added":
+        return (
+          <Badge className="bg-neon-blue/20 text-neon-blue border-neon-blue/30">
+            Eklendi
+          </Badge>
+        );
       default:
         return null;
     }
@@ -164,7 +195,7 @@ export default function AnimeRequest() {
   return (
     <div className="min-h-screen bg-anime-dark">
       <Header />
-      
+
       <div className="pt-16">
         <div className="container mx-auto px-4 py-8">
           {/* Page Header */}
@@ -174,8 +205,8 @@ export default function AnimeRequest() {
               Anime İstekleri
             </h1>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              İzlemek istediğiniz animeleri isteyin ve diğer kullanıcıların isteklerini oylayın. 
-              En çok oy alan animeler siteye eklenecek!
+              İzlemek istediğiniz animeleri isteyin ve diğer kullanıcıların
+              isteklerini oylayın. En çok oy alan animeler siteye eklenecek!
             </p>
           </div>
 
@@ -194,7 +225,9 @@ export default function AnimeRequest() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <Label htmlFor="anime-name" className="text-white">Anime Adı *</Label>
+                    <Label htmlFor="anime-name" className="text-white">
+                      Anime Adı *
+                    </Label>
                     <Input
                       id="anime-name"
                       value={animeName}
@@ -203,9 +236,11 @@ export default function AnimeRequest() {
                       className="bg-black/50 border-white/20 text-white mt-1"
                     />
                   </div>
-                  
+
                   <div>
-                    <Label htmlFor="description" className="text-white">Açıklama (İsteğe bağlı)</Label>
+                    <Label htmlFor="description" className="text-white">
+                      Açıklama (İsteğe bağlı)
+                    </Label>
                     <Textarea
                       id="description"
                       value={description}
@@ -216,7 +251,7 @@ export default function AnimeRequest() {
                     />
                   </div>
 
-                  <Button 
+                  <Button
                     onClick={handleSubmitRequest}
                     disabled={isSubmitting || !animeName.trim()}
                     className="w-full btn-primary"
@@ -259,7 +294,10 @@ export default function AnimeRequest() {
 
               <div className="space-y-4">
                 {sortedRequests.map((request) => (
-                  <Card key={request.id} className="bg-anime-card border-white/10 hover:border-white/20 transition-colors">
+                  <Card
+                    key={request.id}
+                    className="bg-anime-card border-white/10 hover:border-white/20 transition-colors"
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
@@ -269,19 +307,23 @@ export default function AnimeRequest() {
                             </h3>
                             {getStatusBadge(request.status)}
                           </div>
-                          
+
                           {request.description && (
                             <p className="text-gray-300 mb-3 leading-relaxed">
                               {request.description}
                             </p>
                           )}
-                          
+
                           <div className="flex items-center space-x-4 text-sm text-gray-400">
                             <span>👤 {request.requestedBy}</span>
                             <span>•</span>
                             <div className="flex items-center space-x-1">
                               <Clock className="h-3 w-3" />
-                              <span>{new Date(request.timestamp).toLocaleDateString('tr-TR')}</span>
+                              <span>
+                                {new Date(request.timestamp).toLocaleDateString(
+                                  "tr-TR",
+                                )}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -293,17 +335,23 @@ export default function AnimeRequest() {
                             size="sm"
                             variant={request.userVoted ? "default" : "outline"}
                             onClick={() => handleVote(request.id)}
-                            disabled={request.status === 'added' || request.status === 'rejected'}
-                            className={request.userVoted 
-                              ? "bg-neon-blue text-black hover:bg-neon-blue/80" 
-                              : "border-white/20 text-white hover:bg-white/10"
+                            disabled={
+                              request.status === "added" ||
+                              request.status === "rejected"
+                            }
+                            className={
+                              request.userVoted
+                                ? "bg-neon-blue text-black hover:bg-neon-blue/80"
+                                : "border-white/20 text-white hover:bg-white/10"
                             }
                           >
-                            <Star className={`h-4 w-4 mr-1 ${request.userVoted ? 'fill-current' : ''}`} />
+                            <Star
+                              className={`h-4 w-4 mr-1 ${request.userVoted ? "fill-current" : ""}`}
+                            />
                             {request.votes}
                           </Button>
-                          
-                          {request.status === 'added' && (
+
+                          {request.status === "added" && (
                             <div className="flex items-center space-x-1 text-neon-blue text-sm">
                               <CheckCircle className="h-4 w-4" />
                               <span>Siteye eklendi!</span>
@@ -311,11 +359,12 @@ export default function AnimeRequest() {
                           )}
                         </div>
 
-                        {request.status === 'pending' && request.votes >= 50 && (
-                          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                            Yüksek öncelik!
-                          </Badge>
-                        )}
+                        {request.status === "pending" &&
+                          request.votes >= 50 && (
+                            <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                              Yüksek öncelik!
+                            </Badge>
+                          )}
                       </div>
                     </CardContent>
                   </Card>
@@ -326,8 +375,12 @@ export default function AnimeRequest() {
                 <Card className="bg-anime-card border-white/10">
                   <CardContent className="p-12 text-center">
                     <MessageSquare className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium text-white mb-2">Henüz İstek Yok</h3>
-                    <p className="text-gray-400">İlk anime isteğini sen gönder!</p>
+                    <h3 className="text-xl font-medium text-white mb-2">
+                      Henüz İstek Yok
+                    </h3>
+                    <p className="text-gray-400">
+                      İlk anime isteğini sen gönder!
+                    </p>
                   </CardContent>
                 </Card>
               )}

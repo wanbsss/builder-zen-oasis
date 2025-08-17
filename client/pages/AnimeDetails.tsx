@@ -1,9 +1,20 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { 
-  Play, Plus, Heart, Clock, Star, Calendar, 
-  Download, Share2, Bookmark, ChevronLeft,
-  Users, Eye, MessageCircle, ThumbsUp
+import {
+  Play,
+  Plus,
+  Heart,
+  Clock,
+  Star,
+  Calendar,
+  Download,
+  Share2,
+  Bookmark,
+  ChevronLeft,
+  Users,
+  Eye,
+  MessageCircle,
+  ThumbsUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,13 +33,13 @@ export default function AnimeDetails() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const { isAuthenticated } = useAuth();
-  const { 
-    animes, 
-    getEpisodesByAnimeId, 
-    getUserList, 
-    addToList, 
+  const {
+    animes,
+    getEpisodesByAnimeId,
+    getUserList,
+    addToList,
     removeFromList,
-    updateWatchProgress 
+    updateWatchProgress,
   } = useAnimeStore();
 
   const [selectedTab, setSelectedTab] = useState("episodes");
@@ -37,19 +48,19 @@ export default function AnimeDetails() {
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const anime = animes.find(a => a.id === id);
+  const anime = animes.find((a) => a.id === id);
   const episodes = getEpisodesByAnimeId(id || "");
-  
+
   useEffect(() => {
     if (!anime) {
-      navigate('/');
+      navigate("/");
       return;
     }
-    
+
     // Check if anime is in user's lists
     if (isAuthenticated) {
-      const watchlist = getUserList('user', 'watchlist');
-      const favorites = getUserList('user', 'favorites');
+      const watchlist = getUserList("user", "watchlist");
+      const favorites = getUserList("user", "favorites");
       setIsInWatchlist(watchlist.includes(anime.id));
       setIsFavorite(favorites.includes(anime.id));
     }
@@ -59,8 +70,10 @@ export default function AnimeDetails() {
     return (
       <div className="min-h-screen bg-anime-dark flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Anime Bulunamadı</h1>
-          <Button onClick={() => navigate('/')} className="btn-primary">
+          <h1 className="text-2xl font-bold text-white mb-4">
+            Anime Bulunamadı
+          </h1>
+          <Button onClick={() => navigate("/")} className="btn-primary">
             Ana Sayfaya Dön
           </Button>
         </div>
@@ -73,24 +86,24 @@ export default function AnimeDetails() {
       toast({
         title: "Giriş Yapın",
         description: "Bu özelliği kullanmak için giriş yapmanız gerekiyor",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
     if (isInWatchlist) {
-      removeFromList('user', anime.id, 'watchlist');
+      removeFromList("user", anime.id, "watchlist");
       setIsInWatchlist(false);
       toast({
         title: "Listeden Çıkarıldı",
-        description: "Anime izleme listenizden çıkarıldı"
+        description: "Anime izleme listenizden çıkarıldı",
       });
     } else {
-      addToList('user', anime.id, 'watchlist');
+      addToList("user", anime.id, "watchlist");
       setIsInWatchlist(true);
       toast({
         title: "Listeye Eklendi",
-        description: "Anime izleme listenize eklendi"
+        description: "Anime izleme listenize eklendi",
       });
     }
   };
@@ -100,24 +113,24 @@ export default function AnimeDetails() {
       toast({
         title: "Giriş Yapın",
         description: "Bu özelliği kullanmak için giriş yapmanız gerekiyor",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
     if (isFavorite) {
-      removeFromList('user', anime.id, 'favorites');
+      removeFromList("user", anime.id, "favorites");
       setIsFavorite(false);
       toast({
         title: "Favorilerden Çıkarıldı",
-        description: "Anime favorilerinizden çıkarıldı"
+        description: "Anime favorilerinizden çıkarıldı",
       });
     } else {
-      addToList('user', anime.id, 'favorites');
+      addToList("user", anime.id, "favorites");
       setIsFavorite(true);
       toast({
         title: "Favorilere Eklendi",
-        description: "Anime favorilerinize eklendi"
+        description: "Anime favorilerinize eklendi",
       });
     }
   };
@@ -127,14 +140,14 @@ export default function AnimeDetails() {
       toast({
         title: "Giriş Yapın",
         description: "Animeleri izlemek için giriş yapmanız gerekiyor",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
     setSelectedEpisode(episodeNumber);
     setShowPlayer(true);
-    
+
     // Update watch progress
     updateWatchProgress(anime.id, episodeNumber, 0);
   };
@@ -146,14 +159,16 @@ export default function AnimeDetails() {
       toast({
         title: "Bölüm Bulunamadı",
         description: "Bu anime için henüz bölüm eklenmemiş",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   // Mock data for demo
   const relatedAnimes = animes
-    .filter(a => a.id !== anime.id && a.genre.some(g => anime.genre.includes(g)))
+    .filter(
+      (a) => a.id !== anime.id && a.genre.some((g) => anime.genre.includes(g)),
+    )
     .slice(0, 6);
 
   const comments = [
@@ -163,22 +178,22 @@ export default function AnimeDetails() {
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=user1",
       comment: "Harika bir anime! Karakterler çok iyi geliştirilmiş.",
       likes: 24,
-      timestamp: "2 saat önce"
+      timestamp: "2 saat önce",
     },
     {
       id: 2,
       user: "MangaLover",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=user2", 
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=user2",
       comment: "Animasyon kalitesi çok yüksek, gerçekten etkileyici.",
       likes: 18,
-      timestamp: "5 saat önce"
-    }
+      timestamp: "5 saat önce",
+    },
   ];
 
   return (
     <div className="min-h-screen bg-anime-dark">
       <Header />
-      
+
       {/* Video Player Modal */}
       {showPlayer && selectedEpisode && (
         <div className="fixed inset-0 z-50 bg-black">
@@ -193,13 +208,15 @@ export default function AnimeDetails() {
             </Button>
             <VideoPlayer
               src={`https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`}
-              title={`${language === 'en' ? anime.titleEn : anime.title} - Bölüm ${selectedEpisode}`}
-              onProgress={(progress) => updateWatchProgress(anime.id, selectedEpisode, progress)}
+              title={`${language === "en" ? anime.titleEn : anime.title} - Bölüm ${selectedEpisode}`}
+              onProgress={(progress) =>
+                updateWatchProgress(anime.id, selectedEpisode, progress)
+              }
             />
           </div>
         </div>
       )}
-      
+
       <div className="pt-16">
         {/* Hero Section with Banner */}
         <section className="relative h-[70vh] overflow-hidden">
@@ -217,7 +234,7 @@ export default function AnimeDetails() {
             <div className="pb-16 max-w-3xl">
               <div className="flex items-center space-x-4 mb-4">
                 <Badge className="bg-neon-blue/20 text-neon-blue border-neon-blue/50">
-                  {anime.category === 'movie' ? 'Film' : 'Anime'}
+                  {anime.category === "movie" ? "Film" : "Anime"}
                 </Badge>
                 <div className="flex items-center space-x-2 text-gray-300">
                   <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -226,57 +243,75 @@ export default function AnimeDetails() {
                   <span>{anime.year}</span>
                   <span>•</span>
                   <Clock className="h-4 w-4" />
-                  <span>{anime.episodes} {t.episodes}</span>
+                  <span>
+                    {anime.episodes} {t.episodes}
+                  </span>
                 </div>
               </div>
 
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                {language === 'en' ? anime.titleEn : anime.title}
+                {language === "en" ? anime.titleEn : anime.title}
               </h1>
 
               <p className="text-lg text-gray-300 mb-6 leading-relaxed max-w-2xl">
-                {language === 'en' ? anime.descriptionEn : anime.description}
+                {language === "en" ? anime.descriptionEn : anime.description}
               </p>
 
               <div className="flex flex-wrap gap-2 mb-8">
-                {(language === 'en' ? anime.genreEn : anime.genre).map((genre) => (
-                  <Badge key={genre} variant="outline" className="border-white/30 text-gray-300">
-                    {genre}
-                  </Badge>
-                ))}
+                {(language === "en" ? anime.genreEn : anime.genre).map(
+                  (genre) => (
+                    <Badge
+                      key={genre}
+                      variant="outline"
+                      className="border-white/30 text-gray-300"
+                    >
+                      {genre}
+                    </Badge>
+                  ),
+                )}
               </div>
 
               <div className="flex flex-wrap items-center gap-4">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="btn-primary"
                   onClick={handleStartWatching}
                 >
                   <Play className="h-5 w-5 mr-2" />
                   {t.watchNow}
                 </Button>
-                
-                <Button 
-                  size="lg" 
+
+                <Button
+                  size="lg"
                   variant="outline"
                   onClick={handleWatchlistToggle}
-                  className={`border-white/20 ${isInWatchlist ? 'bg-white/10 text-white' : 'text-white hover:bg-white/10'}`}
+                  className={`border-white/20 ${isInWatchlist ? "bg-white/10 text-white" : "text-white hover:bg-white/10"}`}
                 >
-                  {isInWatchlist ? <Bookmark className="h-5 w-5 mr-2 fill-current" /> : <Plus className="h-5 w-5 mr-2" />}
-                  {isInWatchlist ? 'Listede' : 'Listeye Ekle'}
+                  {isInWatchlist ? (
+                    <Bookmark className="h-5 w-5 mr-2 fill-current" />
+                  ) : (
+                    <Plus className="h-5 w-5 mr-2" />
+                  )}
+                  {isInWatchlist ? "Listede" : "Listeye Ekle"}
                 </Button>
 
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   variant="outline"
                   onClick={handleFavoriteToggle}
-                  className={`border-white/20 ${isFavorite ? 'bg-red-500/20 text-red-400' : 'text-white hover:bg-white/10'}`}
+                  className={`border-white/20 ${isFavorite ? "bg-red-500/20 text-red-400" : "text-white hover:bg-white/10"}`}
                 >
-                  <Heart className={`h-5 w-5 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
-                  {isFavorite ? 'Favoride' : 'Favorilere Ekle'}
+                  <Heart
+                    className={`h-5 w-5 mr-2 ${isFavorite ? "fill-current" : ""}`}
+                  />
+                  {isFavorite ? "Favoride" : "Favorilere Ekle"}
                 </Button>
 
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-white/20 text-white hover:bg-white/10"
+                >
                   <Share2 className="h-5 w-5 mr-2" />
                   Paylaş
                 </Button>
@@ -287,21 +322,37 @@ export default function AnimeDetails() {
 
         {/* Content Tabs */}
         <div className="container mx-auto px-4 py-8">
-          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+          <Tabs
+            value={selectedTab}
+            onValueChange={setSelectedTab}
+            className="w-full"
+          >
             <TabsList className="grid w-full grid-cols-4 bg-anime-card border border-white/10">
-              <TabsTrigger value="episodes" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
+              <TabsTrigger
+                value="episodes"
+                className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black"
+              >
                 <Play className="h-4 w-4 mr-2" />
                 Bölümler ({episodes.length})
               </TabsTrigger>
-              <TabsTrigger value="details" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
+              <TabsTrigger
+                value="details"
+                className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black"
+              >
                 <Eye className="h-4 w-4 mr-2" />
                 Detaylar
               </TabsTrigger>
-              <TabsTrigger value="comments" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
+              <TabsTrigger
+                value="comments"
+                className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black"
+              >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 Yorumlar ({comments.length})
               </TabsTrigger>
-              <TabsTrigger value="related" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
+              <TabsTrigger
+                value="related"
+                className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black"
+              >
                 <Users className="h-4 w-4 mr-2" />
                 Benzer Animeler
               </TabsTrigger>
@@ -314,8 +365,8 @@ export default function AnimeDetails() {
                 {episodes.length > 0 ? (
                   <div className="grid gap-3">
                     {episodes.map((episode) => (
-                      <div 
-                        key={episode.id} 
+                      <div
+                        key={episode.id}
                         className="flex items-center space-x-4 p-4 bg-black/30 rounded-lg hover:bg-black/50 transition-colors cursor-pointer group"
                         onClick={() => handlePlayEpisode(episode.episodeNumber)}
                       >
@@ -324,17 +375,26 @@ export default function AnimeDetails() {
                         </div>
                         <div className="flex-1">
                           <h3 className="text-white font-medium mb-1">
-                            Bölüm {episode.episodeNumber}: {language === 'en' ? episode.titleEn : episode.title}
+                            Bölüm {episode.episodeNumber}:{" "}
+                            {language === "en"
+                              ? episode.titleEn
+                              : episode.title}
                           </h3>
                           <p className="text-gray-400 text-sm line-clamp-2">
-                            {language === 'en' ? episode.descriptionEn : episode.description}
+                            {language === "en"
+                              ? episode.descriptionEn
+                              : episode.description}
                           </p>
                           <div className="flex items-center space-x-2 mt-2 text-xs text-gray-500">
                             <Clock className="h-3 w-3" />
                             <span>{episode.duration}</span>
                             <span>•</span>
                             <Calendar className="h-3 w-3" />
-                            <span>{new Date(episode.airDate).toLocaleDateString('tr-TR')}</span>
+                            <span>
+                              {new Date(episode.airDate).toLocaleDateString(
+                                "tr-TR",
+                              )}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -343,8 +403,12 @@ export default function AnimeDetails() {
                 ) : (
                   <div className="text-center py-12">
                     <Play className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium text-white mb-2">Henüz Bölüm Yok</h3>
-                    <p className="text-gray-400">Bu anime için henüz bölüm eklenmemiş</p>
+                    <h3 className="text-xl font-medium text-white mb-2">
+                      Henüz Bölüm Yok
+                    </h3>
+                    <p className="text-gray-400">
+                      Bu anime için henüz bölüm eklenmemiş
+                    </p>
                   </div>
                 )}
               </div>
@@ -353,10 +417,14 @@ export default function AnimeDetails() {
             {/* Details Tab */}
             <TabsContent value="details" className="mt-6">
               <div className="bg-anime-card p-6 rounded-lg border border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-6">Anime Detayları</h2>
+                <h2 className="text-2xl font-bold text-white mb-6">
+                  Anime Detayları
+                </h2>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-4">Genel Bilgiler</h3>
+                    <h3 className="text-lg font-semibold text-white mb-4">
+                      Genel Bilgiler
+                    </h3>
                     <div className="space-y-3">
                       <div className="flex justify-between">
                         <span className="text-gray-400">Türkçe Adı:</span>
@@ -368,7 +436,9 @@ export default function AnimeDetails() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-400">Tür:</span>
-                        <span className="text-white">{anime.category === 'movie' ? 'Film' : 'Anime'}</span>
+                        <span className="text-white">
+                          {anime.category === "movie" ? "Film" : "Anime"}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-400">Yıl:</span>
@@ -391,31 +461,51 @@ export default function AnimeDetails() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-400">Durum:</span>
-                        <Badge variant="outline" className={`${
-                          anime.status === 'ongoing' ? 'border-green-500 text-green-400' :
-                          anime.status === 'completed' ? 'border-blue-500 text-blue-400' :
-                          'border-yellow-500 text-yellow-400'
-                        }`}>
-                          {anime.status === 'ongoing' ? 'Devam Ediyor' : 
-                           anime.status === 'completed' ? 'Tamamlandı' : 'Yakında'}
+                        <Badge
+                          variant="outline"
+                          className={`${
+                            anime.status === "ongoing"
+                              ? "border-green-500 text-green-400"
+                              : anime.status === "completed"
+                                ? "border-blue-500 text-blue-400"
+                                : "border-yellow-500 text-yellow-400"
+                          }`}
+                        >
+                          {anime.status === "ongoing"
+                            ? "Devam Ediyor"
+                            : anime.status === "completed"
+                              ? "Tamamlandı"
+                              : "Yakında"}
                         </Badge>
                       </div>
                     </div>
                   </div>
-                  
+
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-4">Açıklama</h3>
+                    <h3 className="text-lg font-semibold text-white mb-4">
+                      Açıklama
+                    </h3>
                     <p className="text-gray-300 leading-relaxed">
-                      {language === 'en' ? anime.descriptionEn : anime.description}
+                      {language === "en"
+                        ? anime.descriptionEn
+                        : anime.description}
                     </p>
-                    
-                    <h3 className="text-lg font-semibold text-white mb-4 mt-6">Türler</h3>
+
+                    <h3 className="text-lg font-semibold text-white mb-4 mt-6">
+                      Türler
+                    </h3>
                     <div className="flex flex-wrap gap-2">
-                      {(language === 'en' ? anime.genreEn : anime.genre).map((genre) => (
-                        <Badge key={genre} variant="outline" className="border-white/30 text-gray-300">
-                          {genre}
-                        </Badge>
-                      ))}
+                      {(language === "en" ? anime.genreEn : anime.genre).map(
+                        (genre) => (
+                          <Badge
+                            key={genre}
+                            variant="outline"
+                            className="border-white/30 text-gray-300"
+                          >
+                            {genre}
+                          </Badge>
+                        ),
+                      )}
                     </div>
                   </div>
                 </div>
@@ -428,19 +518,32 @@ export default function AnimeDetails() {
                 <h2 className="text-2xl font-bold text-white mb-6">Yorumlar</h2>
                 <div className="space-y-4">
                   {comments.map((comment) => (
-                    <div key={comment.id} className="flex space-x-3 p-4 bg-black/30 rounded-lg">
+                    <div
+                      key={comment.id}
+                      className="flex space-x-3 p-4 bg-black/30 rounded-lg"
+                    >
                       <Avatar className="w-10 h-10">
                         <AvatarImage src={comment.avatar} alt={comment.user} />
-                        <AvatarFallback>{comment.user.charAt(0)}</AvatarFallback>
+                        <AvatarFallback>
+                          {comment.user.charAt(0)}
+                        </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
-                          <span className="font-medium text-white">{comment.user}</span>
-                          <span className="text-xs text-gray-500">{comment.timestamp}</span>
+                          <span className="font-medium text-white">
+                            {comment.user}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {comment.timestamp}
+                          </span>
                         </div>
                         <p className="text-gray-300 mb-2">{comment.comment}</p>
                         <div className="flex items-center space-x-2">
-                          <Button size="sm" variant="ghost" className="text-gray-400 hover:text-neon-blue h-6 px-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-gray-400 hover:text-neon-blue h-6 px-2"
+                          >
                             <ThumbsUp className="h-3 w-3 mr-1" />
                             {comment.likes}
                           </Button>
@@ -455,18 +558,28 @@ export default function AnimeDetails() {
             {/* Related Anime Tab */}
             <TabsContent value="related" className="mt-6">
               <div className="bg-anime-card p-6 rounded-lg border border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-6">Benzer Animeler</h2>
+                <h2 className="text-2xl font-bold text-white mb-6">
+                  Benzer Animeler
+                </h2>
                 {relatedAnimes.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                     {relatedAnimes.map((relatedAnime) => (
-                      <AnimeCard key={relatedAnime.id} {...relatedAnime} size="sm" />
+                      <AnimeCard
+                        key={relatedAnime.id}
+                        {...relatedAnime}
+                        size="sm"
+                      />
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-12">
                     <Users className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium text-white mb-2">Benzer Anime Bulunamadı</h3>
-                    <p className="text-gray-400">Bu anime ile benzer türde anime bulunamadı</p>
+                    <h3 className="text-xl font-medium text-white mb-2">
+                      Benzer Anime Bulunamadı
+                    </h3>
+                    <p className="text-gray-400">
+                      Bu anime ile benzer türde anime bulunamadı
+                    </p>
                   </div>
                 )}
               </div>

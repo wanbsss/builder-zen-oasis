@@ -47,7 +47,7 @@ class AnimeApiService {
   private baseUrl = "https://api.jikan.moe/v4";
   private cache = new Map<string, { data: any; timestamp: number }>();
   private cacheTimeout = 5 * 60 * 1000; // 5 minutes
-  private googleApiKey = ''; // Would need actual API key in production
+  private googleApiKey = ""; // Would need actual API key in production
 
   private async delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -226,7 +226,10 @@ class AnimeApiService {
     return "winter";
   }
 
-  convertToAnimeData(external: ExternalAnimeData, customBanner?: string): {
+  convertToAnimeData(
+    external: ExternalAnimeData,
+    customBanner?: string,
+  ): {
     title: string;
     titleEn: string;
     poster: string;
@@ -302,7 +305,9 @@ class AnimeApiService {
     const descriptionEn =
       external.synopsis || `Description for ${titleEn} coming soon.`;
 
-    const highQualityPoster = this.isValidUrl(poster) ? poster : "https://via.placeholder.com/400x600";
+    const highQualityPoster = this.isValidUrl(poster)
+      ? poster
+      : "https://via.placeholder.com/400x600";
     const banner = customBanner || highQualityPoster;
 
     return {
@@ -371,16 +376,20 @@ class AnimeApiService {
   isLowQualityImage(url: string): boolean {
     if (!url) return true;
     const lowQualityIndicators = [
-      'placeholder',
-      'via.placeholder',
-      'example.com',
-      'no-image',
-      'default',
-      'missing'
+      "placeholder",
+      "via.placeholder",
+      "example.com",
+      "no-image",
+      "default",
+      "missing",
     ];
-    return lowQualityIndicators.some(indicator =>
-      url.toLowerCase().includes(indicator)
-    ) || url.includes('50x50') || url.includes('100x100');
+    return (
+      lowQualityIndicators.some((indicator) =>
+        url.toLowerCase().includes(indicator),
+      ) ||
+      url.includes("50x50") ||
+      url.includes("100x100")
+    );
   }
 
   // Search for high-quality banner images using Google Custom Search
@@ -388,21 +397,24 @@ class AnimeApiService {
     try {
       // This would use Google Custom Search API in production
       // For now, we'll return a constructed URL based on the anime
-      const cleanTitle = animeTitle.replace(/[^a-zA-Z0-9\s]/g, '').trim();
+      const cleanTitle = animeTitle.replace(/[^a-zA-Z0-9\s]/g, "").trim();
 
       // Try to get banner from Jikan first
       const searchResults = await this.searchAnime(cleanTitle, 1);
       if (searchResults.length > 0) {
         const result = searchResults[0];
         // Use the large image as banner if available
-        return result.images?.jpg?.large_image_url ||
-               result.images?.webp?.large_image_url ||
-               result.images?.jpg?.image_url || null;
+        return (
+          result.images?.jpg?.large_image_url ||
+          result.images?.webp?.large_image_url ||
+          result.images?.jpg?.image_url ||
+          null
+        );
       }
 
       return null;
     } catch (error) {
-      console.error('Error searching for banner image:', error);
+      console.error("Error searching for banner image:", error);
       return null;
     }
   }
@@ -423,7 +435,7 @@ class AnimeApiService {
 
       return null;
     } catch (error) {
-      console.error('Error getting high quality poster:', error);
+      console.error("Error getting high quality poster:", error);
       return null;
     }
   }
@@ -438,7 +450,10 @@ class AnimeApiService {
         if (searchResults.length > 0) {
           // Get banner image
           const bannerUrl = await this.searchBannerImage(title);
-          const converted = this.convertToAnimeData(searchResults[0], bannerUrl || undefined);
+          const converted = this.convertToAnimeData(
+            searchResults[0],
+            bannerUrl || undefined,
+          );
           results.push(converted);
         }
         // Respect rate limits
@@ -452,7 +467,12 @@ class AnimeApiService {
   }
 
   // Fix existing anime with missing or low quality images
-  async enhanceAnimeImages(anime: { id: string; title: string; poster?: string; banner?: string }) {
+  async enhanceAnimeImages(anime: {
+    id: string;
+    title: string;
+    poster?: string;
+    banner?: string;
+  }) {
     let updated = false;
     const updates: any = {};
 

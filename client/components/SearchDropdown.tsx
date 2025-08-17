@@ -10,7 +10,10 @@ interface SearchDropdownProps {
   className?: string;
 }
 
-export default function SearchDropdown({ onClose, className = "" }: SearchDropdownProps) {
+export default function SearchDropdown({
+  onClose,
+  className = "",
+}: SearchDropdownProps) {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -20,48 +23,68 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
   const { animes } = useAnimeStore();
 
   // Filter anime based on search query
-  const filteredAnimes = query.length > 0
-    ? animes.filter(anime => {
-        const title = language === 'en' ? anime.titleEn : anime.title;
-        const genres = language === 'en' ? anime.genreEn : anime.genre;
-        
-        return title.toLowerCase().includes(query.toLowerCase()) ||
-               genres.some(genre => genre.toLowerCase().includes(query.toLowerCase()));
-      }).slice(0, 8)
-    : [];
+  const filteredAnimes =
+    query.length > 0
+      ? animes
+          .filter((anime) => {
+            const title = language === "en" ? anime.titleEn : anime.title;
+            const genres = language === "en" ? anime.genreEn : anime.genre;
+
+            return (
+              title.toLowerCase().includes(query.toLowerCase()) ||
+              genres.some((genre) =>
+                genre.toLowerCase().includes(query.toLowerCase()),
+              )
+            );
+          })
+          .slice(0, 8)
+      : [];
 
   // Exact matches
-  const exactMatches = filteredAnimes.filter(anime => {
-    const title = language === 'en' ? anime.titleEn : anime.title;
+  const exactMatches = filteredAnimes.filter((anime) => {
+    const title = language === "en" ? anime.titleEn : anime.title;
     return title.toLowerCase().includes(query.toLowerCase());
   });
 
   // Similar/related anime (if no exact matches)
-  const similarAnimes = exactMatches.length === 0 && query.length > 2
-    ? animes.filter(anime => {
-        const genres = language === 'en' ? anime.genreEn : anime.genre;
-        const title = language === 'en' ? anime.titleEn : anime.title;
-        
-        // Find anime with similar genres or partial title matches
-        return genres.some(genre => 
-          filteredAnimes.length > 0 && 
-          filteredAnimes[0] && 
-          (language === 'en' ? filteredAnimes[0].genreEn : filteredAnimes[0].genre).includes(genre)
-        ) || title.toLowerCase().includes(query.slice(0, -1).toLowerCase());
-      }).slice(0, 4)
-    : [];
+  const similarAnimes =
+    exactMatches.length === 0 && query.length > 2
+      ? animes
+          .filter((anime) => {
+            const genres = language === "en" ? anime.genreEn : anime.genre;
+            const title = language === "en" ? anime.titleEn : anime.title;
+
+            // Find anime with similar genres or partial title matches
+            return (
+              genres.some(
+                (genre) =>
+                  filteredAnimes.length > 0 &&
+                  filteredAnimes[0] &&
+                  (language === "en"
+                    ? filteredAnimes[0].genreEn
+                    : filteredAnimes[0].genre
+                  ).includes(genre),
+              ) ||
+              title.toLowerCase().includes(query.slice(0, -1).toLowerCase())
+            );
+          })
+          .slice(0, 4)
+      : [];
 
   const allResults = [...exactMatches, ...similarAnimes];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -74,15 +97,15 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
     if (!isOpen) return;
 
     switch (e.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         e.preventDefault();
-        setSelectedIndex(prev => Math.min(prev + 1, allResults.length - 1));
+        setSelectedIndex((prev) => Math.min(prev + 1, allResults.length - 1));
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         e.preventDefault();
-        setSelectedIndex(prev => Math.max(prev - 1, -1));
+        setSelectedIndex((prev) => Math.max(prev - 1, -1));
         break;
-      case 'Enter':
+      case "Enter":
         e.preventDefault();
         if (selectedIndex >= 0 && allResults[selectedIndex]) {
           handleAnimeSelect(allResults[selectedIndex]);
@@ -90,7 +113,7 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
           handleSearch();
         }
         break;
-      case 'Escape':
+      case "Escape":
         setIsOpen(false);
         onClose?.();
         break;
@@ -113,16 +136,21 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
 
   const highlightMatch = (text: string, query: string) => {
     if (!query) return text;
-    
-    const regex = new RegExp(`(${query})`, 'gi');
+
+    const regex = new RegExp(`(${query})`, "gi");
     const parts = text.split(regex);
-    
-    return parts.map((part, index) => 
+
+    return parts.map((part, index) =>
       regex.test(part) ? (
-        <span key={index} className="bg-neon-blue/30 text-neon-blue font-semibold">
+        <span
+          key={index}
+          className="bg-neon-blue/30 text-neon-blue font-semibold"
+        >
           {part}
         </span>
-      ) : part
+      ) : (
+        part
+      ),
     );
   };
 
@@ -134,7 +162,7 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
         <Input
           ref={inputRef}
           type="text"
-          placeholder={language === 'en' ? "Search anime..." : "Anime ara..."}
+          placeholder={language === "en" ? "Search anime..." : "Anime ara..."}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -168,20 +196,22 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
               {exactMatches.length > 0 && (
                 <div className="mb-4">
                   <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                    {language === 'en' ? 'Found' : 'Bulunan'}
+                    {language === "en" ? "Found" : "Bulunan"}
                   </div>
                   {exactMatches.map((anime, index) => {
-                    const title = language === 'en' ? anime.titleEn : anime.title;
-                    const genres = language === 'en' ? anime.genreEn : anime.genre;
-                    
+                    const title =
+                      language === "en" ? anime.titleEn : anime.title;
+                    const genres =
+                      language === "en" ? anime.genreEn : anime.genre;
+
                     return (
                       <button
                         key={anime.id}
                         onClick={() => handleAnimeSelect(anime)}
                         className={`w-full text-left p-3 rounded-lg transition-colors ${
                           index === selectedIndex
-                            ? 'bg-neon-blue/20 border-neon-blue/50'
-                            : 'hover:bg-white/5'
+                            ? "bg-neon-blue/20 border-neon-blue/50"
+                            : "hover:bg-white/5"
                         }`}
                       >
                         <div className="flex items-center space-x-3">
@@ -195,12 +225,19 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
                               {highlightMatch(title, query)}
                             </h4>
                             <div className="flex items-center space-x-2 mt-1">
-                              <span className="text-yellow-400 text-sm">★ {anime.rating}</span>
-                              <span className="text-gray-400 text-sm">{anime.year}</span>
+                              <span className="text-yellow-400 text-sm">
+                                ★ {anime.rating}
+                              </span>
+                              <span className="text-gray-400 text-sm">
+                                {anime.year}
+                              </span>
                             </div>
                             <div className="flex flex-wrap gap-1 mt-1">
-                              {genres.slice(0, 2).map(genre => (
-                                <span key={genre} className="text-xs text-gray-400 bg-white/10 px-2 py-0.5 rounded">
+                              {genres.slice(0, 2).map((genre) => (
+                                <span
+                                  key={genre}
+                                  className="text-xs text-gray-400 bg-white/10 px-2 py-0.5 rounded"
+                                >
                                   {genre}
                                 </span>
                               ))}
@@ -216,21 +253,23 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
               {similarAnimes.length > 0 && exactMatches.length === 0 && (
                 <div>
                   <div className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                    {language === 'en' ? 'Similar Anime' : 'Benzer Animeler'}
+                    {language === "en" ? "Similar Anime" : "Benzer Animeler"}
                   </div>
                   {similarAnimes.map((anime, index) => {
-                    const title = language === 'en' ? anime.titleEn : anime.title;
-                    const genres = language === 'en' ? anime.genreEn : anime.genre;
+                    const title =
+                      language === "en" ? anime.titleEn : anime.title;
+                    const genres =
+                      language === "en" ? anime.genreEn : anime.genre;
                     const adjustedIndex = exactMatches.length + index;
-                    
+
                     return (
                       <button
                         key={anime.id}
                         onClick={() => handleAnimeSelect(anime)}
                         className={`w-full text-left p-3 rounded-lg transition-colors ${
                           adjustedIndex === selectedIndex
-                            ? 'bg-neon-purple/20 border-neon-purple/50'
-                            : 'hover:bg-white/5'
+                            ? "bg-neon-purple/20 border-neon-purple/50"
+                            : "hover:bg-white/5"
                         }`}
                       >
                         <div className="flex items-center space-x-3">
@@ -242,12 +281,19 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
                           <div className="flex-1">
                             <h4 className="text-white font-medium">{title}</h4>
                             <div className="flex items-center space-x-2 mt-1">
-                              <span className="text-yellow-400 text-sm">★ {anime.rating}</span>
-                              <span className="text-gray-400 text-sm">{anime.year}</span>
+                              <span className="text-yellow-400 text-sm">
+                                ★ {anime.rating}
+                              </span>
+                              <span className="text-gray-400 text-sm">
+                                {anime.year}
+                              </span>
                             </div>
                             <div className="flex flex-wrap gap-1 mt-1">
-                              {genres.slice(0, 2).map(genre => (
-                                <span key={genre} className="text-xs text-gray-400 bg-white/10 px-2 py-0.5 rounded">
+                              {genres.slice(0, 2).map((genre) => (
+                                <span
+                                  key={genre}
+                                  className="text-xs text-gray-400 bg-white/10 px-2 py-0.5 rounded"
+                                >
                                   {genre}
                                 </span>
                               ))}
@@ -265,9 +311,9 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
                 <button
                   onClick={handleSearch}
                   className={`w-full text-left p-3 rounded-lg transition-colors ${
-                    selectedIndex === allResults.length 
-                      ? 'bg-neon-blue/20 border-neon-blue/50'
-                      : 'hover:bg-white/5'
+                    selectedIndex === allResults.length
+                      ? "bg-neon-blue/20 border-neon-blue/50"
+                      : "hover:bg-white/5"
                   }`}
                 >
                   <div className="flex items-center space-x-3">
@@ -275,8 +321,8 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
                       <Search className="h-4 w-4 text-neon-blue" />
                     </div>
                     <span className="text-white">
-                      {language === 'en' 
-                        ? `Search for "${query}"` 
+                      {language === "en"
+                        ? `Search for "${query}"`
                         : `"${query}" için ara`}
                     </span>
                   </div>
@@ -287,18 +333,15 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
             <div className="p-6 text-center">
               <div className="text-4xl mb-4">🔍</div>
               <h3 className="text-white font-medium mb-2">
-                {language === 'en' ? 'No anime found' : 'Anime bulunamadı'}
+                {language === "en" ? "No anime found" : "Anime bulunamadı"}
               </h3>
               <p className="text-gray-400 text-sm mb-4">
-                {language === 'en' 
+                {language === "en"
                   ? `No results for "${query}". Try different keywords.`
                   : `"${query}" için sonuç bulunamadı. Farklı anahtar kelimeler deneyin.`}
               </p>
-              <Button
-                onClick={handleSearch}
-                className="btn-primary text-sm"
-              >
-                {language === 'en' ? 'Search anyway' : 'Yine de ara'}
+              <Button onClick={handleSearch} className="btn-primary text-sm">
+                {language === "en" ? "Search anyway" : "Yine de ara"}
               </Button>
             </div>
           )}

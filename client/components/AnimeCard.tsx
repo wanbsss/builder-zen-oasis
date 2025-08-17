@@ -42,7 +42,7 @@ export default function AnimeCard({
   progress = 0,
   description = "",
   descriptionEn = "",
-  category = "anime"
+  category = "anime",
 }: AnimeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -70,8 +70,8 @@ export default function AnimeCard({
   };
 
   // Use language-appropriate content
-  const displayTitle = language === 'en' ? titleEn : title;
-  const displayGenres = language === 'en' ? genreEn : genre;
+  const displayTitle = language === "en" ? titleEn : title;
+  const displayGenres = language === "en" ? genreEn : genre;
 
   return (
     <div
@@ -88,10 +88,10 @@ export default function AnimeCard({
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
           loading="lazy"
         />
-        
+
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
-        
+
         {/* Rating Badge */}
         <div className="absolute top-3 left-3">
           <Badge className="bg-black/70 text-neon-blue border-neon-blue/30 flex items-center gap-1">
@@ -102,7 +102,10 @@ export default function AnimeCard({
 
         {/* Year Badge */}
         <div className="absolute top-3 right-3">
-          <Badge variant="secondary" className="bg-white/10 text-white border-white/20">
+          <Badge
+            variant="secondary"
+            className="bg-white/10 text-white border-white/20"
+          >
             {year}
           </Badge>
         </div>
@@ -120,16 +123,19 @@ export default function AnimeCard({
         {/* Hover Overlay */}
         {isHovered && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center transition-all duration-300">
-            <div className="text-center space-y-4" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="text-center space-y-4"
+              onClick={(e) => e.stopPropagation()}
+            >
               <Button
                 size="lg"
                 className="btn-primary"
                 onClick={(e) => handleWatchClick(e)}
               >
                 <Play className="h-5 w-5 mr-2" />
-                {language === 'en' ? 'Watch Now' : 'İzle'}
+                {language === "en" ? "Watch Now" : "İzle"}
               </Button>
-              
+
               <div className="flex items-center justify-center space-x-2">
                 <Button
                   variant="ghost"
@@ -139,18 +145,20 @@ export default function AnimeCard({
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
-                
+
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleLikeToggle}
                   className={`${
-                    isLiked 
-                      ? "text-red-500 hover:text-red-400" 
+                    isLiked
+                      ? "text-red-500 hover:text-red-400"
                       : "text-white hover:text-red-500"
                   }`}
                 >
-                  <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
+                  <Heart
+                    className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`}
+                  />
                 </Button>
               </div>
             </div>
@@ -162,11 +170,13 @@ export default function AnimeCard({
           <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-neon-blue transition-colors">
             {displayTitle}
           </h3>
-          
+
           <div className="flex items-center justify-between text-sm text-gray-300 mb-2">
             <div className="flex items-center space-x-2">
               <Clock className="h-3 w-3" />
-              <span>{episodes} {language === 'en' ? 'eps' : 'bölüm'}</span>
+              <span>
+                {episodes} {language === "en" ? "eps" : "bölüm"}
+              </span>
               <span>•</span>
               <span>{duration}</span>
             </div>
@@ -202,13 +212,15 @@ export const sampleAnimes = [
     genre: ["Aksiyon", "Drama", "Fantastik"],
     genreEn: ["Action", "Drama", "Fantasy"],
     duration: "24min",
-    description: "İnsanlığın devasa titanlarla hayatta kalma mücadelesini konu alan epik bir anime.",
-    descriptionEn: "An epic anime about humanity's struggle for survival against giant titans.",
+    description:
+      "İnsanlığın devasa titanlarla hayatta kalma mücadelesini konu alan epik bir anime.",
+    descriptionEn:
+      "An epic anime about humanity's struggle for survival against giant titans.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
-    id: "2", 
+    id: "2",
     title: "Kimetsu no Yaiba",
     titleEn: "Demon Slayer",
     poster: "https://cdn.myanimelist.net/images/anime/1286/99889.jpg",
@@ -221,11 +233,11 @@ export const sampleAnimes = [
     description: "Demon avcısı Tanjiro'nun kardeşini kurtarma yolculuğu.",
     descriptionEn: "The journey of demon slayer Tanjiro to save his sister.",
     status: "ongoing" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "3",
-    title: "Jujutsu Kaisen", 
+    title: "Jujutsu Kaisen",
     titleEn: "Jujutsu Kaisen",
     poster: "https://cdn.myanimelist.net/images/anime/1171/109222.jpg",
     rating: 8.6,
@@ -237,7 +249,7 @@ export const sampleAnimes = [
     description: "Lanetli ruhlarla savaşan öğrencilerin hikayesi.",
     descriptionEn: "The story of students fighting cursed spirits.",
     status: "ongoing" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "4",
@@ -253,7 +265,7 @@ export const sampleAnimes = [
     description: "Monkey D. Luffy'nin Pirate King olma yolculuğu.",
     descriptionEn: "Monkey D. Luffy's journey to become the Pirate King.",
     status: "ongoing" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "5",
@@ -269,7 +281,7 @@ export const sampleAnimes = [
     description: "Naruto'nun ninja dünyasında güçlü olmaya giden yolu.",
     descriptionEn: "Naruto's path to becoming powerful in the ninja world.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "6",
@@ -282,10 +294,12 @@ export const sampleAnimes = [
     genre: ["Aksiyon", "Okul", "Süper Kahraman"],
     genreEn: ["Action", "School", "Superhero"],
     duration: "24min",
-    description: "Süper güçlerin normal olduğu bir dünyada kahraman olmaya çalışan Deku.",
-    descriptionEn: "Deku trying to become a hero in a world where superpowers are normal.",
+    description:
+      "Süper güçlerin normal olduğu bir dünyada kahraman olmaya çalışan Deku.",
+    descriptionEn:
+      "Deku trying to become a hero in a world where superpowers are normal.",
     status: "ongoing" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "7",
@@ -301,7 +315,7 @@ export const sampleAnimes = [
     description: "Denji'nin şeytan avcısı olarak hayatta kalma mücadelesi.",
     descriptionEn: "Denji's struggle to survive as a devil hunter.",
     status: "ongoing" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "8",
@@ -317,7 +331,7 @@ export const sampleAnimes = [
     description: "Psişik güçlere sahip Mob'un büyüme hikayesi.",
     descriptionEn: "The coming-of-age story of Mob with psychic powers.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "9",
@@ -331,9 +345,10 @@ export const sampleAnimes = [
     genreEn: ["Action", "Comedy", "Superhero"],
     duration: "24min",
     description: "Tek yumrukla her düşmanını yenen Saitama'nın hikayesi.",
-    descriptionEn: "The story of Saitama who defeats every enemy with one punch.",
+    descriptionEn:
+      "The story of Saitama who defeats every enemy with one punch.",
     status: "ongoing" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "10",
@@ -347,9 +362,10 @@ export const sampleAnimes = [
     genreEn: ["Thriller", "Supernatural", "Psychological"],
     duration: "23min",
     description: "Light Yagami'nin Death Note ile adaleti sağlama çabası.",
-    descriptionEn: "Light Yagami's attempt to create justice with the Death Note.",
+    descriptionEn:
+      "Light Yagami's attempt to create justice with the Death Note.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "11",
@@ -362,10 +378,12 @@ export const sampleAnimes = [
     genre: ["Aksiyon", "Macera", "Shonen"],
     genreEn: ["Action", "Adventure", "Shonen"],
     duration: "23min",
-    description: "Goku ve arkadaşlarının yeni evrensel savaşlar ve güçlü düşmanlarla karşılaştığı macera.",
-    descriptionEn: "The adventure of Goku and friends facing new universal battles and powerful enemies.",
+    description:
+      "Goku ve arkadaşlarının yeni evrensel savaşlar ve güçlü düşmanlarla karşılaştığı macera.",
+    descriptionEn:
+      "The adventure of Goku and friends facing new universal battles and powerful enemies.",
     status: "ongoing" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "12",
@@ -379,9 +397,10 @@ export const sampleAnimes = [
     genreEn: ["Adventure", "Action", "Shonen"],
     duration: "23min",
     description: "Gon Freecss'in babasını bulmak için Hunter olma yolculuğu.",
-    descriptionEn: "Gon Freecss's journey to become a Hunter to find his father.",
+    descriptionEn:
+      "Gon Freecss's journey to become a Hunter to find his father.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "13",
@@ -394,10 +413,12 @@ export const sampleAnimes = [
     genre: ["Aksiyon", "Drama", "Fantastik"],
     genreEn: ["Action", "Drama", "Fantasy"],
     duration: "24min",
-    description: "Edward ve Alphonse Elric kardeşlerin felsefe taşını arama hikayesi.",
-    descriptionEn: "The story of brothers Edward and Alphonse Elric searching for the philosopher's stone.",
+    description:
+      "Edward ve Alphonse Elric kardeşlerin felsefe taşını arama hikayesi.",
+    descriptionEn:
+      "The story of brothers Edward and Alphonse Elric searching for the philosopher's stone.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "14",
@@ -413,7 +434,7 @@ export const sampleAnimes = [
     description: "Ken Kaneki'nin ghoul dünyasında hayatta kalma mücadelesi.",
     descriptionEn: "Ken Kaneki's struggle to survive in the ghoul world.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "15",
@@ -426,10 +447,12 @@ export const sampleAnimes = [
     genre: ["Aksiyon", "Doğaüstü", "Shonen"],
     genreEn: ["Action", "Supernatural", "Shonen"],
     duration: "24min",
-    description: "Ichigo'nun Quincy'lerle olan son savaşındaki destansı macerası.",
-    descriptionEn: "Ichigo's epic adventure in the final battle against the Quincies.",
+    description:
+      "Ichigo'nun Quincy'lerle olan son savaşındaki destansı macerası.",
+    descriptionEn:
+      "Ichigo's epic adventure in the final battle against the Quincies.",
     status: "ongoing" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "16",
@@ -445,7 +468,7 @@ export const sampleAnimes = [
     description: "Eski savaş veteranı Violet'in duyguları öğrenme yolculuğu.",
     descriptionEn: "Former war veteran Violet's journey to learn emotions.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "17",
@@ -458,10 +481,12 @@ export const sampleAnimes = [
     genre: ["Drama", "Mecha", "Askeri"],
     genreEn: ["Drama", "Mecha", "Military"],
     duration: "25min",
-    description: "Lelouch'un Geass gücüyle Britanya İmparatorluğuna karşı isyanı.",
-    descriptionEn: "Lelouch's rebellion against the Britannia Empire with the power of Geass.",
+    description:
+      "Lelouch'un Geass gücüyle Britanya İmparatorluğuna karşı isyanı.",
+    descriptionEn:
+      "Lelouch's rebellion against the Britannia Empire with the power of Geass.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "18",
@@ -474,10 +499,12 @@ export const sampleAnimes = [
     genre: ["Komedi", "Aksiyon", "Aile"],
     genreEn: ["Comedy", "Action", "Family"],
     duration: "24min",
-    description: "Sahte aile kuran casus, suikastçı ve telepat kızın komik maceraları.",
-    descriptionEn: "Comic adventures of a spy, assassin, and telepathic girl forming a fake family.",
+    description:
+      "Sahte aile kuran casus, suikastçı ve telepat kızın komik maceraları.",
+    descriptionEn:
+      "Comic adventures of a spy, assassin, and telepathic girl forming a fake family.",
     status: "ongoing" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "19",
@@ -491,9 +518,10 @@ export const sampleAnimes = [
     genreEn: ["Sports", "School", "Comedy"],
     duration: "24min",
     description: "Hinata ve Kageyama'nın voleybolda zirveye çıkma hikayesi.",
-    descriptionEn: "The story of Hinata and Kageyama rising to the top in volleyball.",
+    descriptionEn:
+      "The story of Hinata and Kageyama rising to the top in volleyball.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   {
     id: "20",
@@ -506,10 +534,12 @@ export const sampleAnimes = [
     genre: ["Macera", "Fantastik", "Aksiyon"],
     genreEn: ["Adventure", "Fantasy", "Action"],
     duration: "24min",
-    description: "Yedi Ölümcül Günah şövalyelerinin krallığı kurtarma macerası.",
-    descriptionEn: "The adventure of the Seven Deadly Sins knights to save the kingdom.",
+    description:
+      "Yedi Ölümcül Günah şövalyelerinin krallığı kurtarma macerası.",
+    descriptionEn:
+      "The adventure of the Seven Deadly Sins knights to save the kingdom.",
     status: "completed" as const,
-    category: "anime" as const
+    category: "anime" as const,
   },
   // Movies
   {
@@ -524,9 +554,10 @@ export const sampleAnimes = [
     genreEn: ["Romance", "Drama", "Supernatural"],
     duration: "106min",
     description: "İki gencin vücut değiştirme macerası ve aşk hikayesi.",
-    descriptionEn: "The body-swapping adventure and love story of two teenagers.",
+    descriptionEn:
+      "The body-swapping adventure and love story of two teenagers.",
     status: "completed" as const,
-    category: "movie" as const
+    category: "movie" as const,
   },
   {
     id: "movie-2",
@@ -542,7 +573,7 @@ export const sampleAnimes = [
     description: "Chihiro'nun ruhlar dünyasındaki büyülü macerası.",
     descriptionEn: "Chihiro's magical adventure in the spirit world.",
     status: "completed" as const,
-    category: "movie" as const
+    category: "movie" as const,
   },
   {
     id: "movie-3",
@@ -558,7 +589,7 @@ export const sampleAnimes = [
     description: "2019 Neo-Tokyo'sunda geçen cyberpunk klasiği.",
     descriptionEn: "Cyberpunk classic set in 2019 Neo-Tokyo.",
     status: "completed" as const,
-    category: "movie" as const
+    category: "movie" as const,
   },
   {
     id: "movie-4",
@@ -574,7 +605,7 @@ export const sampleAnimes = [
     description: "Sophie'nin büyücü Howl ile büyülü maceraları.",
     descriptionEn: "Sophie's magical adventures with wizard Howl.",
     status: "completed" as const,
-    category: "movie" as const
+    category: "movie" as const,
   },
   {
     id: "movie-5",
@@ -590,7 +621,7 @@ export const sampleAnimes = [
     description: "Doğa ve sanayi arasındaki çatışmayı anlatan epik hikaye.",
     descriptionEn: "Epic tale of the conflict between nature and industry.",
     status: "completed" as const,
-    category: "movie" as const
+    category: "movie" as const,
   },
   {
     id: "movie-6",
@@ -603,22 +634,28 @@ export const sampleAnimes = [
     genre: ["Romantik", "Drama", "Doğaüstü"],
     genreEn: ["Romance", "Drama", "Supernatural"],
     duration: "112min",
-    description: "Hava durumunu kontrol edebilen kızla tanışan gencin hikayesi.",
-    descriptionEn: "The story of a boy who meets a girl who can control the weather.",
+    description:
+      "Hava durumunu kontrol edebilen kızla tanışan gencin hikayesi.",
+    descriptionEn:
+      "The story of a boy who meets a girl who can control the weather.",
     status: "completed" as const,
-    category: "movie" as const
-  }
+    category: "movie" as const,
+  },
 ];
 
 // Filter functions for categories
-export const getAnimeByCategory = (category: "anime" | "movie" | "trending" | "all" = "all") => {
+export const getAnimeByCategory = (
+  category: "anime" | "movie" | "trending" | "all" = "all",
+) => {
   switch (category) {
     case "anime":
-      return sampleAnimes.filter(anime => anime.category === "anime");
+      return sampleAnimes.filter((anime) => anime.category === "anime");
     case "movie":
-      return sampleAnimes.filter(anime => anime.category === "movie");
+      return sampleAnimes.filter((anime) => anime.category === "movie");
     case "trending":
-      return sampleAnimes.filter(anime => anime.rating >= 8.6).sort((a, b) => b.rating - a.rating);
+      return sampleAnimes
+        .filter((anime) => anime.rating >= 8.6)
+        .sort((a, b) => b.rating - a.rating);
     default:
       return sampleAnimes;
   }

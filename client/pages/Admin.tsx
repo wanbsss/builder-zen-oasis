@@ -32,6 +32,7 @@ import {
 import Header from "@/components/Header";
 import { useAnimeStore } from "@/lib/animeStore";
 import type { AnimeData } from "@/lib/animeStore";
+import { animeApi } from "@/lib/animeApi";
 import { useLanguage } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import { toast } from "@/hooks/use-toast";
@@ -1184,7 +1185,7 @@ One Piece`}
                                     <div className="flex items-center justify-between">
                                       <div>
                                         <h5 className="text-white font-medium text-sm">
-                                          Böl��m {episode.episodeNumber}: {language === 'en' ? episode.titleEn : episode.title}
+                                          Bölüm {episode.episodeNumber}: {language === 'en' ? episode.titleEn : episode.title}
                                         </h5>
                                         <p className="text-gray-400 text-xs">
                                           {episode.duration} • {new Date(episode.airDate).toLocaleDateString('tr-TR')}

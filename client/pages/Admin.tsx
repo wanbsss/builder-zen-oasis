@@ -297,6 +297,82 @@ export default function Admin() {
     }
   };
 
+  const handleApiSearch = async () => {
+    if (!apiSearchQuery.trim()) return;
+
+    setIsApiLoading(true);
+    try {
+      const results = await animeApi.searchAnime(apiSearchQuery, 20);
+      setApiSearchResults(results);
+      if (results.length === 0) {
+        toast({
+          title: "Sonuç Bulunamadı",
+          description: "Arama kriterlerinize uygun anime bulunamadı",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Arama Hatası",
+        description: "Anime arama sırasında bir hata oluştu",
+        variant: "destructive"
+      });
+    } finally {
+      setIsApiLoading(false);
+    }
+  };
+
+  const handleApiImport = async () => {
+    if (selectedApiAnimes.size === 0) return;
+
+    setIsApiLoading(true);
+    let successCount = 0;
+
+    try {
+      for (const index of selectedApiAnimes) {
+        const externalAnime = apiSearchResults[index];
+        if (externalAnime) {
+          const animeData = animeApi.convertToAnimeData(externalAnime);
+          storeAddAnime(animeData);
+          successCount++;
+        }
+      }
+
+      setSelectedApiAnimes(new Set());
+      setShowApiImport(false);
+
+      toast({
+        title: "API İçe Aktarma Tamamlandı",
+        description: `${successCount} anime başarıyla eklendi`,
+      });
+    } catch (error) {
+      toast({
+        title: "İçe Aktarma Hatası",
+        description: "Anime i��e aktarma sırasında bir hata oluştu",
+        variant: "destructive"
+      });
+    } finally {
+      setIsApiLoading(false);
+    }
+  };
+
+  const handleLoadPopularAnime = async () => {
+    setIsApiLoading(true);
+    try {
+      const popular = await animeApi.getPopularAnime();
+      setApiSearchResults(popular.slice(0, 20));
+      setApiSearchQuery("Popular Anime");
+    } catch (error) {
+      toast({
+        title: "Yükleme Hatası",
+        description: "Popüler animeler yüklenirken hata oluştu",
+        variant: "destructive"
+      });
+    } finally {
+      setIsApiLoading(false);
+    }
+  };
+
   const handleAddEpisode = () => {
     if (!selectedAnime || !newEpisode.title || !newEpisode.titleEn) {
       toast({
@@ -1269,7 +1345,7 @@ One Piece`}
                   <div className="p-4 bg-neon-pink/10 border border-neon-pink/20 rounded-lg">
                     <h3 className="text-neon-pink font-semibold mb-2">Site Ayarları</h3>
                     <p className="text-neon-pink text-sm">
-                      ⚙️ Gelecek özellikler: Genel ayarlar, tema seçenekleri, dil ayarları
+                      ⚙�� Gelecek özellikler: Genel ayarlar, tema seçenekleri, dil ayarları
                     </p>
                   </div>
                   <div className="p-4 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">

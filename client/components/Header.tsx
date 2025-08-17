@@ -177,14 +177,6 @@ export default function Header({ onAuthClick }: HeaderProps) {
             {/* User Actions */}
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-400 hover:text-neon-blue"
-                >
-                  <Bell className="h-5 w-5" />
-                </Button>
-                
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button

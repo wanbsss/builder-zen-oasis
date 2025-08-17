@@ -105,8 +105,7 @@ export default function Admin() {
 
   const [editAnime, setEditAnime] = useState<AnimeData | null>(null);
 
-  const [newEpisode, setNewEpisode] = useState<Episode>({
-    id: 1,
+  const [newEpisode, setNewEpisode] = useState<NewEpisode>({
     title: "",
     titleEn: "",
     description: "",
@@ -114,10 +113,9 @@ export default function Admin() {
     videoUrl: "",
     duration: "24min",
     episodeNumber: 1,
-    airDate: new Date().toISOString().split('T')[0]
+    airDate: new Date().toISOString().split('T')[0],
+    animeId: ""
   });
-
-  const [animeEpisodes, setAnimeEpisodes] = useState<{ [key: string]: Episode[] }>({});
 
   const availableGenres = [
     { tr: "Aksiyon", en: "Action" },

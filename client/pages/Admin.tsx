@@ -210,6 +210,7 @@ export default function Admin() {
       title: newAnime.title,
       titleEn: newAnime.titleEn,
       poster: newAnime.poster || "https://via.placeholder.com/400x600",
+      banner: newAnime.banner,
       rating: newAnime.rating,
       year: newAnime.year,
       episodes: newAnime.episodes,

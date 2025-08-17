@@ -35,7 +35,7 @@ export default function Browse() {
       'trending': language === 'en' ? 'Trending Anime' : 'Trend Animeler',
       'all': language === 'en' ? 'All Anime' : 'Tüm Animeler'
     };
-    document.title = `${categoryTitles[category as keyof typeof categoryTitles]} - Animewa`;
+    document.title = `${categoryTitles[category as keyof typeof categoryTitles]} - Aniwa`;
   }, [category, language]);
 
   const genres = language === 'en'

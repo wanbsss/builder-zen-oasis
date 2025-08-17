@@ -20,8 +20,8 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
   const { animes } = useAnimeStore();
 
   // Filter anime based on search query
-  const filteredAnimes = query.length > 0 
-    ? sampleAnimes.filter(anime => {
+  const filteredAnimes = query.length > 0
+    ? animes.filter(anime => {
         const title = language === 'en' ? anime.titleEn : anime.title;
         const genres = language === 'en' ? anime.genreEn : anime.genre;
         

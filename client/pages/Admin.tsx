@@ -501,6 +501,80 @@ export default function Admin() {
               </div>
             </TabsContent>
 
+            {/* Add Notification Dialog */}
+            <Dialog open={showAddNotification} onOpenChange={setShowAddNotification}>
+              <DialogContent className="max-w-md bg-anime-card border-white/10 text-white">
+                <DialogHeader>
+                  <DialogTitle>Yeni Duyuru Ekle</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="notif-title">Başlık *</Label>
+                    <Input
+                      id="notif-title"
+                      value={newNotification.title}
+                      onChange={(e) => setNewNotification({ ...newNotification, title: e.target.value })}
+                      className="bg-black/50 border-white/20 text-white"
+                      placeholder="Duyuru başlığı"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="notif-message">Mesaj *</Label>
+                    <Textarea
+                      id="notif-message"
+                      value={newNotification.message}
+                      onChange={(e) => setNewNotification({ ...newNotification, message: e.target.value })}
+                      className="bg-black/50 border-white/20 text-white"
+                      placeholder="Duyuru mesajı"
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="notif-type">Tür</Label>
+                    <Select
+                      value={newNotification.type}
+                      onValueChange={(value: any) => setNewNotification({ ...newNotification, type: value })}
+                    >
+                      <SelectTrigger className="bg-black/50 border-white/20 text-white">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-anime-card border-white/10">
+                        <SelectItem value="info" className="text-white">📢 Bilgi</SelectItem>
+                        <SelectItem value="success" className="text-white">✅ Başarı</SelectItem>
+                        <SelectItem value="warning" className="text-white">⚠️ Uyarı</SelectItem>
+                        <SelectItem value="error" className="text-white">❌ Hata</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowAddNotification(false)}
+                      className="border-white/20 text-white hover:bg-white/10"
+                    >
+                      İptal
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        if (newNotification.title && newNotification.message) {
+                          addNotification(newNotification);
+                          setNewNotification({ title: "", message: "", type: "info" });
+                          setShowAddNotification(false);
+                          toast({
+                            title: "Duyuru Eklendi",
+                            description: "Duyuru başarıyla eklendi",
+                          });
+                        }
+                      }}
+                      className="btn-primary"
+                    >
+                      Duyuru Ekle
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+
             {/* Anime Management */}
             <TabsContent value="animes" className="mt-6">
               <div className="flex justify-between items-center mb-6">

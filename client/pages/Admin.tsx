@@ -1271,18 +1271,34 @@ One Piece`}
                                   placeholder="English title"
                                 />
                               </div>
+                              <div className="grid grid-cols-2 gap-2">
+                                <Input
+                                  value={editAnime.poster}
+                                  onChange={(e) => setEditAnime({ ...editAnime, poster: e.target.value })}
+                                  className="bg-black/50 border-white/20 text-white text-sm"
+                                  placeholder="Poster URL"
+                                />
+                                <Input
+                                  value={editAnime.banner || ""}
+                                  onChange={(e) => setEditAnime({ ...editAnime, banner: e.target.value })}
+                                  className="bg-black/50 border-white/20 text-white text-sm"
+                                  placeholder="Banner URL"
+                                />
+                              </div>
                               <div className="flex items-center space-x-2">
                                 <Input
                                   type="number"
                                   value={editAnime.year}
                                   onChange={(e) => setEditAnime({ ...editAnime, year: parseInt(e.target.value) })}
                                   className="bg-black/50 border-white/20 text-white text-sm w-20"
+                                  placeholder="Yıl"
                                 />
                                 <Input
                                   type="number"
                                   value={editAnime.episodes}
                                   onChange={(e) => setEditAnime({ ...editAnime, episodes: parseInt(e.target.value) })}
                                   className="bg-black/50 border-white/20 text-white text-sm w-20"
+                                  placeholder="Bölüm"
                                 />
                                 <Input
                                   type="number"
@@ -1290,6 +1306,7 @@ One Piece`}
                                   value={editAnime.rating}
                                   onChange={(e) => setEditAnime({ ...editAnime, rating: parseFloat(e.target.value) })}
                                   className="bg-black/50 border-white/20 text-white text-sm w-20"
+                                  placeholder="Puan"
                                 />
                               </div>
                             </div>

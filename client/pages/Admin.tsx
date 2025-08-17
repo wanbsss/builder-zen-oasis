@@ -348,7 +348,7 @@ export default function Admin() {
     } catch (error) {
       toast({
         title: "İçe Aktarma Hatası",
-        description: "Anime i��e aktarma sırasında bir hata oluştu",
+        description: "Anime içe aktarma sırasında bir hata oluştu",
         variant: "destructive"
       });
     } finally {
@@ -912,6 +912,15 @@ One Piece`}
                     Toplu İçe Aktar
                   </Button>
 
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowApiImport(true)}
+                    className="border-neon-blue/50 text-neon-blue hover:bg-neon-blue/10"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    API'den İçe Aktar
+                  </Button>
+
                   <Dialog open={showAddAnime} onOpenChange={setShowAddAnime}>
                     <DialogTrigger asChild>
                       <Button className="btn-primary">
@@ -1345,7 +1354,7 @@ One Piece`}
                   <div className="p-4 bg-neon-pink/10 border border-neon-pink/20 rounded-lg">
                     <h3 className="text-neon-pink font-semibold mb-2">Site Ayarları</h3>
                     <p className="text-neon-pink text-sm">
-                      ⚙�� Gelecek özellikler: Genel ayarlar, tema seçenekleri, dil ayarları
+                      ⚙️ Gelecek özellikler: Genel ayarlar, tema seçenekleri, dil ayarları
                     </p>
                   </div>
                   <div className="p-4 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">

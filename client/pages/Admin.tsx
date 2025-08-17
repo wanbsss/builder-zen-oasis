@@ -1489,6 +1489,64 @@ One Piece`}
               </div>
             </TabsContent>
 
+            {/* Anime Requests */}
+            <TabsContent value="requests" className="mt-6">
+              <div className="bg-anime-card p-6 rounded-lg border border-white/10">
+                <h2 className="text-2xl font-bold text-white mb-4">Anime İstekleri</h2>
+                <p className="text-gray-400 mb-6">
+                  Kullanıcıların gönderdiği anime isteklerini burada görüntüleyebilir ve yönetebilirsiniz.
+                </p>
+
+                <div className="grid gap-4">
+                  {/* Mock request data */}
+                  {[
+                    { id: 1, anime: "One Piece Film: Red", user: "AnimeOtaku2024", votes: 45, status: "Onaylandı" },
+                    { id: 2, anime: "Jujutsu Kaisen Season 3", user: "MangaFan", votes: 38, status: "Beklemede" },
+                    { id: 3, anime: "Studio Ghibli Collection", user: "GhibliFan", votes: 62, status: "Eklendi" },
+                    { id: 4, anime: "Demon Slayer Movie", user: "SwordFan", votes: 29, status: "Beklemede" },
+                  ].map((request) => (
+                    <div key={request.id} className="flex items-center justify-between p-4 bg-black/30 rounded-lg">
+                      <div className="flex-1">
+                        <h3 className="text-white font-medium">{request.anime}</h3>
+                        <div className="flex items-center space-x-4 text-sm text-gray-400 mt-1">
+                          <span>👤 {request.user}</span>
+                          <span>⭐ {request.votes} oy</span>
+                          <span>📅 {new Date().toLocaleDateString('tr-TR')}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="outline" className={
+                          request.status === 'Eklendi' ? 'border-green-500 text-green-400' :
+                          request.status === 'Onaylandı' ? 'border-blue-500 text-blue-400' :
+                          request.status === 'Reddedildi' ? 'border-red-500 text-red-400' :
+                          'border-yellow-500 text-yellow-400'
+                        }>
+                          {request.status}
+                        </Badge>
+                        {request.status === 'Beklemede' && (
+                          <div className="flex space-x-1">
+                            <Button size="sm" className="bg-green-500/20 text-green-400 hover:bg-green-500/30">
+                              Onayla
+                            </Button>
+                            <Button size="sm" className="bg-red-500/20 text-red-400 hover:bg-red-500/30">
+                              Reddet
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 p-4 bg-neon-blue/10 border border-neon-blue/20 rounded-lg">
+                  <p className="text-neon-blue text-sm">
+                    💡 Anime istekleri sistemi: Kullanıcılar /anime-request sayfasından istek gönderebilir,
+                    yüksek oy alan istekler buraya düşer.
+                  </p>
+                </div>
+              </div>
+            </TabsContent>
+
             {/* Users */}
             <TabsContent value="users" className="mt-6">
               <div className="bg-anime-card p-6 rounded-lg border border-white/10">

@@ -84,8 +84,15 @@ export default function Admin() {
   const [editingAnime, setEditingAnime] = useState<string | null>(null);
   const [showAddAnime, setShowAddAnime] = useState(false);
   const [showAddEpisode, setShowAddEpisode] = useState(false);
+  const [showAddNotification, setShowAddNotification] = useState(false);
   const [expandedAnimes, setExpandedAnimes] = useState<Set<string>>(new Set());
   const [lastUpdate, setLastUpdate] = useState(new Date());
+
+  const [newNotification, setNewNotification] = useState({
+    title: "",
+    message: "",
+    type: "info" as "info" | "success" | "warning" | "error"
+  });
   
   const [newAnime, setNewAnime] = useState<NewAnime>({
     title: "",

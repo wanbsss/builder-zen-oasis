@@ -497,7 +497,7 @@ export default function Admin() {
           </div>
 
           <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 bg-anime-card border border-white/10">
+            <TabsList className="grid w-full grid-cols-5 bg-anime-card border border-white/10">
               <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Dashboard
@@ -505,6 +505,10 @@ export default function Admin() {
               <TabsTrigger value="animes" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
                 <Play className="h-4 w-4 mr-2" />
                 Anime Yönetimi
+              </TabsTrigger>
+              <TabsTrigger value="requests" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
+                <Upload className="h-4 w-4 mr-2" />
+                İstekler
               </TabsTrigger>
               <TabsTrigger value="users" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
                 <Users className="h-4 w-4 mr-2" />

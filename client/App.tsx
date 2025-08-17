@@ -21,10 +21,16 @@ import Admin from "./pages/Admin";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => {
+    // Only show loading on first visit per session
+    return !sessionStorage.getItem('aniwa_app_loaded');
+  });
 
   if (isLoading) {
-    return <LoadingScreen onComplete={() => setIsLoading(false)} />;
+    return <LoadingScreen onComplete={() => {
+      setIsLoading(false);
+      sessionStorage.setItem('aniwa_app_loaded', 'true');
+    }} />;
   }
 
   return (

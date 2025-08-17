@@ -347,6 +347,34 @@ export default function Admin() {
     });
   };
 
+  const handleQuickAdd = () => {
+    if (!quickAddTitle.trim()) return;
+
+    const animeData = {
+      title: quickAddTitle.trim(),
+      titleEn: quickAddTitle.trim(),
+      poster: "https://via.placeholder.com/400x600",
+      rating: 7.5,
+      year: new Date().getFullYear(),
+      episodes: 12,
+      genre: ["Aksiyon"],
+      genreEn: ["Action"],
+      duration: "24min",
+      description: `${quickAddTitle} - Açıklama yakında eklenecek`,
+      descriptionEn: `${quickAddTitle} - Description coming soon`,
+      status: "upcoming" as const,
+      category: "anime" as const
+    };
+
+    storeAddAnime(animeData);
+    setQuickAddTitle("");
+
+    toast({
+      title: "Hızlı Ekleme Başarılı",
+      description: `${quickAddTitle} temel bilgilerle eklendi. Detayları düzenleyebilirsiniz.`,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-anime-dark">
       <Header />

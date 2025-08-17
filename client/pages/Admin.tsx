@@ -95,6 +95,8 @@ export default function Admin() {
   });
 
   const [quickAddTitle, setQuickAddTitle] = useState("");
+  const [showBulkImport, setShowBulkImport] = useState(false);
+  const [bulkImportText, setBulkImportText] = useState("");
   
   const [newAnime, setNewAnime] = useState<NewAnime>({
     title: "",

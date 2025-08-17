@@ -191,13 +191,22 @@ export default function Header({ onAuthClick }: HeaderProps) {
                     <DropdownMenuItem className="text-white hover:bg-white/10 font-medium">
                       {user?.username}
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-white hover:bg-white/10">
+                    <DropdownMenuItem
+                      onClick={() => window.location.href = '/profile'}
+                      className="text-white hover:bg-white/10 cursor-pointer"
+                    >
                       {t.profile}
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-white hover:bg-white/10">
+                    <DropdownMenuItem
+                      onClick={() => window.location.href = '/profile?tab=history'}
+                      className="text-white hover:bg-white/10 cursor-pointer"
+                    >
                       İzleme Geçmişi
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-white hover:bg-white/10">
+                    <DropdownMenuItem
+                      onClick={() => window.location.href = '/profile?tab=watchlist'}
+                      className="text-white hover:bg-white/10 cursor-pointer"
+                    >
                       {t.myList}
                     </DropdownMenuItem>
                     {user?.isAdmin && (

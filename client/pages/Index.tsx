@@ -14,6 +14,7 @@ export default function Index() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { t, language } = useLanguage();
   const { isAuthenticated } = useAuth();
+  const { animes } = useAnimeStore();
 
   // Featured anime for hero section with dual language support
   const featuredAnimes = [

@@ -42,7 +42,7 @@ export default function Header({ onAuthClick }: HeaderProps) {
           {/* Logo */}
           <div className="flex items-center space-x-4">
             <div className="text-2xl font-bold neon-text">
-              Animewa
+              Aniwa
             </div>
           </div>
 

@@ -38,7 +38,7 @@ export default function SearchDropdown({ onClose, className = "" }: SearchDropdo
 
   // Similar/related anime (if no exact matches)
   const similarAnimes = exactMatches.length === 0 && query.length > 2
-    ? sampleAnimes.filter(anime => {
+    ? animes.filter(anime => {
         const genres = language === 'en' ? anime.genreEn : anime.genre;
         const title = language === 'en' ? anime.titleEn : anime.title;
         

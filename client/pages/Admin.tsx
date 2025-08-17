@@ -741,11 +741,20 @@ export default function Admin() {
                     </DialogContent>
                   </Dialog>
 
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowBulkImport(true)}
+                    className="border-white/20 text-white hover:bg-white/10"
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    Toplu İçe Aktar
+                  </Button>
+
                   <Dialog open={showAddAnime} onOpenChange={setShowAddAnime}>
                     <DialogTrigger asChild>
                       <Button className="btn-primary">
                         <Plus className="h-4 w-4 mr-2" />
-                        Yeni Anime Ekle
+                        Detaylı Ekle
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-4xl bg-anime-card border-white/10 text-white max-h-[80vh] overflow-y-auto">

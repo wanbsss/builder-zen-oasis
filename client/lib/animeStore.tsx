@@ -5,7 +5,8 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { sampleAnimes } from "@/components/AnimeCard";
+import { animeAPI, adminAPI, userAPI } from "./apiClient";
+import { useAuth } from "./auth";
 
 export interface AnimeData {
   id: string;
@@ -56,13 +57,15 @@ interface AnimeStoreContextType {
   // Anime data
   animes: AnimeData[];
   episodes: Episode[];
-  addAnime: (anime: Omit<AnimeData, "id">) => string;
-  updateAnime: (id: string, anime: Partial<AnimeData>) => void;
-  deleteAnime: (id: string) => void;
+  loading: boolean;
+  addAnime: (anime: Omit<AnimeData, "id">) => Promise<string>;
+  updateAnime: (id: string, anime: Partial<AnimeData>) => Promise<void>;
+  deleteAnime: (id: string) => Promise<void>;
   getAnimeById: (id: string) => AnimeData | undefined;
+  fetchAnimes: () => Promise<void>;
 
   // Episode data
-  addEpisode: (episode: Omit<Episode, "id">) => string;
+  addEpisode: (episode: Omit<Episode, "id">) => Promise<string>;
   updateEpisode: (id: number, episode: Partial<Episode>) => void;
   deleteEpisode: (id: number) => void;
   getEpisodesByAnimeId: (animeId: string) => Episode[];
@@ -73,26 +76,27 @@ interface AnimeStoreContextType {
     animeId: string,
     episodeId: number,
     progress: number,
-  ) => void;
+  ) => Promise<void>;
   getUserProgress: (userId: string) => WatchProgress[];
 
   // User lists
   userLists: UserList[];
-  addToList: (userId: string, animeId: string, type: UserList["type"]) => void;
+  addToList: (userId: string, animeId: string, type: UserList["type"]) => Promise<void>;
   removeFromList: (
     userId: string,
     animeId: string,
     type: UserList["type"],
-  ) => void;
+  ) => Promise<void>;
   getUserList: (userId: string, type: UserList["type"]) => string[];
 
   // Admin notifications
   notifications: AdminNotification[];
   addNotification: (
     notification: Omit<AdminNotification, "id" | "timestamp">,
-  ) => void;
-  markNotificationRead: (id: string) => void;
-  clearNotifications: () => void;
+  ) => Promise<void>;
+  markNotificationRead: (id: string) => Promise<void>;
+  clearNotifications: () => Promise<void>;
+  fetchNotifications: () => Promise<void>;
 }
 
 export interface AdminNotification {
@@ -108,104 +112,49 @@ const AnimeStoreContext = createContext<AnimeStoreContextType | undefined>(
   undefined,
 );
 
-const STORAGE_KEYS = {
-  animes: "aniwa_animes",
-  episodes: "aniwa_episodes",
-  watchProgress: "aniwa_watch_progress",
-  userLists: "aniwa_user_lists",
-  notifications: "aniwa_notifications",
-};
-
 export function AnimeStoreProvider({ children }: { children: ReactNode }) {
-  // Initialize state from localStorage or defaults
-  const [animes, setAnimes] = useState<AnimeData[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.animes);
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved animes:", e);
+  const { user } = useAuth();
+  const [animes, setAnimes] = useState<AnimeData[]>([]);
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [watchProgress, setWatchProgress] = useState<WatchProgress[]>([]);
+  const [userLists, setUserLists] = useState<UserList[]>([]);
+  const [notifications, setNotifications] = useState<AdminNotification[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch animes from API
+  const fetchAnimes = async () => {
+    try {
+      setLoading(true);
+      const response = await animeAPI.getAll();
+      if (response.success) {
+        setAnimes(response.data);
       }
+    } catch (error) {
+      console.error('Failed to fetch animes:', error);
+    } finally {
+      setLoading(false);
     }
-    return sampleAnimes as AnimeData[];
-  });
+  };
 
-  const [episodes, setEpisodes] = useState<Episode[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.episodes);
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved episodes:", e);
+  // Fetch notifications from API
+  const fetchNotifications = async () => {
+    try {
+      const response = await adminAPI.getNotifications();
+      if (response.success) {
+        setNotifications(response.data);
       }
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
     }
-    return [];
-  });
+  };
 
-  const [watchProgress, setWatchProgress] = useState<WatchProgress[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.watchProgress);
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved watch progress:", e);
-      }
+  // Load data on mount
+  useEffect(() => {
+    fetchAnimes();
+    if (user?.isAdmin) {
+      fetchNotifications();
     }
-    return [];
-  });
-
-  const [userLists, setUserLists] = useState<UserList[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.userLists);
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved user lists:", e);
-      }
-    }
-    return [];
-  });
-
-  const [notifications, setNotifications] = useState<AdminNotification[]>(
-    () => {
-      const saved = localStorage.getItem(STORAGE_KEYS.notifications);
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch (e) {
-          console.error("Failed to parse saved notifications:", e);
-        }
-      }
-      return [];
-    },
-  );
-
-  // Auto-save to localStorage when state changes
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.animes, JSON.stringify(animes));
-  }, [animes]);
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.episodes, JSON.stringify(episodes));
-  }, [episodes]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEYS.watchProgress,
-      JSON.stringify(watchProgress),
-    );
-  }, [watchProgress]);
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.userLists, JSON.stringify(userLists));
-  }, [userLists]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEYS.notifications,
-      JSON.stringify(notifications),
-    );
-  }, [notifications]);
+  }, [user]);
 
   // Anime CRUD operations
   const addAnime = (animeData: Omit<AnimeData, "id">): string => {

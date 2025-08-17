@@ -81,11 +81,7 @@ interface AnimeStoreContextType {
 
   // User lists
   userLists: UserList[];
-  addToList: (
-    userId: string,
-    animeId: string,
-    type: UserList["type"],
-  ) => Promise<void>;
+  addToList: (userId: string, animeId: string, type: UserList["type"]) => Promise<void>;
   removeFromList: (
     userId: string,
     animeId: string,
@@ -134,7 +130,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
         setAnimes(response.data);
       }
     } catch (error) {
-      console.error("Failed to fetch animes:", error);
+      console.error('Failed to fetch animes:', error);
     } finally {
       setLoading(false);
     }
@@ -148,7 +144,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
         setNotifications(response.data);
       }
     } catch (error) {
-      console.error("Failed to fetch notifications:", error);
+      console.error('Failed to fetch notifications:', error);
     }
   };
 
@@ -161,46 +157,50 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   // Anime CRUD operations
-  const addAnime = (animeData: Omit<AnimeData, "id">): string => {
-    const id = `anime_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const newAnime: AnimeData = { ...animeData, id };
-    setAnimes((prev) => [...prev, newAnime]);
-
-    // Add notification
-    addNotification({
-      title: "Yeni Anime Eklendi",
-      message: `${animeData.title} başarıyla eklendi`,
-      type: "success",
-    });
-
-    return id;
+  const addAnime = async (animeData: Omit<AnimeData, "id">): Promise<string> => {
+    try {
+      const response = await animeAPI.create(animeData);
+      if (response.success) {
+        setAnimes((prev) => [...prev, response.data]);
+        return response.data.id;
+      }
+      throw new Error(response.message || 'Failed to create anime');
+    } catch (error) {
+      console.error('Failed to add anime:', error);
+      throw error;
+    }
   };
 
-  const updateAnime = (id: string, animeData: Partial<AnimeData>) => {
-    setAnimes((prev) =>
-      prev.map((anime) =>
-        anime.id === id ? { ...anime, ...animeData } : anime,
-      ),
-    );
-
-    addNotification({
-      title: "Anime Güncellendi",
-      message: `Anime bilgileri başarıyla güncellendi`,
-      type: "info",
-    });
+  const updateAnime = async (id: string, animeData: Partial<AnimeData>): Promise<void> => {
+    try {
+      const response = await animeAPI.update(id, animeData);
+      if (response.success) {
+        setAnimes((prev) =>
+          prev.map((anime) =>
+            anime.id === id ? { ...anime, ...response.data } : anime,
+          ),
+        );
+      } else {
+        throw new Error(response.message || 'Failed to update anime');
+      }
+    } catch (error) {
+      console.error('Failed to update anime:', error);
+      throw error;
+    }
   };
 
-  const deleteAnime = (id: string) => {
-    const anime = animes.find((a) => a.id === id);
-    setAnimes((prev) => prev.filter((anime) => anime.id !== id));
-    setEpisodes((prev) => prev.filter((episode) => episode.animeId !== id));
-
-    if (anime) {
-      addNotification({
-        title: "Anime Silindi",
-        message: `${anime.title} silindi`,
-        type: "warning",
-      });
+  const deleteAnime = async (id: string): Promise<void> => {
+    try {
+      const response = await animeAPI.delete(id);
+      if (response.success) {
+        setAnimes((prev) => prev.filter((anime) => anime.id !== id));
+        setEpisodes((prev) => prev.filter((episode) => episode.animeId !== id));
+      } else {
+        throw new Error(response.message || 'Failed to delete anime');
+      }
+    } catch (error) {
+      console.error('Failed to delete anime:', error);
+      throw error;
     }
   };
 
@@ -209,19 +209,18 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
   };
 
   // Episode CRUD operations
-  const addEpisode = (episodeData: Omit<Episode, "id">): string => {
-    const id = Date.now();
-    const newEpisode: Episode = { ...episodeData, id };
-    setEpisodes((prev) => [...prev, newEpisode]);
-
-    const anime = getAnimeById(episodeData.animeId);
-    addNotification({
-      title: "Yeni Bölüm Eklendi",
-      message: `${anime?.title} - Bölüm ${episodeData.episodeNumber} eklendi`,
-      type: "success",
-    });
-
-    return id.toString();
+  const addEpisode = async (episodeData: Omit<Episode, "id">): Promise<string> => {
+    try {
+      const response = await animeAPI.addEpisode(episodeData.animeId, episodeData);
+      if (response.success) {
+        setEpisodes((prev) => [...prev, response.data]);
+        return response.data.id.toString();
+      }
+      throw new Error(response.message || 'Failed to add episode');
+    } catch (error) {
+      console.error('Failed to add episode:', error);
+      throw error;
+    }
   };
 
   const updateEpisode = (id: number, episodeData: Partial<Episode>) => {
@@ -243,33 +242,42 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
   };
 
   // Watch progress
-  const updateWatchProgress = (
+  const updateWatchProgress = async (
     animeId: string,
     episodeId: number,
     progress: number,
-  ) => {
-    setWatchProgress((prev) => {
-      const existing = prev.find(
-        (p) => p.animeId === animeId && p.episodeId === episodeId,
-      );
-      if (existing) {
-        return prev.map((p) =>
-          p.animeId === animeId && p.episodeId === episodeId
-            ? { ...p, progress, lastWatched: new Date().toISOString() }
-            : p,
+  ): Promise<void> => {
+    if (!user) return;
+
+    try {
+      await userAPI.updateWatchProgress(user.id.toString(), animeId, episodeId.toString(), progress);
+
+      setWatchProgress((prev) => {
+        const existing = prev.find(
+          (p) => p.animeId === animeId && p.episodeId === episodeId,
         );
-      } else {
-        return [
-          ...prev,
-          {
-            animeId,
-            episodeId,
-            progress,
-            lastWatched: new Date().toISOString(),
-          },
-        ];
-      }
-    });
+        if (existing) {
+          return prev.map((p) =>
+            p.animeId === animeId && p.episodeId === episodeId
+              ? { ...p, progress, lastWatched: new Date().toISOString() }
+              : p,
+          );
+        } else {
+          return [
+            ...prev,
+            {
+              animeId,
+              episodeId,
+              progress,
+              lastWatched: new Date().toISOString(),
+            },
+          ];
+        }
+      });
+    } catch (error) {
+      console.error('Failed to update watch progress:', error);
+      throw error;
+    }
   };
 
   const getUserProgress = (userId: string): WatchProgress[] => {
@@ -277,45 +285,59 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
   };
 
   // User lists
-  const addToList = (
+  const addToList = async (
     userId: string,
     animeId: string,
     type: UserList["type"],
-  ) => {
-    const listItem: UserList = {
-      userId,
-      animeId,
-      type,
-      addedAt: new Date().toISOString(),
-    };
-    setUserLists((prev) => [
-      ...prev.filter(
-        (item) =>
-          !(
-            item.userId === userId &&
-            item.animeId === animeId &&
-            item.type === type
-          ),
-      ),
-      listItem,
-    ]);
+  ): Promise<void> => {
+    try {
+      await userAPI.addToList(userId, animeId, type);
+
+      const listItem: UserList = {
+        userId,
+        animeId,
+        type,
+        addedAt: new Date().toISOString(),
+      };
+      setUserLists((prev) => [
+        ...prev.filter(
+          (item) =>
+            !(
+              item.userId === userId &&
+              item.animeId === animeId &&
+              item.type === type
+            ),
+        ),
+        listItem,
+      ]);
+    } catch (error) {
+      console.error('Failed to add to list:', error);
+      throw error;
+    }
   };
 
-  const removeFromList = (
+  const removeFromList = async (
     userId: string,
     animeId: string,
     type: UserList["type"],
-  ) => {
-    setUserLists((prev) =>
-      prev.filter(
-        (item) =>
-          !(
-            item.userId === userId &&
-            item.animeId === animeId &&
-            item.type === type
-          ),
-      ),
-    );
+  ): Promise<void> => {
+    try {
+      await userAPI.removeFromList(userId, animeId, type);
+
+      setUserLists((prev) =>
+        prev.filter(
+          (item) =>
+            !(
+              item.userId === userId &&
+              item.animeId === animeId &&
+              item.type === type
+            ),
+        ),
+      );
+    } catch (error) {
+      console.error('Failed to remove from list:', error);
+      throw error;
+    }
   };
 
   const getUserList = (userId: string, type: UserList["type"]): string[] => {
@@ -325,26 +347,48 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
   };
 
   // Notifications
-  const addNotification = (
+  const addNotification = async (
     notification: Omit<AdminNotification, "id" | "timestamp">,
-  ) => {
-    const newNotification: AdminNotification = {
-      ...notification,
-      id: `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      timestamp: new Date().toISOString(),
-      read: false,
-    };
-    setNotifications((prev) => [newNotification, ...prev.slice(0, 49)]); // Keep last 50
+  ): Promise<void> => {
+    try {
+      const response = await adminAPI.createNotification(
+        notification.title,
+        notification.message,
+        notification.type
+      );
+      if (response.success) {
+        setNotifications((prev) => [response.data, ...prev.slice(0, 49)]);
+      }
+    } catch (error) {
+      console.error('Failed to create notification:', error);
+      throw error;
+    }
   };
 
-  const markNotificationRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif)),
-    );
+  const markNotificationRead = async (id: string): Promise<void> => {
+    try {
+      const response = await adminAPI.markNotificationRead(id);
+      if (response.success) {
+        setNotifications((prev) =>
+          prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif)),
+        );
+      }
+    } catch (error) {
+      console.error('Failed to mark notification as read:', error);
+      throw error;
+    }
   };
 
-  const clearNotifications = () => {
-    setNotifications([]);
+  const clearNotifications = async (): Promise<void> => {
+    try {
+      const response = await adminAPI.clearNotifications();
+      if (response.success) {
+        setNotifications([]);
+      }
+    } catch (error) {
+      console.error('Failed to clear notifications:', error);
+      throw error;
+    }
   };
 
   const value: AnimeStoreContextType = {

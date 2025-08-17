@@ -188,8 +188,7 @@ export default function Admin() {
       return;
     }
 
-    const anime: AnimeData = {
-      id: (animes.length + 1).toString(),
+    const animeData = {
       title: newAnime.title,
       titleEn: newAnime.titleEn,
       poster: newAnime.poster || "https://via.placeholder.com/400x600",
@@ -205,7 +204,7 @@ export default function Admin() {
       category: newAnime.category
     };
 
-    setAnimes([...animes, anime]);
+    storeAddAnime(animeData);
     setNewAnime({
       title: "",
       titleEn: "",

@@ -236,9 +236,7 @@ export default function Admin() {
   const handleSaveEdit = () => {
     if (!editAnime) return;
 
-    setAnimes(prev => prev.map(anime => 
-      anime.id === editAnime.id ? editAnime : anime
-    ));
+    storeUpdateAnime(editAnime.id, editAnime);
     setEditingAnime(null);
     setEditAnime(null);
 
@@ -254,12 +252,7 @@ export default function Admin() {
   };
 
   const handleDeleteAnime = (id: string) => {
-    setAnimes(animes.filter(anime => anime.id !== id));
-    setAnimeEpisodes(prev => {
-      const updated = { ...prev };
-      delete updated[id];
-      return updated;
-    });
+    storeDeleteAnime(id);
     toast({
       title: "Başarılı",
       description: "Anime silindi!",

@@ -615,6 +615,135 @@ export default function Admin() {
               </div>
             </TabsContent>
 
+            {/* API Import Dialog */}
+            <Dialog open={showApiImport} onOpenChange={setShowApiImport}>
+              <DialogContent className="max-w-5xl bg-anime-card border-white/10 text-white max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>API'den Anime İçe Aktarma</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="flex space-x-2">
+                    <Input
+                      value={apiSearchQuery}
+                      onChange={(e) => setApiSearchQuery(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleApiSearch()}
+                      placeholder="Anime ara... (örn: Attack on Titan)"
+                      className="flex-1 bg-black/50 border-white/20 text-white"
+                    />
+                    <Button onClick={handleApiSearch} disabled={isApiLoading} className="btn-primary">
+                      {isApiLoading ? "Aranıyor..." : "Ara"}
+                    </Button>
+                    <Button onClick={handleLoadPopularAnime} disabled={isApiLoading} variant="outline" className="border-white/20">
+                      Popüler
+                    </Button>
+                  </div>
+
+                  {apiSearchResults.length > 0 && (
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <p className="text-gray-400">{apiSearchResults.length} sonuç bulundu</p>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              const allIndices = new Set(Array.from({ length: apiSearchResults.length }, (_, i) => i));
+                              setSelectedApiAnimes(allIndices);
+                            }}
+                            className="border-white/20 text-white hover:bg-white/10"
+                          >
+                            Tümünü Seç
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setSelectedApiAnimes(new Set())}
+                            className="border-white/20 text-white hover:bg-white/10"
+                          >
+                            Seçimi Temizle
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+                        {apiSearchResults.map((anime, index) => (
+                          <div
+                            key={index}
+                            className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                              selectedApiAnimes.has(index)
+                                ? 'border-neon-blue bg-neon-blue/10'
+                                : 'border-white/10 hover:border-white/30'
+                            }`}
+                            onClick={() => {
+                              const newSelected = new Set(selectedApiAnimes);
+                              if (newSelected.has(index)) {
+                                newSelected.delete(index);
+                              } else {
+                                newSelected.add(index);
+                              }
+                              setSelectedApiAnimes(newSelected);
+                            }}
+                          >
+                            <div className="flex space-x-3">
+                              <img
+                                src={anime.images?.jpg?.image_url || 'https://via.placeholder.com/100x150'}
+                                alt={anime.title}
+                                className="w-16 h-20 object-cover rounded"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <h4 className="text-white font-medium text-sm truncate">
+                                  {anime.title}
+                                </h4>
+                                {anime.title_english && anime.title_english !== anime.title && (
+                                  <p className="text-gray-400 text-xs truncate">
+                                    {anime.title_english}
+                                  </p>
+                                )}
+                                <div className="flex items-center space-x-2 mt-1">
+                                  <div className="flex items-center space-x-1">
+                                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                                    <span className="text-xs text-gray-300">{anime.score || 'N/A'}</span>
+                                  </div>
+                                  <span className="text-xs text-gray-400">•</span>
+                                  <span className="text-xs text-gray-400">{anime.episodes || 'TBA'} ep</span>
+                                  <span className="text-xs text-gray-400">•</span>
+                                  <span className="text-xs text-gray-400">{anime.year || 'TBA'}</span>
+                                </div>
+                                <div className="flex flex-wrap gap-1 mt-2">
+                                  {anime.genres?.slice(0, 2).map((genre: any) => (
+                                    <Badge key={genre.name} variant="outline" className="text-xs border-white/30 text-gray-300">
+                                      {genre.name}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex justify-end space-x-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowApiImport(false)}
+                      className="border-white/20 text-white hover:bg-white/10"
+                    >
+                      İptal
+                    </Button>
+                    <Button
+                      onClick={handleApiImport}
+                      disabled={selectedApiAnimes.size === 0 || isApiLoading}
+                      className="btn-primary"
+                    >
+                      {isApiLoading ? "İçe Aktarılıyor..." : `${selectedApiAnimes.size} Anime İçe Aktar`}
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+
             {/* Bulk Import Dialog */}
             <Dialog open={showBulkImport} onOpenChange={setShowBulkImport}>
               <DialogContent className="max-w-2xl bg-anime-card border-white/10 text-white">

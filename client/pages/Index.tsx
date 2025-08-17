@@ -77,11 +77,25 @@ export default function Index() {
     setCurrentHero((prev) => (prev - 1 + featuredAnimes.length) % featuredAnimes.length);
   };
 
+  // Filter functions for categories
+  const getAnimeByCategory = (category: "anime" | "movie" | "trending" | "all" = "all") => {
+    switch (category) {
+      case "anime":
+        return animes.filter(anime => anime.category === "anime");
+      case "movie":
+        return animes.filter(anime => anime.category === "movie");
+      case "trending":
+        return animes.filter(anime => anime.rating >= 8.6).sort((a, b) => b.rating - a.rating);
+      default:
+        return animes;
+    }
+  };
+
   // Properly categorized data
   const trendingAnimes = getAnimeByCategory("trending").slice(0, 6);
-  const newReleases = sampleAnimes.filter(anime => anime.year >= 2020).slice(0, 6);
-  const topRated = sampleAnimes.filter(anime => anime.rating >= 8.5).slice(0, 6);
-  const continueWatching = sampleAnimes.slice(0, 4).map(anime => ({
+  const newReleases = animes.filter(anime => anime.year >= 2020).slice(0, 6);
+  const topRated = animes.filter(anime => anime.rating >= 8.5).slice(0, 6);
+  const continueWatching = animes.slice(0, 4).map(anime => ({
     ...anime,
     progress: Math.floor(Math.random() * 80) + 10,
   }));

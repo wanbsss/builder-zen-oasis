@@ -1163,6 +1163,18 @@ One Piece`}
                               placeholder="https://example.com/poster.jpg"
                             />
                           </div>
+                          <div>
+                            <Label htmlFor="banner">Banner URL</Label>
+                            <Input
+                              id="banner"
+                              value={newAnime.banner}
+                              onChange={(e) => setNewAnime({ ...newAnime, banner: e.target.value })}
+                              className="bg-black/50 border-white/20 text-white"
+                              placeholder="https://example.com/banner.jpg"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-4">
                           <div className="grid grid-cols-2 gap-2">
                             <div>
                               <Label htmlFor="status">Durum</Label>

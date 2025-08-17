@@ -32,7 +32,7 @@ export default function Header({ onAuthClick }: HeaderProps) {
     { name: t.anime, href: "/anime?category=anime" },
     { name: t.movies, href: "/anime?category=movie" },
     { name: t.trending, href: "/anime?category=trending" },
-    { name: "İstekler", href: "/anime-request" },
+    { name: t.requests, href: "/anime-request" },
     { name: t.myList, href: "/my-list" },
   ];
 
@@ -101,9 +101,9 @@ export default function Header({ onAuthClick }: HeaderProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-80 bg-anime-card border-white/10 max-h-96 overflow-y-auto">
                   <div className="p-3 border-b border-white/10">
-                    <h3 className="text-white font-semibold">Bildirimler</h3>
+                    <h3 className="text-white font-semibold">{t.notifications}</h3>
                     <p className="text-gray-400 text-sm">
-                      {unreadCount} okunmamış bildirim
+                      {unreadCount} {t.unreadNotifications}
                     </p>
                   </div>
                   {notifications.length > 0 ? (
@@ -157,7 +157,7 @@ export default function Header({ onAuthClick }: HeaderProps) {
                   ) : (
                     <div className="p-6 text-center text-gray-400">
                       <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">Henüz bildirim yok</p>
+                      <p className="text-sm">{t.noNotifications}</p>
                     </div>
                   )}
                 </DropdownMenuContent>
@@ -220,7 +220,7 @@ export default function Header({ onAuthClick }: HeaderProps) {
                       }
                       className="text-white hover:bg-white/10 cursor-pointer"
                     >
-                      İzleme Geçmişi
+                      {t.watchHistory}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() =>
@@ -245,13 +245,13 @@ export default function Header({ onAuthClick }: HeaderProps) {
                       className="text-white hover:bg-white/10 cursor-pointer"
                     >
                       <Settings className="h-4 w-4 mr-2" />
-                      Ayarlar
+                      {t.settings}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={logout}
                       className="text-red-400 hover:bg-red-500/10"
                     >
-                      Çıkış Yap
+                      {t.logout}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

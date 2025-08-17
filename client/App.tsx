@@ -53,6 +53,7 @@ const App = () => {
                 <Route path="/anime" element={<Browse />} />
                 <Route path="/movies" element={<Browse />} />
                 <Route path="/trending" element={<Browse />} />
+                <Route path="/anime-request" element={<AnimeRequest />} />
                 <Route path="/my-list" element={
                   <ProtectedRoute>
                     <Profile />

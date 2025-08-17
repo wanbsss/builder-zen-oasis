@@ -383,6 +383,56 @@ export default function Admin() {
     }
   };
 
+  const handleCheckImageQuality = async () => {
+    setIsCheckingImages(true);
+    let fixedCount = 0;
+
+    try {
+      for (const anime of animes) {
+        // Check if image is placeholder or low quality
+        if (!anime.poster ||
+            anime.poster.includes('placeholder') ||
+            anime.poster.includes('via.placeholder') ||
+            anime.poster.includes('example.com')) {
+
+          // Try to fetch better image from API
+          try {
+            const searchResults = await animeApi.searchAnime(anime.title, 1);
+            if (searchResults.length > 0 && searchResults[0].images?.jpg?.large_image_url) {
+              const updatedAnime = {
+                ...anime,
+                poster: searchResults[0].images.jpg.large_image_url,
+                banner: anime.banner || searchResults[0].images?.jpg?.large_image_url
+              };
+
+              storeUpdateAnime(anime.id, updatedAnime);
+              fixedCount++;
+            }
+          } catch (error) {
+            console.error(`Failed to update image for ${anime.title}:`, error);
+          }
+
+          // Rate limiting
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+      }
+
+      toast({
+        title: "Resim Kalitesi Kontrolü Tamamlandı",
+        description: `${fixedCount} anime için resim güncellendi`,
+      });
+
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "Resim kalitesi kontrolü sırasında bir hata oluştu",
+        variant: "destructive"
+      });
+    } finally {
+      setIsCheckingImages(false);
+    }
+  };
+
   const handleAddEpisode = () => {
     if (!selectedAnime || !newEpisode.title || !newEpisode.titleEn) {
       toast({
@@ -1505,7 +1555,7 @@ One Piece`}
               <div className="bg-anime-card p-6 rounded-lg border border-white/10">
                 <h2 className="text-2xl font-bold text-white mb-4">Anime İstekleri</h2>
                 <p className="text-gray-400 mb-6">
-                  Kullanıcıların gönderdiği anime isteklerini burada gör��ntüleyebilir ve yönetebilirsiniz.
+                  Kullanıcıların gönderdiği anime isteklerini burada görüntüleyebilir ve yönetebilirsiniz.
                 </p>
 
                 <div className="grid gap-4">

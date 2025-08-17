@@ -10,6 +10,7 @@ import {
 import SearchDropdown from "@/components/SearchDropdown";
 import { useLanguage } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
+import { useAnimeStore } from "@/lib/animeStore";
 
 interface HeaderProps {
   onAuthClick?: () => void;

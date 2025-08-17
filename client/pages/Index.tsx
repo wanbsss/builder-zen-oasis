@@ -1,21 +1,11 @@
 import { useState, useEffect } from "react";
-import {
-  Play,
-  Info,
-  ChevronLeft,
-  ChevronRight,
-  TrendingUp,
-  Star,
-  Clock,
-} from "lucide-react";
+import { Play, Info, ChevronLeft, ChevronRight, TrendingUp, Star, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
-import AnimeCard, {
-  sampleAnimes,
-  getAnimeByCategory,
-} from "@/components/AnimeCard";
+import AnimeCard from "@/components/AnimeCard";
 import AuthModal from "@/components/AuthModal";
+import { useAnimeStore } from "@/lib/animeStore";
 import { useLanguage } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 
@@ -29,61 +19,40 @@ export default function Index() {
   const featuredAnimes = [
     {
       id: "hero-1",
-      title:
-        language === "en"
-          ? "Attack on Titan Final Season"
-          : "Shingeki no Kyojin Final Season",
-      description:
-        language === "en"
-          ? "Humanity's last stand against the titans. The truth behind the walls is finally revealed in this epic conclusion to the legendary series."
-          : "İnsanlığın titanlara karşı son duruşu. Duvarların arkasındaki gerçek, bu efsanevi serinin destansı finalinde sonunda ortaya çıkıyor.",
+      title: language === 'en' ? "Attack on Titan Final Season" : "Shingeki no Kyojin Final Season",
+      description: language === 'en' 
+        ? "Humanity's last stand against the titans. The truth behind the walls is finally revealed in this epic conclusion to the legendary series."
+        : "İnsanlığın titanlara karşı son duruşu. Duvarların arkasındaki gerçek, bu efsanevi serinin destansı finalinde sonunda ortaya çıkıyor.",
       poster: "https://wallpaperaccess.com/full/1088163.jpg",
       rating: 9.0,
       year: 2023,
-      genres:
-        language === "en"
-          ? ["Action", "Drama", "Fantasy"]
-          : ["Aksiyon", "Drama", "Fantastik"],
+      genres: language === 'en' ? ["Action", "Drama", "Fantasy"] : ["Aksiyon", "Drama", "Fantastik"],
       episodes: 87,
       duration: "24min",
     },
     {
-      id: "hero-2",
-      title:
-        language === "en"
-          ? "Jujutsu Kaisen Shibuya Arc"
-          : "Jujutsu Kaisen Shibuya Arc",
-      description:
-        language === "en"
-          ? "The most intense arc yet. Follow Yuji and friends as they face their greatest challenge in the heart of Shibuya during Halloween night."
-          : "Şimdiye kadarki en yoğun bölüm. Yuji ve arkadaşlarının Cadılar Bayramı gecesi Shibuya'nın kalbinde karşılaştıkları en büyük meydan okumayı takip edin.",
+      id: "hero-2", 
+      title: language === 'en' ? "Jujutsu Kaisen Shibuya Arc" : "Jujutsu Kaisen Shibuya Arc",
+      description: language === 'en'
+        ? "The most intense arc yet. Follow Yuji and friends as they face their greatest challenge in the heart of Shibuya during Halloween night."
+        : "Şimdiye kadarki en yoğun bölüm. Yuji ve arkadaşlarının Cadılar Bayramı gecesi Shibuya'nın kalbinde karşılaştıkları en büyük meydan okumayı takip edin.",
       poster: "https://wallpaperaccess.com/full/2792930.jpg",
       rating: 8.9,
       year: 2023,
-      genres:
-        language === "en"
-          ? ["Action", "Supernatural", "School"]
-          : ["Aksiyon", "Doğaüstü", "Okul"],
+      genres: language === 'en' ? ["Action", "Supernatural", "School"] : ["Aksiyon", "Doğaüstü", "Okul"],
       episodes: 24,
       duration: "23min",
     },
     {
       id: "hero-3",
-      title:
-        language === "en"
-          ? "Demon Slayer: Hashira Training Arc"
-          : "Kimetsu no Yaiba: Hashira Eğitim Arc",
-      description:
-        language === "en"
-          ? "The Hashira prepare for the final battle. Witness intense training sequences and character development in this thrilling arc."
-          : "Hashira'lar son savaşa hazırlanıyor. Bu heyecan verici bölümde yoğun antrenman sahneleri ve karakter gelişimi izleyin.",
+      title: language === 'en' ? "Demon Slayer: Hashira Training Arc" : "Kimetsu no Yaiba: Hashira Eğitim Arc",
+      description: language === 'en'
+        ? "The Hashira prepare for the final battle. Witness intense training sequences and character development in this thrilling arc."
+        : "Hashira'lar son savaşa hazırlanıyor. Bu heyecan verici bölümde yoğun antrenman sahneleri ve karakter gelişimi izleyin.",
       poster: "https://wallpaperaccess.com/full/2532191.jpg",
       rating: 8.8,
       year: 2024,
-      genres:
-        language === "en"
-          ? ["Action", "Historical", "Supernatural"]
-          : ["Aksiyon", "Tarihi", "Doğaüstü"],
+      genres: language === 'en' ? ["Action", "Historical", "Supernatural"] : ["Aksiyon", "Tarihi", "Doğaüstü"],
       episodes: 11,
       duration: "23min",
     },
@@ -104,20 +73,14 @@ export default function Index() {
   };
 
   const prevHero = () => {
-    setCurrentHero(
-      (prev) => (prev - 1 + featuredAnimes.length) % featuredAnimes.length,
-    );
+    setCurrentHero((prev) => (prev - 1 + featuredAnimes.length) % featuredAnimes.length);
   };
 
   // Properly categorized data
   const trendingAnimes = getAnimeByCategory("trending").slice(0, 6);
-  const newReleases = sampleAnimes
-    .filter((anime) => anime.year >= 2020)
-    .slice(0, 6);
-  const topRated = sampleAnimes
-    .filter((anime) => anime.rating >= 8.5)
-    .slice(0, 6);
-  const continueWatching = sampleAnimes.slice(0, 4).map((anime) => ({
+  const newReleases = sampleAnimes.filter(anime => anime.year >= 2020).slice(0, 6);
+  const topRated = sampleAnimes.filter(anime => anime.rating >= 8.5).slice(0, 6);
+  const continueWatching = sampleAnimes.slice(0, 4).map(anime => ({
     ...anime,
     progress: Math.floor(Math.random() * 80) + 10,
   }));
@@ -133,7 +96,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-anime-dark">
       <Header onAuthClick={() => setShowAuthModal(true)} />
-
+      
       {/* Hero Section - Fully Responsive */}
       <section className="relative h-screen overflow-hidden">
         <div className="absolute inset-0">
@@ -159,9 +122,7 @@ export default function Index() {
                 <span>{currentFeature.year}</span>
                 <span>•</span>
                 <Clock className="h-4 w-4" />
-                <span>
-                  {currentFeature.episodes} {t.episodes}
-                </span>
+                <span>{currentFeature.episodes} {t.episodes}</span>
               </div>
             </div>
 
@@ -175,19 +136,15 @@ export default function Index() {
 
             <div className="flex flex-wrap gap-2 mb-6">
               {currentFeature.genres.map((genre) => (
-                <Badge
-                  key={genre}
-                  variant="outline"
-                  className="border-white/30 text-gray-300"
-                >
+                <Badge key={genre} variant="outline" className="border-white/30 text-gray-300">
                   {genre}
                 </Badge>
               ))}
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
-              <Button
-                size="lg"
+              <Button 
+                size="lg" 
                 className="btn-primary w-full sm:w-auto"
                 onClick={handleWatchClick}
               >
@@ -274,7 +231,7 @@ export default function Index() {
         <section>
           <h2 className="section-title flex items-center text-xl md:text-2xl lg:text-3xl">
             <span className="w-6 h-6 md:w-8 md:h-8 mr-3 bg-gradient-to-r from-neon-blue to-neon-purple rounded flex items-center justify-center text-black font-bold text-sm md:text-base">
-              {language === "en" ? "N" : "Y"}
+              {language === 'en' ? 'N' : 'Y'}
             </span>
             {t.newReleases}
           </h2>
@@ -306,12 +263,13 @@ export default function Index() {
                 {t.mustLoginToWatch}
               </h2>
               <p className="text-lg md:text-xl text-gray-300 mb-6 md:mb-8">
-                {language === "en"
-                  ? "Sign in for thousands of anime and movies. Continue where you left off, save your favorites."
-                  : "Binlerce anime ve film için giriş yapın. Kaldığınız yerden devam edin, favorilerinizi kaydedin."}
+                {language === 'en' 
+                  ? 'Sign in for thousands of anime and movies. Continue where you left off, save your favorites.'
+                  : 'Binlerce anime ve film için giriş yapın. Kaldığınız yerden devam edin, favorilerinizi kaydedin.'
+                }
               </p>
-              <Button
-                size="lg"
+              <Button 
+                size="lg" 
                 className="btn-primary text-lg md:text-xl px-6 md:px-8 py-3 md:py-4 w-full sm:w-auto"
                 onClick={() => setShowAuthModal(true)}
               >
@@ -329,120 +287,37 @@ export default function Index() {
             <div className="col-span-1 sm:col-span-2 md:col-span-1">
               <div className="text-2xl font-bold neon-text mb-4">Aniwa</div>
               <p className="text-gray-400 text-sm md:text-base">
-                {language === "en"
-                  ? "The ultimate destination for anime streaming. Watch your favorite shows in HD quality."
-                  : "Anime izleme deneyimi için en iyi destinasyon. Favori dizilerinizi HD kalitede izleyin."}
+                {language === 'en'
+                  ? 'The ultimate destination for anime streaming. Watch your favorite shows in HD quality.'
+                  : 'Anime izleme deneyimi için en iyi destinasyon. Favori dizilerinizi HD kalitede izleyin.'
+                }
               </p>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-4">{t.browse}</h3>
               <ul className="space-y-2 text-gray-400 text-sm md:text-base">
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    {t.popular}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    {t.newReleases}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    {t.topRated}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    {t.genres}
-                  </a>
-                </li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.popular}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.newReleases}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.topRated}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.genres}</a></li>
               </ul>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-4">{t.support}</h3>
               <ul className="space-y-2 text-gray-400 text-sm md:text-base">
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    {t.helpCenter}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    {t.contactUs}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    {t.termsOfService}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    {t.privacyPolicy}
-                  </a>
-                </li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.helpCenter}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.contactUs}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.termsOfService}</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.privacyPolicy}</a></li>
               </ul>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-4">{t.connect}</h3>
               <ul className="space-y-2 text-gray-400 text-sm md:text-base">
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    Discord
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    Twitter
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    Reddit
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-neon-blue transition-colors"
-                  >
-                    {t.newsletter}
-                  </a>
-                </li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">Discord</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">Twitter</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">Reddit</a></li>
+                <li><a href="#" className="hover:text-neon-blue transition-colors">{t.newsletter}</a></li>
               </ul>
             </div>
           </div>

@@ -124,7 +124,7 @@ export default function AnimeCard({
               <Button
                 size="lg"
                 className="btn-primary"
-                onClick={handleWatchClick}
+                onClick={(e) => handleWatchClick(e)}
               >
                 <Play className="h-5 w-5 mr-2" />
                 {language === 'en' ? 'Watch Now' : 'İzle'}

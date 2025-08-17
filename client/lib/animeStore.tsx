@@ -1,17 +1,12 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
-import { sampleAnimes } from "@/components/AnimeCard";
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { sampleAnimes } from '@/components/AnimeCard';
 
 export interface AnimeData {
   id: string;
   title: string;
   titleEn: string;
   poster: string;
+  banner?: string;
   rating: number;
   year: number;
   episodes: number;
@@ -20,8 +15,8 @@ export interface AnimeData {
   duration: string;
   description: string;
   descriptionEn: string;
-  status: "ongoing" | "completed" | "upcoming";
-  category: "anime" | "movie";
+  status: 'ongoing' | 'completed' | 'upcoming';
+  category: 'anime' | 'movie';
 }
 
 export interface Episode {
@@ -48,48 +43,38 @@ export interface UserList {
   userId: string;
   animeId: string;
   addedAt: string;
-  type: "watchlist" | "favorites" | "completed";
+  type: 'watchlist' | 'favorites' | 'completed';
 }
 
 interface AnimeStoreContextType {
   // Anime data
   animes: AnimeData[];
   episodes: Episode[];
-  addAnime: (anime: Omit<AnimeData, "id">) => string;
+  addAnime: (anime: Omit<AnimeData, 'id'>) => string;
   updateAnime: (id: string, anime: Partial<AnimeData>) => void;
   deleteAnime: (id: string) => void;
   getAnimeById: (id: string) => AnimeData | undefined;
-
+  
   // Episode data
-  addEpisode: (episode: Omit<Episode, "id">) => string;
+  addEpisode: (episode: Omit<Episode, 'id'>) => string;
   updateEpisode: (id: number, episode: Partial<Episode>) => void;
   deleteEpisode: (id: number) => void;
   getEpisodesByAnimeId: (animeId: string) => Episode[];
-
+  
   // User progress
   watchProgress: WatchProgress[];
-  updateWatchProgress: (
-    animeId: string,
-    episodeId: number,
-    progress: number,
-  ) => void;
+  updateWatchProgress: (animeId: string, episodeId: number, progress: number) => void;
   getUserProgress: (userId: string) => WatchProgress[];
-
+  
   // User lists
   userLists: UserList[];
-  addToList: (userId: string, animeId: string, type: UserList["type"]) => void;
-  removeFromList: (
-    userId: string,
-    animeId: string,
-    type: UserList["type"],
-  ) => void;
-  getUserList: (userId: string, type: UserList["type"]) => string[];
-
+  addToList: (userId: string, animeId: string, type: UserList['type']) => void;
+  removeFromList: (userId: string, animeId: string, type: UserList['type']) => void;
+  getUserList: (userId: string, type: UserList['type']) => string[];
+  
   // Admin notifications
   notifications: AdminNotification[];
-  addNotification: (
-    notification: Omit<AdminNotification, "id" | "timestamp">,
-  ) => void;
+  addNotification: (notification: Omit<AdminNotification, 'id' | 'timestamp'>) => void;
   markNotificationRead: (id: string) => void;
   clearNotifications: () => void;
 }
@@ -98,21 +83,19 @@ export interface AdminNotification {
   id: string;
   title: string;
   message: string;
-  type: "info" | "success" | "warning" | "error";
+  type: 'info' | 'success' | 'warning' | 'error';
   timestamp: string;
   read: boolean;
 }
 
-const AnimeStoreContext = createContext<AnimeStoreContextType | undefined>(
-  undefined,
-);
+const AnimeStoreContext = createContext<AnimeStoreContextType | undefined>(undefined);
 
 const STORAGE_KEYS = {
-  animes: "aniwa_animes",
-  episodes: "aniwa_episodes",
-  watchProgress: "aniwa_watch_progress",
-  userLists: "aniwa_user_lists",
-  notifications: "aniwa_notifications",
+  animes: 'aniwa_animes',
+  episodes: 'aniwa_episodes',
+  watchProgress: 'aniwa_watch_progress',
+  userLists: 'aniwa_user_lists',
+  notifications: 'aniwa_notifications'
 };
 
 export function AnimeStoreProvider({ children }: { children: ReactNode }) {
@@ -123,7 +106,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
       try {
         return JSON.parse(saved);
       } catch (e) {
-        console.error("Failed to parse saved animes:", e);
+        console.error('Failed to parse saved animes:', e);
       }
     }
     return sampleAnimes as AnimeData[];
@@ -135,7 +118,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
       try {
         return JSON.parse(saved);
       } catch (e) {
-        console.error("Failed to parse saved episodes:", e);
+        console.error('Failed to parse saved episodes:', e);
       }
     }
     return [];
@@ -147,7 +130,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
       try {
         return JSON.parse(saved);
       } catch (e) {
-        console.error("Failed to parse saved watch progress:", e);
+        console.error('Failed to parse saved watch progress:', e);
       }
     }
     return [];
@@ -159,25 +142,23 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
       try {
         return JSON.parse(saved);
       } catch (e) {
-        console.error("Failed to parse saved user lists:", e);
+        console.error('Failed to parse saved user lists:', e);
       }
     }
     return [];
   });
 
-  const [notifications, setNotifications] = useState<AdminNotification[]>(
-    () => {
-      const saved = localStorage.getItem(STORAGE_KEYS.notifications);
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch (e) {
-          console.error("Failed to parse saved notifications:", e);
-        }
+  const [notifications, setNotifications] = useState<AdminNotification[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.notifications);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error('Failed to parse saved notifications:', e);
       }
-      return [];
-    },
-  );
+    }
+    return [];
+  });
 
   // Auto-save to localStorage when state changes
   useEffect(() => {
@@ -189,10 +170,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
   }, [episodes]);
 
   useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEYS.watchProgress,
-      JSON.stringify(watchProgress),
-    );
+    localStorage.setItem(STORAGE_KEYS.watchProgress, JSON.stringify(watchProgress));
   }, [watchProgress]);
 
   useEffect(() => {
@@ -200,193 +178,151 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
   }, [userLists]);
 
   useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEYS.notifications,
-      JSON.stringify(notifications),
-    );
+    localStorage.setItem(STORAGE_KEYS.notifications, JSON.stringify(notifications));
   }, [notifications]);
 
   // Anime CRUD operations
-  const addAnime = (animeData: Omit<AnimeData, "id">): string => {
+  const addAnime = (animeData: Omit<AnimeData, 'id'>): string => {
     const id = `anime_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const newAnime: AnimeData = { ...animeData, id };
-    setAnimes((prev) => [...prev, newAnime]);
-
+    setAnimes(prev => [...prev, newAnime]);
+    
     // Add notification
     addNotification({
-      title: "Yeni Anime Eklendi",
+      title: 'Yeni Anime Eklendi',
       message: `${animeData.title} başarıyla eklendi`,
-      type: "success",
+      type: 'success'
     });
-
+    
     return id;
   };
 
   const updateAnime = (id: string, animeData: Partial<AnimeData>) => {
-    setAnimes((prev) =>
-      prev.map((anime) =>
-        anime.id === id ? { ...anime, ...animeData } : anime,
-      ),
-    );
-
+    setAnimes(prev => prev.map(anime => 
+      anime.id === id ? { ...anime, ...animeData } : anime
+    ));
+    
     addNotification({
-      title: "Anime Güncellendi",
+      title: 'Anime Güncellendi',
       message: `Anime bilgileri başarıyla güncellendi`,
-      type: "info",
+      type: 'info'
     });
   };
 
   const deleteAnime = (id: string) => {
-    const anime = animes.find((a) => a.id === id);
-    setAnimes((prev) => prev.filter((anime) => anime.id !== id));
-    setEpisodes((prev) => prev.filter((episode) => episode.animeId !== id));
-
+    const anime = animes.find(a => a.id === id);
+    setAnimes(prev => prev.filter(anime => anime.id !== id));
+    setEpisodes(prev => prev.filter(episode => episode.animeId !== id));
+    
     if (anime) {
       addNotification({
-        title: "Anime Silindi",
+        title: 'Anime Silindi',
         message: `${anime.title} silindi`,
-        type: "warning",
+        type: 'warning'
       });
     }
   };
 
   const getAnimeById = (id: string): AnimeData | undefined => {
-    return animes.find((anime) => anime.id === id);
+    return animes.find(anime => anime.id === id);
   };
 
   // Episode CRUD operations
-  const addEpisode = (episodeData: Omit<Episode, "id">): string => {
+  const addEpisode = (episodeData: Omit<Episode, 'id'>): string => {
     const id = Date.now();
     const newEpisode: Episode = { ...episodeData, id };
-    setEpisodes((prev) => [...prev, newEpisode]);
-
+    setEpisodes(prev => [...prev, newEpisode]);
+    
     const anime = getAnimeById(episodeData.animeId);
     addNotification({
-      title: "Yeni Bölüm Eklendi",
+      title: 'Yeni Bölüm Eklendi',
       message: `${anime?.title} - Bölüm ${episodeData.episodeNumber} eklendi`,
-      type: "success",
+      type: 'success'
     });
-
+    
     return id.toString();
   };
 
   const updateEpisode = (id: number, episodeData: Partial<Episode>) => {
-    setEpisodes((prev) =>
-      prev.map((episode) =>
-        episode.id === id ? { ...episode, ...episodeData } : episode,
-      ),
-    );
+    setEpisodes(prev => prev.map(episode => 
+      episode.id === id ? { ...episode, ...episodeData } : episode
+    ));
   };
 
   const deleteEpisode = (id: number) => {
-    setEpisodes((prev) => prev.filter((episode) => episode.id !== id));
+    setEpisodes(prev => prev.filter(episode => episode.id !== id));
   };
 
   const getEpisodesByAnimeId = (animeId: string): Episode[] => {
-    return episodes
-      .filter((episode) => episode.animeId === animeId)
+    return episodes.filter(episode => episode.animeId === animeId)
       .sort((a, b) => a.episodeNumber - b.episodeNumber);
   };
 
   // Watch progress
-  const updateWatchProgress = (
-    animeId: string,
-    episodeId: number,
-    progress: number,
-  ) => {
-    setWatchProgress((prev) => {
-      const existing = prev.find(
-        (p) => p.animeId === animeId && p.episodeId === episodeId,
-      );
+  const updateWatchProgress = (animeId: string, episodeId: number, progress: number) => {
+    setWatchProgress(prev => {
+      const existing = prev.find(p => p.animeId === animeId && p.episodeId === episodeId);
       if (existing) {
-        return prev.map((p) =>
+        return prev.map(p => 
           p.animeId === animeId && p.episodeId === episodeId
             ? { ...p, progress, lastWatched: new Date().toISOString() }
-            : p,
+            : p
         );
       } else {
-        return [
-          ...prev,
-          {
-            animeId,
-            episodeId,
-            progress,
-            lastWatched: new Date().toISOString(),
-          },
-        ];
+        return [...prev, {
+          animeId,
+          episodeId,
+          progress,
+          lastWatched: new Date().toISOString()
+        }];
       }
     });
   };
 
   const getUserProgress = (userId: string): WatchProgress[] => {
-    return watchProgress.filter((p) => p.animeId.includes(userId));
+    return watchProgress.filter(p => p.animeId.includes(userId));
   };
 
   // User lists
-  const addToList = (
-    userId: string,
-    animeId: string,
-    type: UserList["type"],
-  ) => {
+  const addToList = (userId: string, animeId: string, type: UserList['type']) => {
     const listItem: UserList = {
       userId,
       animeId,
       type,
-      addedAt: new Date().toISOString(),
+      addedAt: new Date().toISOString()
     };
-    setUserLists((prev) => [
-      ...prev.filter(
-        (item) =>
-          !(
-            item.userId === userId &&
-            item.animeId === animeId &&
-            item.type === type
-          ),
-      ),
-      listItem,
-    ]);
+    setUserLists(prev => [...prev.filter(item => 
+      !(item.userId === userId && item.animeId === animeId && item.type === type)
+    ), listItem]);
   };
 
-  const removeFromList = (
-    userId: string,
-    animeId: string,
-    type: UserList["type"],
-  ) => {
-    setUserLists((prev) =>
-      prev.filter(
-        (item) =>
-          !(
-            item.userId === userId &&
-            item.animeId === animeId &&
-            item.type === type
-          ),
-      ),
-    );
+  const removeFromList = (userId: string, animeId: string, type: UserList['type']) => {
+    setUserLists(prev => prev.filter(item => 
+      !(item.userId === userId && item.animeId === animeId && item.type === type)
+    ));
   };
 
-  const getUserList = (userId: string, type: UserList["type"]): string[] => {
+  const getUserList = (userId: string, type: UserList['type']): string[] => {
     return userLists
-      .filter((item) => item.userId === userId && item.type === type)
-      .map((item) => item.animeId);
+      .filter(item => item.userId === userId && item.type === type)
+      .map(item => item.animeId);
   };
 
   // Notifications
-  const addNotification = (
-    notification: Omit<AdminNotification, "id" | "timestamp">,
-  ) => {
+  const addNotification = (notification: Omit<AdminNotification, 'id' | 'timestamp'>) => {
     const newNotification: AdminNotification = {
       ...notification,
       id: `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date().toISOString(),
-      read: false,
+      read: false
     };
-    setNotifications((prev) => [newNotification, ...prev.slice(0, 49)]); // Keep last 50
+    setNotifications(prev => [newNotification, ...prev.slice(0, 49)]); // Keep last 50
   };
 
   const markNotificationRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif)),
-    );
+    setNotifications(prev => prev.map(notif => 
+      notif.id === id ? { ...notif, read: true } : notif
+    ));
   };
 
   const clearNotifications = () => {
@@ -414,7 +350,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
     notifications,
     addNotification,
     markNotificationRead,
-    clearNotifications,
+    clearNotifications
   };
 
   return (
@@ -427,7 +363,7 @@ export function AnimeStoreProvider({ children }: { children: ReactNode }) {
 export function useAnimeStore() {
   const context = useContext(AnimeStoreContext);
   if (context === undefined) {
-    throw new Error("useAnimeStore must be used within an AnimeStoreProvider");
+    throw new Error('useAnimeStore must be used within an AnimeStoreProvider');
   }
   return context;
 }

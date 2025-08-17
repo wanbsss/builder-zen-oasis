@@ -105,7 +105,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
       <DialogContent className="sm:max-w-md bg-anime-card border-white/10 text-white">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
-            {mode === "login" ? t.welcomeBack : t.joinAnimewa}
+            {mode === "login" ? t.welcomeBack : t.joinAniwa}
           </DialogTitle>
           <DialogDescription className="text-center text-gray-400">
             {mode === "login" ? t.signInMessage : t.createAccountMessage}

@@ -101,7 +101,9 @@ export default function Header({ onAuthClick }: HeaderProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-80 bg-anime-card border-white/10 max-h-96 overflow-y-auto">
                   <div className="p-3 border-b border-white/10">
-                    <h3 className="text-white font-semibold">{t.notifications}</h3>
+                    <h3 className="text-white font-semibold">
+                      {t.notifications}
+                    </h3>
                     <p className="text-gray-400 text-sm">
                       {unreadCount} {t.unreadNotifications}
                     </p>

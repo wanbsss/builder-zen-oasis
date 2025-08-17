@@ -1,8 +1,24 @@
 import { useState, useEffect } from "react";
 import {
-  Plus, Edit, Trash2, Users, BarChart3, Settings,
-  Upload, Play, Eye, Calendar, Star, Clock, Video,
-  Save, X, ChevronDown, ChevronUp, RefreshCw, Download
+  Plus,
+  Edit,
+  Trash2,
+  Users,
+  BarChart3,
+  Settings,
+  Upload,
+  Play,
+  Eye,
+  Calendar,
+  Star,
+  Clock,
+  Video,
+  Save,
+  X,
+  ChevronDown,
+  ChevronUp,
+  RefreshCw,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,21 +26,21 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { 
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -50,8 +66,8 @@ interface NewAnime {
   duration: string;
   poster: string;
   banner: string;
-  status: 'ongoing' | 'completed' | 'upcoming';
-  category: 'anime' | 'movie';
+  status: "ongoing" | "completed" | "upcoming";
+  category: "anime" | "movie";
 }
 
 interface NewEpisode {
@@ -79,7 +95,7 @@ export default function Admin() {
     addEpisode: storeAddEpisode,
     getEpisodesByAnimeId,
     notifications,
-    addNotification
+    addNotification,
   } = useAnimeStore();
 
   const [selectedAnime, setSelectedAnime] = useState<string | null>(null);
@@ -93,7 +109,7 @@ export default function Admin() {
   const [newNotification, setNewNotification] = useState({
     title: "",
     message: "",
-    type: "info" as "info" | "success" | "warning" | "error"
+    type: "info" as "info" | "success" | "warning" | "error",
   });
 
   const [quickAddTitle, setQuickAddTitle] = useState("");
@@ -103,9 +119,11 @@ export default function Admin() {
   const [apiSearchQuery, setApiSearchQuery] = useState("");
   const [apiSearchResults, setApiSearchResults] = useState<any[]>([]);
   const [isApiLoading, setIsApiLoading] = useState(false);
-  const [selectedApiAnimes, setSelectedApiAnimes] = useState<Set<number>>(new Set());
+  const [selectedApiAnimes, setSelectedApiAnimes] = useState<Set<number>>(
+    new Set(),
+  );
   const [isCheckingImages, setIsCheckingImages] = useState(false);
-  
+
   const [newAnime, setNewAnime] = useState<NewAnime>({
     title: "",
     titleEn: "",
@@ -120,7 +138,7 @@ export default function Admin() {
     poster: "",
     banner: "",
     status: "ongoing",
-    category: "anime"
+    category: "anime",
   });
 
   const [editAnime, setEditAnime] = useState<AnimeData | null>(null);
@@ -133,8 +151,8 @@ export default function Admin() {
     videoUrl: "",
     duration: "24min",
     episodeNumber: 1,
-    airDate: new Date().toISOString().split('T')[0],
-    animeId: ""
+    airDate: new Date().toISOString().split("T")[0],
+    animeId: "",
   });
 
   const availableGenres = [
@@ -153,7 +171,7 @@ export default function Admin() {
     { tr: "Doğaüstü", en: "Supernatural" },
     { tr: "Psikolojik", en: "Psychological" },
     { tr: "Tarihi", en: "Historical" },
-    { tr: "Askeri", en: "Military" }
+    { tr: "Askeri", en: "Military" },
   ];
 
   // Auto-refresh data every minute
@@ -169,7 +187,7 @@ export default function Admin() {
   // Real statistics based on actual data
   const totalEpisodes = episodes.length;
   const totalNotifications = notifications.length;
-  const unreadNotifications = notifications.filter(n => !n.read).length;
+  const unreadNotifications = notifications.filter((n) => !n.read).length;
 
   const stats = {
     totalAnimes: animes.length,
@@ -178,9 +196,9 @@ export default function Admin() {
     totalViews: Math.floor(animes.length * 45.2), // Views based on anime count
     newUsersToday: Math.floor(Math.random() * 3) + 1, // 1-3 new users per day
     watchTimeToday: `${Math.floor(animes.length * 0.8)} saat`, // Realistic watch time
-    lastUpdate: lastUpdate.toLocaleTimeString('tr-TR'),
+    lastUpdate: lastUpdate.toLocaleTimeString("tr-TR"),
     activeNotifications: unreadNotifications,
-    totalNotifications: totalNotifications
+    totalNotifications: totalNotifications,
   };
 
   if (!isAdmin) {
@@ -189,10 +207,14 @@ export default function Admin() {
         <Header />
         <div className="pt-16 min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-white mb-4">Yetkisiz Erişim</h1>
-            <p className="text-gray-400 mb-6">Bu sayfaya erişim yetkiniz yok.</p>
-            <Button 
-              onClick={() => window.location.href = '/'}
+            <h1 className="text-2xl font-bold text-white mb-4">
+              Yetkisiz Erişim
+            </h1>
+            <p className="text-gray-400 mb-6">
+              Bu sayfaya erişim yetkiniz yok.
+            </p>
+            <Button
+              onClick={() => (window.location.href = "/")}
               className="btn-primary"
             >
               Ana Sayfaya Git
@@ -204,7 +226,12 @@ export default function Admin() {
   }
 
   const handleAddAnime = () => {
-    if (!newAnime.title || !newAnime.titleEn || !newAnime.description || !newAnime.descriptionEn) {
+    if (
+      !newAnime.title ||
+      !newAnime.titleEn ||
+      !newAnime.description ||
+      !newAnime.descriptionEn
+    ) {
       toast({
         title: "Hata",
         description: "Lütfen tüm zorunlu alanları doldurun",
@@ -227,7 +254,7 @@ export default function Admin() {
       description: newAnime.description,
       descriptionEn: newAnime.descriptionEn,
       status: newAnime.status,
-      category: newAnime.category
+      category: newAnime.category,
     };
 
     storeAddAnime(animeData);
@@ -245,7 +272,7 @@ export default function Admin() {
       poster: "",
       banner: "",
       status: "ongoing",
-      category: "anime"
+      category: "anime",
     });
     setShowAddAnime(false);
 
@@ -286,7 +313,10 @@ export default function Admin() {
     });
   };
 
-  const handleGenreChange = (genre: { tr: string; en: string }, isNew = true) => {
+  const handleGenreChange = (
+    genre: { tr: string; en: string },
+    isNew = true,
+  ) => {
     const target = isNew ? newAnime : editAnime;
     const setter = isNew ? setNewAnime : setEditAnime;
 
@@ -295,14 +325,14 @@ export default function Admin() {
     if (target.genre.includes(genre.tr)) {
       setter({
         ...target,
-        genre: target.genre.filter(g => g !== genre.tr),
-        genreEn: target.genreEn.filter(g => g !== genre.en)
+        genre: target.genre.filter((g) => g !== genre.tr),
+        genreEn: target.genreEn.filter((g) => g !== genre.en),
       });
     } else {
       setter({
         ...target,
         genre: [...target.genre, genre.tr],
-        genreEn: [...target.genreEn, genre.en]
+        genreEn: [...target.genreEn, genre.en],
       });
     }
   };
@@ -318,14 +348,14 @@ export default function Admin() {
         toast({
           title: "Sonuç Bulunamadı",
           description: "Arama kriterlerinize uygun anime bulunamadı",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     } catch (error) {
       toast({
         title: "Arama Hatası",
         description: "Anime arama sırasında bir hata oluştu",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsApiLoading(false);
@@ -348,21 +378,26 @@ export default function Admin() {
         const externalAnime = apiSearchResults[index];
         if (externalAnime) {
           // Get banner for each anime
-          const bannerUrl = await animeApi.searchBannerImage(externalAnime.title);
-          const animeData = animeApi.convertToAnimeData(externalAnime, bannerUrl || undefined);
+          const bannerUrl = await animeApi.searchBannerImage(
+            externalAnime.title,
+          );
+          const animeData = animeApi.convertToAnimeData(
+            externalAnime,
+            bannerUrl || undefined,
+          );
 
           storeAddAnime(animeData);
           successCount++;
 
           // Add notification for each import
           addNotification({
-            title: 'API İçe Aktarma',
-            message: `${externalAnime.title} banner${bannerUrl ? ' ve resim' : ''} ile eklendi`,
-            type: 'success'
+            title: "API İçe Aktarma",
+            message: `${externalAnime.title} banner${bannerUrl ? " ve resim" : ""} ile eklendi`,
+            type: "success",
           });
 
           // Rate limiting
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
       }
 
@@ -374,11 +409,11 @@ export default function Admin() {
         description: `${successCount} anime yüksek kaliteli resim ve banner ile eklendi`,
       });
     } catch (error) {
-      console.error('API import error:', error);
+      console.error("API import error:", error);
       toast({
         title: "İçe Aktarma Hatası",
         description: "Anime içe aktarma sırasında bir hata oluştu",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsApiLoading(false);
@@ -395,7 +430,7 @@ export default function Admin() {
       toast({
         title: "Yükleme Hatası",
         description: "Popüler animeler yüklenirken hata oluştu",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsApiLoading(false);
@@ -417,8 +452,10 @@ export default function Admin() {
         checkedCount++;
 
         // Use enhanced image quality detection
-        const needsPosterFix = !anime.poster || animeApi.isLowQualityImage(anime.poster);
-        const needsBannerFix = !anime.banner || animeApi.isLowQualityImage(anime.banner);
+        const needsPosterFix =
+          !anime.poster || animeApi.isLowQualityImage(anime.poster);
+        const needsBannerFix =
+          !anime.banner || animeApi.isLowQualityImage(anime.banner);
 
         if (needsPosterFix || needsBannerFix) {
           try {
@@ -427,13 +464,13 @@ export default function Admin() {
               id: anime.id,
               title: anime.title,
               poster: anime.poster,
-              banner: anime.banner
+              banner: anime.banner,
             });
 
             if (imageUpdates) {
               const updatedAnime = {
                 ...anime,
-                ...imageUpdates
+                ...imageUpdates,
               };
 
               storeUpdateAnime(anime.id, updatedAnime);
@@ -441,22 +478,22 @@ export default function Admin() {
 
               // Add notification about the specific improvement
               addNotification({
-                title: 'Resim Kalitesi İyileştirildi',
-                message: `${anime.title} için ${imageUpdates.poster ? 'poster' : ''}${imageUpdates.poster && imageUpdates.banner ? ' ve ' : ''}${imageUpdates.banner ? 'banner' : ''} güncellendi`,
-                type: 'success'
+                title: "Resim Kalitesi İyileştirildi",
+                message: `${anime.title} için ${imageUpdates.poster ? "poster" : ""}${imageUpdates.poster && imageUpdates.banner ? " ve " : ""}${imageUpdates.banner ? "banner" : ""} güncellendi`,
+                type: "success",
               });
             }
           } catch (error) {
             console.error(`Failed to update images for ${anime.title}:`, error);
             addNotification({
-              title: 'Resim Güncelleme Hatası',
+              title: "Resim Güncelleme Hatası",
               message: `${anime.title} için resim güncellenemedi`,
-              type: 'error'
+              type: "error",
             });
           }
 
           // Rate limiting to respect API limits
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 2000));
         }
 
         // Update progress every 5 animes
@@ -472,13 +509,12 @@ export default function Admin() {
         title: "Resim Kalitesi Kontrolü Tamamlandı",
         description: `${checkedCount} anime kontrol edildi. ${fixedCount} anime için resim kalitesi iyileştirildi.`,
       });
-
     } catch (error) {
-      console.error('Image quality check error:', error);
+      console.error("Image quality check error:", error);
       toast({
         title: "Hata",
         description: "Resim kalitesi kontrolü sırasında bir hata oluştu",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsCheckingImages(false);
@@ -499,7 +535,7 @@ export default function Admin() {
     const episodeData = {
       ...newEpisode,
       animeId: selectedAnime,
-      episodeNumber: existingEpisodes.length + 1
+      episodeNumber: existingEpisodes.length + 1,
     };
 
     storeAddEpisode(episodeData);
@@ -512,8 +548,8 @@ export default function Admin() {
       videoUrl: "",
       duration: "24min",
       episodeNumber: 1,
-      airDate: new Date().toISOString().split('T')[0],
-      animeId: ""
+      airDate: new Date().toISOString().split("T")[0],
+      animeId: "",
     });
     setShowAddEpisode(false);
 
@@ -524,7 +560,7 @@ export default function Admin() {
   };
 
   const toggleExpanded = (animeId: string) => {
-    setExpandedAnimes(prev => {
+    setExpandedAnimes((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(animeId)) {
         newSet.delete(animeId);
@@ -561,7 +597,10 @@ export default function Admin() {
       if (searchResults.length > 0) {
         // Use API data with banner fetching
         const bannerUrl = await animeApi.searchBannerImage(title);
-        animeData = animeApi.convertToAnimeData(searchResults[0], bannerUrl || undefined);
+        animeData = animeApi.convertToAnimeData(
+          searchResults[0],
+          bannerUrl || undefined,
+        );
 
         toast({
           title: "API Verisi Bulundu",
@@ -586,12 +625,12 @@ export default function Admin() {
           description: `${title} - Açıklama yakında eklenecek`,
           descriptionEn: `${title} - Description coming soon`,
           status: "upcoming" as const,
-          category: "anime" as const
+          category: "anime" as const,
         };
 
         toast({
           title: "Temel Veri Oluşturuldu",
-          description: `${title} için ${posterUrl ? 'yüksek kaliteli poster' : 'temel'} veriler eklendi.`,
+          description: `${title} için ${posterUrl ? "yüksek kaliteli poster" : "temel"} veriler eklendi.`,
         });
       }
 
@@ -600,13 +639,12 @@ export default function Admin() {
 
       // Add success notification
       addNotification({
-        title: 'Yeni Anime Eklendi',
+        title: "Yeni Anime Eklendi",
         message: `${title} otomatik veri toplama ile eklendi`,
-        type: 'success'
+        type: "success",
       });
-
     } catch (error) {
-      console.error('Quick add error:', error);
+      console.error("Quick add error:", error);
 
       // Fallback to basic addition if API fails
       const basicAnimeData = {
@@ -622,7 +660,7 @@ export default function Admin() {
         description: `${title} - Açıklama yakında eklenecek`,
         descriptionEn: `${title} - Description coming soon`,
         status: "upcoming" as const,
-        category: "anime" as const
+        category: "anime" as const,
       };
 
       storeAddAnime(basicAnimeData);
@@ -631,7 +669,7 @@ export default function Admin() {
       toast({
         title: "Temel Ekleme Tamamlandı",
         description: `${title} temel bilgilerle eklendi. API'den veri alınamadı, daha sonra resim kalitesi kontrolü yapabilirsiniz.`,
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -639,19 +677,21 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-anime-dark">
       <Header />
-      
+
       <div className="pt-16">
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-3xl font-bold text-white">{t.adminPanel}</h1>
               <p className="text-gray-400">Hoş geldiniz, {user?.username}</p>
-              <p className="text-xs text-gray-500 mt-1">Son güncelleme: {stats.lastUpdate}</p>
+              <p className="text-xs text-gray-500 mt-1">
+                Son güncelleme: {stats.lastUpdate}
+              </p>
             </div>
             <div className="flex items-center space-x-3">
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={refreshData}
                 className="border-white/20 text-white hover:bg-white/10"
               >
@@ -664,25 +704,44 @@ export default function Admin() {
             </div>
           </div>
 
-          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+          <Tabs
+            value={selectedTab}
+            onValueChange={setSelectedTab}
+            className="w-full"
+          >
             <TabsList className="grid w-full grid-cols-5 bg-anime-card border border-white/10">
-              <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
+              <TabsTrigger
+                value="dashboard"
+                className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black"
+              >
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Dashboard
               </TabsTrigger>
-              <TabsTrigger value="animes" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
+              <TabsTrigger
+                value="animes"
+                className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black"
+              >
                 <Play className="h-4 w-4 mr-2" />
                 Anime Yönetimi
               </TabsTrigger>
-              <TabsTrigger value="requests" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
+              <TabsTrigger
+                value="requests"
+                className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black"
+              >
                 <Upload className="h-4 w-4 mr-2" />
                 İstekler
               </TabsTrigger>
-              <TabsTrigger value="users" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
+              <TabsTrigger
+                value="users"
+                className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black"
+              >
                 <Users className="h-4 w-4 mr-2" />
                 Kullanıcılar
               </TabsTrigger>
-              <TabsTrigger value="settings" className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black">
+              <TabsTrigger
+                value="settings"
+                className="text-white data-[state=active]:bg-neon-blue data-[state=active]:text-black"
+              >
                 <Settings className="h-4 w-4 mr-2" />
                 Ayarlar
               </TabsTrigger>
@@ -695,7 +754,9 @@ export default function Admin() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-400 text-sm">Toplam Anime</p>
-                      <p className="text-2xl font-bold text-white">{stats.totalAnimes}</p>
+                      <p className="text-2xl font-bold text-white">
+                        {stats.totalAnimes}
+                      </p>
                     </div>
                     <Play className="h-8 w-8 text-neon-blue" />
                   </div>
@@ -704,7 +765,9 @@ export default function Admin() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-400 text-sm">Toplam Bölüm</p>
-                      <p className="text-2xl font-bold text-white">{stats.totalEpisodes}</p>
+                      <p className="text-2xl font-bold text-white">
+                        {stats.totalEpisodes}
+                      </p>
                     </div>
                     <Clock className="h-8 w-8 text-neon-purple" />
                   </div>
@@ -713,7 +776,9 @@ export default function Admin() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-400 text-sm">Toplam Kullanıcı</p>
-                      <p className="text-2xl font-bold text-white">{stats.totalUsers}</p>
+                      <p className="text-2xl font-bold text-white">
+                        {stats.totalUsers}
+                      </p>
                     </div>
                     <Users className="h-8 w-8 text-neon-pink" />
                   </div>
@@ -722,7 +787,9 @@ export default function Admin() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-400 text-sm">Bugün İzleme</p>
-                      <p className="text-2xl font-bold text-white">{stats.watchTimeToday}</p>
+                      <p className="text-2xl font-bold text-white">
+                        {stats.watchTimeToday}
+                      </p>
                     </div>
                     <Eye className="h-8 w-8 text-yellow-400" />
                   </div>
@@ -732,7 +799,9 @@ export default function Admin() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-anime-card p-6 rounded-lg border border-white/10">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold text-white">Son Aktiviteler</h3>
+                    <h3 className="text-xl font-bold text-white">
+                      Son Aktiviteler
+                    </h3>
                     <Button
                       size="sm"
                       onClick={() => setShowAddNotification(true)}
@@ -744,21 +813,33 @@ export default function Admin() {
                   </div>
                   <div className="space-y-3">
                     {notifications.slice(0, 5).map((notification) => (
-                      <div key={notification.id} className="text-gray-300 text-sm border-b border-white/10 pb-2 last:border-b-0">
+                      <div
+                        key={notification.id}
+                        className="text-gray-300 text-sm border-b border-white/10 pb-2 last:border-b-0"
+                      >
                         <div className="flex items-center justify-between">
-                          <span className={`text-xs mr-2 ${
-                            notification.type === 'success' ? 'text-green-400' :
-                            notification.type === 'warning' ? 'text-yellow-400' :
-                            notification.type === 'error' ? 'text-red-400' :
-                            'text-neon-blue'
-                          }`}>
-                            {new Date(notification.timestamp).toLocaleTimeString('tr-TR')}
+                          <span
+                            className={`text-xs mr-2 ${
+                              notification.type === "success"
+                                ? "text-green-400"
+                                : notification.type === "warning"
+                                  ? "text-yellow-400"
+                                  : notification.type === "error"
+                                    ? "text-red-400"
+                                    : "text-neon-blue"
+                            }`}
+                          >
+                            {new Date(
+                              notification.timestamp,
+                            ).toLocaleTimeString("tr-TR")}
                           </span>
                           {!notification.read && (
                             <div className="w-2 h-2 bg-neon-blue rounded-full"></div>
                           )}
                         </div>
-                        <div className="font-medium text-white">{notification.title}</div>
+                        <div className="font-medium text-white">
+                          {notification.title}
+                        </div>
                         <div>{notification.message}</div>
                       </div>
                     ))}
@@ -771,22 +852,33 @@ export default function Admin() {
                 </div>
 
                 <div className="bg-anime-card p-6 rounded-lg border border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-4">Popüler Animeler</h3>
+                  <h3 className="text-xl font-bold text-white mb-4">
+                    Popüler Animeler
+                  </h3>
                   <div className="space-y-3">
                     {animes.slice(0, 4).map((anime) => (
-                      <div key={anime.id} className="flex items-center space-x-3">
+                      <div
+                        key={anime.id}
+                        className="flex items-center space-x-3"
+                      >
                         <img
                           src={anime.poster}
                           alt={anime.title}
                           className="w-10 h-12 object-cover rounded"
                         />
                         <div className="flex-1">
-                          <p className="text-white font-medium text-sm">{language === 'en' ? anime.titleEn : anime.title}</p>
+                          <p className="text-white font-medium text-sm">
+                            {language === "en" ? anime.titleEn : anime.title}
+                          </p>
                           <div className="flex items-center space-x-1">
                             <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                            <span className="text-gray-400 text-xs">{anime.rating}</span>
+                            <span className="text-gray-400 text-xs">
+                              {anime.rating}
+                            </span>
                             <span className="text-gray-500">•</span>
-                            <span className="text-gray-400 text-xs">{anime.episodes} bölüm</span>
+                            <span className="text-gray-400 text-xs">
+                              {anime.episodes} bölüm
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -807,14 +899,23 @@ export default function Admin() {
                     <Input
                       value={apiSearchQuery}
                       onChange={(e) => setApiSearchQuery(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleApiSearch()}
+                      onKeyPress={(e) => e.key === "Enter" && handleApiSearch()}
                       placeholder="Anime ara... (örn: Attack on Titan)"
                       className="flex-1 bg-black/50 border-white/20 text-white"
                     />
-                    <Button onClick={handleApiSearch} disabled={isApiLoading} className="btn-primary">
+                    <Button
+                      onClick={handleApiSearch}
+                      disabled={isApiLoading}
+                      className="btn-primary"
+                    >
                       {isApiLoading ? "Aranıyor..." : "Ara"}
                     </Button>
-                    <Button onClick={handleLoadPopularAnime} disabled={isApiLoading} variant="outline" className="border-white/20">
+                    <Button
+                      onClick={handleLoadPopularAnime}
+                      disabled={isApiLoading}
+                      variant="outline"
+                      className="border-white/20"
+                    >
                       Popüler
                     </Button>
                   </div>
@@ -822,13 +923,20 @@ export default function Admin() {
                   {apiSearchResults.length > 0 && (
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <p className="text-gray-400">{apiSearchResults.length} sonuç bulundu</p>
+                        <p className="text-gray-400">
+                          {apiSearchResults.length} sonuç bulundu
+                        </p>
                         <div className="flex space-x-2">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => {
-                              const allIndices = new Set(Array.from({ length: apiSearchResults.length }, (_, i) => i));
+                              const allIndices = new Set(
+                                Array.from(
+                                  { length: apiSearchResults.length },
+                                  (_, i) => i,
+                                ),
+                              );
                               setSelectedApiAnimes(allIndices);
                             }}
                             className="border-white/20 text-white hover:bg-white/10"
@@ -852,8 +960,8 @@ export default function Admin() {
                             key={index}
                             className={`p-3 rounded-lg border cursor-pointer transition-all ${
                               selectedApiAnimes.has(index)
-                                ? 'border-neon-blue bg-neon-blue/10'
-                                : 'border-white/10 hover:border-white/30'
+                                ? "border-neon-blue bg-neon-blue/10"
+                                : "border-white/10 hover:border-white/30"
                             }`}
                             onClick={() => {
                               const newSelected = new Set(selectedApiAnimes);
@@ -867,7 +975,10 @@ export default function Admin() {
                           >
                             <div className="flex space-x-3">
                               <img
-                                src={anime.images?.jpg?.image_url || 'https://via.placeholder.com/100x150'}
+                                src={
+                                  anime.images?.jpg?.image_url ||
+                                  "https://via.placeholder.com/100x150"
+                                }
                                 alt={anime.title}
                                 className="w-16 h-20 object-cover rounded"
                               />
@@ -875,27 +986,44 @@ export default function Admin() {
                                 <h4 className="text-white font-medium text-sm truncate">
                                   {anime.title}
                                 </h4>
-                                {anime.title_english && anime.title_english !== anime.title && (
-                                  <p className="text-gray-400 text-xs truncate">
-                                    {anime.title_english}
-                                  </p>
-                                )}
+                                {anime.title_english &&
+                                  anime.title_english !== anime.title && (
+                                    <p className="text-gray-400 text-xs truncate">
+                                      {anime.title_english}
+                                    </p>
+                                  )}
                                 <div className="flex items-center space-x-2 mt-1">
                                   <div className="flex items-center space-x-1">
                                     <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                    <span className="text-xs text-gray-300">{anime.score || 'N/A'}</span>
+                                    <span className="text-xs text-gray-300">
+                                      {anime.score || "N/A"}
+                                    </span>
                                   </div>
-                                  <span className="text-xs text-gray-400">•</span>
-                                  <span className="text-xs text-gray-400">{anime.episodes || 'TBA'} ep</span>
-                                  <span className="text-xs text-gray-400">•</span>
-                                  <span className="text-xs text-gray-400">{anime.year || 'TBA'}</span>
+                                  <span className="text-xs text-gray-400">
+                                    •
+                                  </span>
+                                  <span className="text-xs text-gray-400">
+                                    {anime.episodes || "TBA"} ep
+                                  </span>
+                                  <span className="text-xs text-gray-400">
+                                    •
+                                  </span>
+                                  <span className="text-xs text-gray-400">
+                                    {anime.year || "TBA"}
+                                  </span>
                                 </div>
                                 <div className="flex flex-wrap gap-1 mt-2">
-                                  {anime.genres?.slice(0, 2).map((genre: any) => (
-                                    <Badge key={genre.name} variant="outline" className="text-xs border-white/30 text-gray-300">
-                                      {genre.name}
-                                    </Badge>
-                                  ))}
+                                  {anime.genres
+                                    ?.slice(0, 2)
+                                    .map((genre: any) => (
+                                      <Badge
+                                        key={genre.name}
+                                        variant="outline"
+                                        className="text-xs border-white/30 text-gray-300"
+                                      >
+                                        {genre.name}
+                                      </Badge>
+                                    ))}
                                 </div>
                               </div>
                             </div>
@@ -918,7 +1046,9 @@ export default function Admin() {
                       disabled={selectedApiAnimes.size === 0 || isApiLoading}
                       className="btn-primary"
                     >
-                      {isApiLoading ? "İçe Aktarılıyor..." : `${selectedApiAnimes.size} Anime İçe Aktar`}
+                      {isApiLoading
+                        ? "İçe Aktarılıyor..."
+                        : `${selectedApiAnimes.size} Anime İçe Aktar`}
                     </Button>
                   </div>
                 </div>
@@ -935,7 +1065,8 @@ export default function Admin() {
                   <div>
                     <Label htmlFor="bulk-import">Anime Listesi</Label>
                     <p className="text-sm text-gray-400 mb-2">
-                      Her satıra bir anime adı yazın. Otomatik olarak temel bilgilerle eklenecek.
+                      Her satıra bir anime adı yazın. Otomatik olarak temel
+                      bilgilerle eklenecek.
                     </p>
                     <Textarea
                       id="bulk-import"
@@ -960,18 +1091,20 @@ One Piece`}
                     <Button
                       onClick={() => {
                         const animeList = bulkImportText
-                          .split('\n')
-                          .map(line => line.trim())
-                          .filter(line => line.length > 0);
+                          .split("\n")
+                          .map((line) => line.trim())
+                          .filter((line) => line.length > 0);
 
                         let addedCount = 0;
-                        animeList.forEach(title => {
+                        animeList.forEach((title) => {
                           const animeData = {
                             title: title,
                             titleEn: title,
                             poster: "https://via.placeholder.com/400x600",
                             rating: 7.0 + Math.random() * 2,
-                            year: new Date().getFullYear() - Math.floor(Math.random() * 5),
+                            year:
+                              new Date().getFullYear() -
+                              Math.floor(Math.random() * 5),
                             episodes: Math.floor(Math.random() * 50) + 12,
                             genre: ["Aksiyon"],
                             genreEn: ["Action"],
@@ -979,7 +1112,7 @@ One Piece`}
                             description: `${title} - Açıklama yakında eklenecek`,
                             descriptionEn: `${title} - Description coming soon`,
                             status: "upcoming" as const,
-                            category: "anime" as const
+                            category: "anime" as const,
                           };
                           storeAddAnime(animeData);
                           addedCount++;
@@ -996,7 +1129,11 @@ One Piece`}
                       className="btn-primary"
                       disabled={!bulkImportText.trim()}
                     >
-                      {bulkImportText.split('\n').filter(line => line.trim()).length} Anime Ekle
+                      {
+                        bulkImportText.split("\n").filter((line) => line.trim())
+                          .length
+                      }{" "}
+                      Anime Ekle
                     </Button>
                   </div>
                 </div>
@@ -1004,7 +1141,10 @@ One Piece`}
             </Dialog>
 
             {/* Add Notification Dialog */}
-            <Dialog open={showAddNotification} onOpenChange={setShowAddNotification}>
+            <Dialog
+              open={showAddNotification}
+              onOpenChange={setShowAddNotification}
+            >
               <DialogContent className="max-w-md bg-anime-card border-white/10 text-white">
                 <DialogHeader>
                   <DialogTitle>Yeni Duyuru Ekle</DialogTitle>
@@ -1015,7 +1155,12 @@ One Piece`}
                     <Input
                       id="notif-title"
                       value={newNotification.title}
-                      onChange={(e) => setNewNotification({ ...newNotification, title: e.target.value })}
+                      onChange={(e) =>
+                        setNewNotification({
+                          ...newNotification,
+                          title: e.target.value,
+                        })
+                      }
                       className="bg-black/50 border-white/20 text-white"
                       placeholder="Duyuru başlığı"
                     />
@@ -1025,7 +1170,12 @@ One Piece`}
                     <Textarea
                       id="notif-message"
                       value={newNotification.message}
-                      onChange={(e) => setNewNotification({ ...newNotification, message: e.target.value })}
+                      onChange={(e) =>
+                        setNewNotification({
+                          ...newNotification,
+                          message: e.target.value,
+                        })
+                      }
                       className="bg-black/50 border-white/20 text-white"
                       placeholder="Duyuru mesajı"
                       rows={3}
@@ -1035,16 +1185,26 @@ One Piece`}
                     <Label htmlFor="notif-type">Tür</Label>
                     <Select
                       value={newNotification.type}
-                      onValueChange={(value: any) => setNewNotification({ ...newNotification, type: value })}
+                      onValueChange={(value: any) =>
+                        setNewNotification({ ...newNotification, type: value })
+                      }
                     >
                       <SelectTrigger className="bg-black/50 border-white/20 text-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-anime-card border-white/10">
-                        <SelectItem value="info" className="text-white">📢 Bilgi</SelectItem>
-                        <SelectItem value="success" className="text-white">✅ Başarı</SelectItem>
-                        <SelectItem value="warning" className="text-white">⚠️ Uyarı</SelectItem>
-                        <SelectItem value="error" className="text-white">❌ Hata</SelectItem>
+                        <SelectItem value="info" className="text-white">
+                          📢 Bilgi
+                        </SelectItem>
+                        <SelectItem value="success" className="text-white">
+                          ✅ Başarı
+                        </SelectItem>
+                        <SelectItem value="warning" className="text-white">
+                          ⚠️ Uyarı
+                        </SelectItem>
+                        <SelectItem value="error" className="text-white">
+                          ❌ Hata
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -1060,7 +1220,11 @@ One Piece`}
                       onClick={() => {
                         if (newNotification.title && newNotification.message) {
                           addNotification(newNotification);
-                          setNewNotification({ title: "", message: "", type: "info" });
+                          setNewNotification({
+                            title: "",
+                            message: "",
+                            type: "info",
+                          });
                           setShowAddNotification(false);
                           toast({
                             title: "Duyuru Eklendi",
@@ -1080,7 +1244,9 @@ One Piece`}
             {/* Anime Management */}
             <TabsContent value="animes" className="mt-6">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-white">Anime Yönetimi</h2>
+                <h2 className="text-2xl font-bold text-white">
+                  Anime Yönetimi
+                </h2>
                 <div className="flex space-x-2">
                   {/* Quick Add Form */}
                   <div className="flex items-center space-x-2 bg-black/30 p-2 rounded-lg border border-white/10">
@@ -1089,7 +1255,7 @@ One Piece`}
                       value={quickAddTitle}
                       onChange={(e) => setQuickAddTitle(e.target.value)}
                       onKeyPress={(e) => {
-                        if (e.key === 'Enter' && quickAddTitle.trim()) {
+                        if (e.key === "Enter" && quickAddTitle.trim()) {
                           handleQuickAdd();
                         }
                       }}
@@ -1105,10 +1271,13 @@ One Piece`}
                     </Button>
                   </div>
 
-                  <Dialog open={showAddEpisode} onOpenChange={setShowAddEpisode}>
+                  <Dialog
+                    open={showAddEpisode}
+                    onOpenChange={setShowAddEpisode}
+                  >
                     <DialogTrigger asChild>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         className="border-white/20 text-white hover:bg-white/10"
                         disabled={!selectedAnime}
                       >
@@ -1123,21 +1292,35 @@ One Piece`}
                       <div className="space-y-4">
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="episode-title">Bölüm Adı (Türkçe) *</Label>
+                            <Label htmlFor="episode-title">
+                              Bölüm Adı (Türkçe) *
+                            </Label>
                             <Input
                               id="episode-title"
                               value={newEpisode.title}
-                              onChange={(e) => setNewEpisode({ ...newEpisode, title: e.target.value })}
+                              onChange={(e) =>
+                                setNewEpisode({
+                                  ...newEpisode,
+                                  title: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="Bölüm başlığı"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="episode-title-en">Bölüm Adı (İngilizce) *</Label>
+                            <Label htmlFor="episode-title-en">
+                              Bölüm Adı (İngilizce) *
+                            </Label>
                             <Input
                               id="episode-title-en"
                               value={newEpisode.titleEn}
-                              onChange={(e) => setNewEpisode({ ...newEpisode, titleEn: e.target.value })}
+                              onChange={(e) =>
+                                setNewEpisode({
+                                  ...newEpisode,
+                                  titleEn: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="Episode title"
                             />
@@ -1145,21 +1328,35 @@ One Piece`}
                         </div>
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="episode-desc">Açıklama (Türkçe)</Label>
+                            <Label htmlFor="episode-desc">
+                              Açıklama (Türkçe)
+                            </Label>
                             <Textarea
                               id="episode-desc"
                               value={newEpisode.description}
-                              onChange={(e) => setNewEpisode({ ...newEpisode, description: e.target.value })}
+                              onChange={(e) =>
+                                setNewEpisode({
+                                  ...newEpisode,
+                                  description: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="Bölüm açıklaması"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="episode-desc-en">Açıklama (İngilizce)</Label>
+                            <Label htmlFor="episode-desc-en">
+                              Açıklama (İngilizce)
+                            </Label>
                             <Textarea
                               id="episode-desc-en"
                               value={newEpisode.descriptionEn}
-                              onChange={(e) => setNewEpisode({ ...newEpisode, descriptionEn: e.target.value })}
+                              onChange={(e) =>
+                                setNewEpisode({
+                                  ...newEpisode,
+                                  descriptionEn: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="Episode description"
                             />
@@ -1171,7 +1368,12 @@ One Piece`}
                             <Input
                               id="video-url"
                               value={newEpisode.videoUrl}
-                              onChange={(e) => setNewEpisode({ ...newEpisode, videoUrl: e.target.value })}
+                              onChange={(e) =>
+                                setNewEpisode({
+                                  ...newEpisode,
+                                  videoUrl: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="https://example.com/video.mp4"
                             />
@@ -1181,7 +1383,12 @@ One Piece`}
                             <Input
                               id="episode-duration"
                               value={newEpisode.duration}
-                              onChange={(e) => setNewEpisode({ ...newEpisode, duration: e.target.value })}
+                              onChange={(e) =>
+                                setNewEpisode({
+                                  ...newEpisode,
+                                  duration: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="24min"
                             />
@@ -1192,20 +1399,28 @@ One Piece`}
                               id="air-date"
                               type="date"
                               value={newEpisode.airDate}
-                              onChange={(e) => setNewEpisode({ ...newEpisode, airDate: e.target.value })}
+                              onChange={(e) =>
+                                setNewEpisode({
+                                  ...newEpisode,
+                                  airDate: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                             />
                           </div>
                         </div>
                         <div className="flex justify-end space-x-2">
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             onClick={() => setShowAddEpisode(false)}
                             className="border-white/20 text-white hover:bg-white/10"
                           >
                             İptal
                           </Button>
-                          <Button onClick={handleAddEpisode} className="btn-primary">
+                          <Button
+                            onClick={handleAddEpisode}
+                            className="btn-primary"
+                          >
                             Bölüm Ekle
                           </Button>
                         </div>
@@ -1237,8 +1452,12 @@ One Piece`}
                     className="border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10"
                     disabled={isCheckingImages}
                   >
-                    <RefreshCw className={`h-4 w-4 mr-2 ${isCheckingImages ? 'animate-spin' : ''}`} />
-                    {isCheckingImages ? 'Kontrol Ediliyor...' : 'Resim Kalitesi Kontrol'}
+                    <RefreshCw
+                      className={`h-4 w-4 mr-2 ${isCheckingImages ? "animate-spin" : ""}`}
+                    />
+                    {isCheckingImages
+                      ? "Kontrol Ediliyor..."
+                      : "Resim Kalitesi Kontrol"}
                   </Button>
 
                   <Dialog open={showAddAnime} onOpenChange={setShowAddAnime}>
@@ -1259,17 +1478,29 @@ One Piece`}
                             <Input
                               id="title"
                               value={newAnime.title}
-                              onChange={(e) => setNewAnime({ ...newAnime, title: e.target.value })}
+                              onChange={(e) =>
+                                setNewAnime({
+                                  ...newAnime,
+                                  title: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="Anime adını girin"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="title-en">Anime Adı (İngilizce) *</Label>
+                            <Label htmlFor="title-en">
+                              Anime Adı (İngilizce) *
+                            </Label>
                             <Input
                               id="title-en"
                               value={newAnime.titleEn}
-                              onChange={(e) => setNewAnime({ ...newAnime, titleEn: e.target.value })}
+                              onChange={(e) =>
+                                setNewAnime({
+                                  ...newAnime,
+                                  titleEn: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="Enter anime title"
                             />
@@ -1277,21 +1508,35 @@ One Piece`}
                         </div>
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="description">Açıklama (Türkçe) *</Label>
+                            <Label htmlFor="description">
+                              Açıklama (Türkçe) *
+                            </Label>
                             <Textarea
                               id="description"
                               value={newAnime.description}
-                              onChange={(e) => setNewAnime({ ...newAnime, description: e.target.value })}
+                              onChange={(e) =>
+                                setNewAnime({
+                                  ...newAnime,
+                                  description: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="Anime açıklaması"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="description-en">Açıklama (İngilizce) *</Label>
+                            <Label htmlFor="description-en">
+                              Açıklama (İngilizce) *
+                            </Label>
                             <Textarea
                               id="description-en"
                               value={newAnime.descriptionEn}
-                              onChange={(e) => setNewAnime({ ...newAnime, descriptionEn: e.target.value })}
+                              onChange={(e) =>
+                                setNewAnime({
+                                  ...newAnime,
+                                  descriptionEn: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="Anime description"
                             />
@@ -1304,7 +1549,12 @@ One Piece`}
                               id="year"
                               type="number"
                               value={newAnime.year}
-                              onChange={(e) => setNewAnime({ ...newAnime, year: parseInt(e.target.value) })}
+                              onChange={(e) =>
+                                setNewAnime({
+                                  ...newAnime,
+                                  year: parseInt(e.target.value),
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                             />
                           </div>
@@ -1314,7 +1564,12 @@ One Piece`}
                               id="episodes"
                               type="number"
                               value={newAnime.episodes}
-                              onChange={(e) => setNewAnime({ ...newAnime, episodes: parseInt(e.target.value) })}
+                              onChange={(e) =>
+                                setNewAnime({
+                                  ...newAnime,
+                                  episodes: parseInt(e.target.value),
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                             />
                           </div>
@@ -1327,7 +1582,12 @@ One Piece`}
                               min="0"
                               max="10"
                               value={newAnime.rating}
-                              onChange={(e) => setNewAnime({ ...newAnime, rating: parseFloat(e.target.value) })}
+                              onChange={(e) =>
+                                setNewAnime({
+                                  ...newAnime,
+                                  rating: parseFloat(e.target.value),
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                             />
                           </div>
@@ -1336,7 +1596,12 @@ One Piece`}
                             <Input
                               id="duration"
                               value={newAnime.duration}
-                              onChange={(e) => setNewAnime({ ...newAnime, duration: e.target.value })}
+                              onChange={(e) =>
+                                setNewAnime({
+                                  ...newAnime,
+                                  duration: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="24min"
                             />
@@ -1348,7 +1613,12 @@ One Piece`}
                             <Input
                               id="poster"
                               value={newAnime.poster}
-                              onChange={(e) => setNewAnime({ ...newAnime, poster: e.target.value })}
+                              onChange={(e) =>
+                                setNewAnime({
+                                  ...newAnime,
+                                  poster: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="https://example.com/poster.jpg"
                             />
@@ -1358,7 +1628,12 @@ One Piece`}
                             <Input
                               id="banner"
                               value={newAnime.banner}
-                              onChange={(e) => setNewAnime({ ...newAnime, banner: e.target.value })}
+                              onChange={(e) =>
+                                setNewAnime({
+                                  ...newAnime,
+                                  banner: e.target.value,
+                                })
+                              }
                               className="bg-black/50 border-white/20 text-white"
                               placeholder="https://example.com/banner.jpg"
                             />
@@ -1368,26 +1643,61 @@ One Piece`}
                           <div className="grid grid-cols-2 gap-2">
                             <div>
                               <Label htmlFor="status">Durum</Label>
-                              <Select value={newAnime.status} onValueChange={(value: any) => setNewAnime({ ...newAnime, status: value })}>
+                              <Select
+                                value={newAnime.status}
+                                onValueChange={(value: any) =>
+                                  setNewAnime({ ...newAnime, status: value })
+                                }
+                              >
                                 <SelectTrigger className="bg-black/50 border-white/20 text-white">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent className="bg-anime-card border-white/10">
-                                  <SelectItem value="ongoing" className="text-white">Devam Ediyor</SelectItem>
-                                  <SelectItem value="completed" className="text-white">Tamamlandı</SelectItem>
-                                  <SelectItem value="upcoming" className="text-white">Yakında</SelectItem>
+                                  <SelectItem
+                                    value="ongoing"
+                                    className="text-white"
+                                  >
+                                    Devam Ediyor
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="completed"
+                                    className="text-white"
+                                  >
+                                    Tamamlandı
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="upcoming"
+                                    className="text-white"
+                                  >
+                                    Yakında
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
                             <div>
                               <Label htmlFor="category">Kategori</Label>
-                              <Select value={newAnime.category} onValueChange={(value: any) => setNewAnime({ ...newAnime, category: value })}>
+                              <Select
+                                value={newAnime.category}
+                                onValueChange={(value: any) =>
+                                  setNewAnime({ ...newAnime, category: value })
+                                }
+                              >
                                 <SelectTrigger className="bg-black/50 border-white/20 text-white">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent className="bg-anime-card border-white/10">
-                                  <SelectItem value="anime" className="text-white">Anime</SelectItem>
-                                  <SelectItem value="movie" className="text-white">Film</SelectItem>
+                                  <SelectItem
+                                    value="anime"
+                                    className="text-white"
+                                  >
+                                    Anime
+                                  </SelectItem>
+                                  <SelectItem
+                                    value="movie"
+                                    className="text-white"
+                                  >
+                                    Film
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
@@ -1400,12 +1710,17 @@ One Piece`}
                               <Button
                                 key={genre.tr}
                                 type="button"
-                                variant={newAnime.genre.includes(genre.tr) ? "default" : "outline"}
+                                variant={
+                                  newAnime.genre.includes(genre.tr)
+                                    ? "default"
+                                    : "outline"
+                                }
                                 size="sm"
                                 onClick={() => handleGenreChange(genre, true)}
-                                className={newAnime.genre.includes(genre.tr) 
-                                  ? "bg-neon-blue text-black" 
-                                  : "border-white/20 text-white hover:bg-white/10"
+                                className={
+                                  newAnime.genre.includes(genre.tr)
+                                    ? "bg-neon-blue text-black"
+                                    : "border-white/20 text-white hover:bg-white/10"
                                 }
                               >
                                 {genre.tr}
@@ -1414,14 +1729,17 @@ One Piece`}
                           </div>
                         </div>
                         <div className="flex justify-end space-x-2">
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             onClick={() => setShowAddAnime(false)}
                             className="border-white/20 text-white hover:bg-white/10"
                           >
                             İptal
                           </Button>
-                          <Button onClick={handleAddAnime} className="btn-primary">
+                          <Button
+                            onClick={handleAddAnime}
+                            className="btn-primary"
+                          >
                             Anime Ekle
                           </Button>
                         </div>
@@ -1433,14 +1751,21 @@ One Piece`}
 
               <div className="grid gap-4">
                 {animes.map((anime) => (
-                  <div key={anime.id} className="bg-anime-card rounded-lg border border-white/10">
+                  <div
+                    key={anime.id}
+                    className="bg-anime-card rounded-lg border border-white/10"
+                  >
                     <div className="p-4">
                       <div className="flex items-center space-x-4">
                         <img
                           src={anime.poster}
                           alt={anime.title}
                           className="w-16 h-20 object-cover rounded cursor-pointer"
-                          onClick={() => setSelectedAnime(selectedAnime === anime.id ? null : anime.id)}
+                          onClick={() =>
+                            setSelectedAnime(
+                              selectedAnime === anime.id ? null : anime.id,
+                            )
+                          }
                         />
                         <div className="flex-1">
                           {editingAnime === anime.id && editAnime ? (
@@ -1448,13 +1773,23 @@ One Piece`}
                               <div className="grid grid-cols-2 gap-2">
                                 <Input
                                   value={editAnime.title}
-                                  onChange={(e) => setEditAnime({ ...editAnime, title: e.target.value })}
+                                  onChange={(e) =>
+                                    setEditAnime({
+                                      ...editAnime,
+                                      title: e.target.value,
+                                    })
+                                  }
                                   className="bg-black/50 border-white/20 text-white text-sm"
                                   placeholder="Türkçe başlık"
                                 />
                                 <Input
                                   value={editAnime.titleEn}
-                                  onChange={(e) => setEditAnime({ ...editAnime, titleEn: e.target.value })}
+                                  onChange={(e) =>
+                                    setEditAnime({
+                                      ...editAnime,
+                                      titleEn: e.target.value,
+                                    })
+                                  }
                                   className="bg-black/50 border-white/20 text-white text-sm"
                                   placeholder="English title"
                                 />
@@ -1462,13 +1797,23 @@ One Piece`}
                               <div className="grid grid-cols-2 gap-2">
                                 <Input
                                   value={editAnime.poster}
-                                  onChange={(e) => setEditAnime({ ...editAnime, poster: e.target.value })}
+                                  onChange={(e) =>
+                                    setEditAnime({
+                                      ...editAnime,
+                                      poster: e.target.value,
+                                    })
+                                  }
                                   className="bg-black/50 border-white/20 text-white text-sm"
                                   placeholder="Poster URL"
                                 />
                                 <Input
                                   value={editAnime.banner || ""}
-                                  onChange={(e) => setEditAnime({ ...editAnime, banner: e.target.value })}
+                                  onChange={(e) =>
+                                    setEditAnime({
+                                      ...editAnime,
+                                      banner: e.target.value,
+                                    })
+                                  }
                                   className="bg-black/50 border-white/20 text-white text-sm"
                                   placeholder="Banner URL"
                                 />
@@ -1477,14 +1822,24 @@ One Piece`}
                                 <Input
                                   type="number"
                                   value={editAnime.year}
-                                  onChange={(e) => setEditAnime({ ...editAnime, year: parseInt(e.target.value) })}
+                                  onChange={(e) =>
+                                    setEditAnime({
+                                      ...editAnime,
+                                      year: parseInt(e.target.value),
+                                    })
+                                  }
                                   className="bg-black/50 border-white/20 text-white text-sm w-20"
                                   placeholder="Yıl"
                                 />
                                 <Input
                                   type="number"
                                   value={editAnime.episodes}
-                                  onChange={(e) => setEditAnime({ ...editAnime, episodes: parseInt(e.target.value) })}
+                                  onChange={(e) =>
+                                    setEditAnime({
+                                      ...editAnime,
+                                      episodes: parseInt(e.target.value),
+                                    })
+                                  }
                                   className="bg-black/50 border-white/20 text-white text-sm w-20"
                                   placeholder="Bölüm"
                                 />
@@ -1492,7 +1847,12 @@ One Piece`}
                                   type="number"
                                   step="0.1"
                                   value={editAnime.rating}
-                                  onChange={(e) => setEditAnime({ ...editAnime, rating: parseFloat(e.target.value) })}
+                                  onChange={(e) =>
+                                    setEditAnime({
+                                      ...editAnime,
+                                      rating: parseFloat(e.target.value),
+                                    })
+                                  }
                                   className="bg-black/50 border-white/20 text-white text-sm w-20"
                                   placeholder="Puan"
                                 />
@@ -1500,7 +1860,11 @@ One Piece`}
                             </div>
                           ) : (
                             <div>
-                              <h3 className="text-white font-bold">{language === 'en' ? anime.titleEn : anime.title}</h3>
+                              <h3 className="text-white font-bold">
+                                {language === "en"
+                                  ? anime.titleEn
+                                  : anime.title}
+                              </h3>
                               <div className="flex items-center space-x-4 text-sm text-gray-400">
                                 <span>{anime.year}</span>
                                 <span>{anime.episodes} bölüm</span>
@@ -1508,21 +1872,38 @@ One Piece`}
                                   <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                                   <span>{anime.rating}</span>
                                 </div>
-                                <Badge variant="outline" className={`text-xs ${
-                                  anime.status === 'ongoing' ? 'border-green-500 text-green-400' :
-                                  anime.status === 'completed' ? 'border-blue-500 text-blue-400' :
-                                  'border-yellow-500 text-yellow-400'
-                                }`}>
-                                  {anime.status === 'ongoing' ? 'Devam Ediyor' : 
-                                   anime.status === 'completed' ? 'Tamamlandı' : 'Yakında'}
+                                <Badge
+                                  variant="outline"
+                                  className={`text-xs ${
+                                    anime.status === "ongoing"
+                                      ? "border-green-500 text-green-400"
+                                      : anime.status === "completed"
+                                        ? "border-blue-500 text-blue-400"
+                                        : "border-yellow-500 text-yellow-400"
+                                  }`}
+                                >
+                                  {anime.status === "ongoing"
+                                    ? "Devam Ediyor"
+                                    : anime.status === "completed"
+                                      ? "Tamamlandı"
+                                      : "Yakında"}
                                 </Badge>
                               </div>
                               <div className="flex flex-wrap gap-1 mt-2">
-                                {(language === 'en' ? anime.genreEn : anime.genre).slice(0, 3).map((genre) => (
-                                  <Badge key={genre} variant="outline" className="border-white/30 text-gray-300 text-xs">
-                                    {genre}
-                                  </Badge>
-                                ))}
+                                {(language === "en"
+                                  ? anime.genreEn
+                                  : anime.genre
+                                )
+                                  .slice(0, 3)
+                                  .map((genre) => (
+                                    <Badge
+                                      key={genre}
+                                      variant="outline"
+                                      className="border-white/30 text-gray-300 text-xs"
+                                    >
+                                      {genre}
+                                    </Badge>
+                                  ))}
                               </div>
                             </div>
                           )}
@@ -1530,17 +1911,17 @@ One Piece`}
                         <div className="flex items-center space-x-2">
                           {editingAnime === anime.id ? (
                             <>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={handleSaveEdit}
                                 className="border-green-500/20 text-green-400 hover:bg-green-500/10"
                               >
                                 <Save className="h-4 w-4" />
                               </Button>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={handleCancelEdit}
                                 className="border-red-500/20 text-red-400 hover:bg-red-500/10"
                               >
@@ -1549,36 +1930,37 @@ One Piece`}
                             </>
                           ) : (
                             <>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => handleEditAnime(anime)}
                                 className="border-white/20 text-white hover:bg-white/10"
                               >
                                 <Edit className="h-4 w-4" />
                               </Button>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => handleDeleteAnime(anime.id)}
                                 className="border-red-500/20 text-red-400 hover:bg-red-500/10"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
-                              <Collapsible 
-                                open={expandedAnimes.has(anime.id)} 
+                              <Collapsible
+                                open={expandedAnimes.has(anime.id)}
                                 onOpenChange={() => toggleExpanded(anime.id)}
                               >
                                 <CollapsibleTrigger asChild>
-                                  <Button 
-                                    variant="outline" 
+                                  <Button
+                                    variant="outline"
                                     size="sm"
                                     className="border-white/20 text-white hover:bg-white/10"
                                   >
-                                    {expandedAnimes.has(anime.id) ? 
-                                      <ChevronUp className="h-4 w-4" /> : 
+                                    {expandedAnimes.has(anime.id) ? (
+                                      <ChevronUp className="h-4 w-4" />
+                                    ) : (
                                       <ChevronDown className="h-4 w-4" />
-                                    }
+                                    )}
                                   </Button>
                                 </CollapsibleTrigger>
                               </Collapsible>
@@ -1587,21 +1969,26 @@ One Piece`}
                         </div>
                       </div>
                     </div>
-                    
+
                     <Collapsible open={expandedAnimes.has(anime.id)}>
                       <CollapsibleContent className="border-t border-white/10 p-4">
                         <div className="space-y-4">
                           <div>
-                            <h4 className="text-white font-semibold mb-2">Açıklama</h4>
+                            <h4 className="text-white font-semibold mb-2">
+                              Açıklama
+                            </h4>
                             <p className="text-gray-300 text-sm">
-                              {language === 'en' ? anime.descriptionEn : anime.description}
+                              {language === "en"
+                                ? anime.descriptionEn
+                                : anime.description}
                             </p>
                           </div>
-                          
+
                           <div>
                             <div className="flex items-center justify-between mb-2">
                               <h4 className="text-white font-semibold">
-                                Bölümler ({getEpisodesByAnimeId(anime.id).length})
+                                Bölümler (
+                                {getEpisodesByAnimeId(anime.id).length})
                               </h4>
                               <Button
                                 variant="outline"
@@ -1619,44 +2006,57 @@ One Piece`}
 
                             {getEpisodesByAnimeId(anime.id).length ? (
                               <div className="grid gap-2">
-                                {getEpisodesByAnimeId(anime.id).map((episode) => (
-                                  <div key={episode.id} className="bg-black/30 p-3 rounded border border-white/10">
-                                    <div className="flex items-center justify-between">
-                                      <div>
-                                        <h5 className="text-white font-medium text-sm">
-                                          Bölüm {episode.episodeNumber}: {language === 'en' ? episode.titleEn : episode.title}
-                                        </h5>
-                                        <p className="text-gray-400 text-xs">
-                                          {episode.duration} • {new Date(episode.airDate).toLocaleDateString('tr-TR')}
-                                        </p>
-                                        {episode.videoUrl && (
-                                          <p className="text-neon-blue text-xs truncate mt-1">
-                                            📹 {episode.videoUrl}
+                                {getEpisodesByAnimeId(anime.id).map(
+                                  (episode) => (
+                                    <div
+                                      key={episode.id}
+                                      className="bg-black/30 p-3 rounded border border-white/10"
+                                    >
+                                      <div className="flex items-center justify-between">
+                                        <div>
+                                          <h5 className="text-white font-medium text-sm">
+                                            Bölüm {episode.episodeNumber}:{" "}
+                                            {language === "en"
+                                              ? episode.titleEn
+                                              : episode.title}
+                                          </h5>
+                                          <p className="text-gray-400 text-xs">
+                                            {episode.duration} •{" "}
+                                            {new Date(
+                                              episode.airDate,
+                                            ).toLocaleDateString("tr-TR")}
                                           </p>
-                                        )}
-                                      </div>
-                                      <div className="flex items-center space-x-1">
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          className="border-white/20 text-white hover:bg-white/10 h-6 w-6 p-0"
-                                        >
-                                          <Edit className="h-3 w-3" />
-                                        </Button>
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          className="border-red-500/20 text-red-400 hover:bg-red-500/10 h-6 w-6 p-0"
-                                        >
-                                          <Trash2 className="h-3 w-3" />
-                                        </Button>
+                                          {episode.videoUrl && (
+                                            <p className="text-neon-blue text-xs truncate mt-1">
+                                              📹 {episode.videoUrl}
+                                            </p>
+                                          )}
+                                        </div>
+                                        <div className="flex items-center space-x-1">
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="border-white/20 text-white hover:bg-white/10 h-6 w-6 p-0"
+                                          >
+                                            <Edit className="h-3 w-3" />
+                                          </Button>
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="border-red-500/20 text-red-400 hover:bg-red-500/10 h-6 w-6 p-0"
+                                          >
+                                            <Trash2 className="h-3 w-3" />
+                                          </Button>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                ))}
+                                  ),
+                                )}
                               </div>
                             ) : (
-                              <p className="text-gray-400 text-sm italic">Henüz bölüm eklenmemiş</p>
+                              <p className="text-gray-400 text-sm italic">
+                                Henüz bölüm eklenmemiş
+                              </p>
                             )}
                           </div>
                         </div>
@@ -1670,43 +2070,89 @@ One Piece`}
             {/* Anime Requests */}
             <TabsContent value="requests" className="mt-6">
               <div className="bg-anime-card p-6 rounded-lg border border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-4">Anime İstekleri</h2>
+                <h2 className="text-2xl font-bold text-white mb-4">
+                  Anime İstekleri
+                </h2>
                 <p className="text-gray-400 mb-6">
-                  Kullanıcıların gönderdiği anime isteklerini burada görüntüleyebilir ve yönetebilirsiniz.
+                  Kullanıcıların gönderdiği anime isteklerini burada
+                  görüntüleyebilir ve yönetebilirsiniz.
                 </p>
 
                 <div className="grid gap-4">
                   {/* Mock request data */}
                   {[
-                    { id: 1, anime: "One Piece Film: Red", user: "AnimeOtaku2024", votes: 45, status: "Onaylandı" },
-                    { id: 2, anime: "Jujutsu Kaisen Season 3", user: "MangaFan", votes: 38, status: "Beklemede" },
-                    { id: 3, anime: "Studio Ghibli Collection", user: "GhibliFan", votes: 62, status: "Eklendi" },
-                    { id: 4, anime: "Demon Slayer Movie", user: "SwordFan", votes: 29, status: "Beklemede" },
+                    {
+                      id: 1,
+                      anime: "One Piece Film: Red",
+                      user: "AnimeOtaku2024",
+                      votes: 45,
+                      status: "Onaylandı",
+                    },
+                    {
+                      id: 2,
+                      anime: "Jujutsu Kaisen Season 3",
+                      user: "MangaFan",
+                      votes: 38,
+                      status: "Beklemede",
+                    },
+                    {
+                      id: 3,
+                      anime: "Studio Ghibli Collection",
+                      user: "GhibliFan",
+                      votes: 62,
+                      status: "Eklendi",
+                    },
+                    {
+                      id: 4,
+                      anime: "Demon Slayer Movie",
+                      user: "SwordFan",
+                      votes: 29,
+                      status: "Beklemede",
+                    },
                   ].map((request) => (
-                    <div key={request.id} className="flex items-center justify-between p-4 bg-black/30 rounded-lg">
+                    <div
+                      key={request.id}
+                      className="flex items-center justify-between p-4 bg-black/30 rounded-lg"
+                    >
                       <div className="flex-1">
-                        <h3 className="text-white font-medium">{request.anime}</h3>
+                        <h3 className="text-white font-medium">
+                          {request.anime}
+                        </h3>
                         <div className="flex items-center space-x-4 text-sm text-gray-400 mt-1">
                           <span>�� {request.user}</span>
                           <span>⭐ {request.votes} oy</span>
-                          <span>📅 {new Date().toLocaleDateString('tr-TR')}</span>
+                          <span>
+                            📅 {new Date().toLocaleDateString("tr-TR")}
+                          </span>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge variant="outline" className={
-                          request.status === 'Eklendi' ? 'border-green-500 text-green-400' :
-                          request.status === 'Onaylandı' ? 'border-blue-500 text-blue-400' :
-                          request.status === 'Reddedildi' ? 'border-red-500 text-red-400' :
-                          'border-yellow-500 text-yellow-400'
-                        }>
+                        <Badge
+                          variant="outline"
+                          className={
+                            request.status === "Eklendi"
+                              ? "border-green-500 text-green-400"
+                              : request.status === "Onaylandı"
+                                ? "border-blue-500 text-blue-400"
+                                : request.status === "Reddedildi"
+                                  ? "border-red-500 text-red-400"
+                                  : "border-yellow-500 text-yellow-400"
+                          }
+                        >
                           {request.status}
                         </Badge>
-                        {request.status === 'Beklemede' && (
+                        {request.status === "Beklemede" && (
                           <div className="flex space-x-1">
-                            <Button size="sm" className="bg-green-500/20 text-green-400 hover:bg-green-500/30">
+                            <Button
+                              size="sm"
+                              className="bg-green-500/20 text-green-400 hover:bg-green-500/30"
+                            >
                               Onayla
                             </Button>
-                            <Button size="sm" className="bg-red-500/20 text-red-400 hover:bg-red-500/30">
+                            <Button
+                              size="sm"
+                              className="bg-red-500/20 text-red-400 hover:bg-red-500/30"
+                            >
                               Reddet
                             </Button>
                           </div>
@@ -1718,8 +2164,9 @@ One Piece`}
 
                 <div className="mt-6 p-4 bg-neon-blue/10 border border-neon-blue/20 rounded-lg">
                   <p className="text-neon-blue text-sm">
-                    💡 Anime istekleri sistemi: Kullanıcılar /anime-request sayfasından istek gönderebilir,
-                    yüksek oy alan istekler buraya düşer.
+                    💡 Anime istekleri sistemi: Kullanıcılar /anime-request
+                    sayfasından istek gönderebilir, yüksek oy alan istekler
+                    buraya düşer.
                   </p>
                 </div>
               </div>
@@ -1728,22 +2175,31 @@ One Piece`}
             {/* Users */}
             <TabsContent value="users" className="mt-6">
               <div className="bg-anime-card p-6 rounded-lg border border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-4">Kullanıcı Yönetimi</h2>
+                <h2 className="text-2xl font-bold text-white mb-4">
+                  Kullanıcı Yönetimi
+                </h2>
                 <p className="text-gray-400 mb-4">
-                  Kullanıcı yönetimi özellikleri yakında eklenecek. Burada kullanıcıları görüntüleyebilir, 
-                  yönetebilir ve istatistiklerini inceleyebilirsiniz.
+                  Kullanıcı yönetimi özellikleri yakında eklenecek. Burada
+                  kullanıcıları görüntüleyebilir, yönetebilir ve
+                  istatistiklerini inceleyebilirsiniz.
                 </p>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="p-4 bg-neon-blue/10 border border-neon-blue/20 rounded-lg">
-                    <h3 className="text-neon-blue font-semibold mb-2">Aktif Kullanıcılar</h3>
+                    <h3 className="text-neon-blue font-semibold mb-2">
+                      Aktif Kullanıcılar
+                    </h3>
                     <p className="text-neon-blue text-sm">
-                      💡 Gelecek özellikler: Online kullanıcı listesi, aktivite izleme
+                      💡 Gelecek özellikler: Online kullanıcı listesi, aktivite
+                      izleme
                     </p>
                   </div>
                   <div className="p-4 bg-neon-purple/10 border border-neon-purple/20 rounded-lg">
-                    <h3 className="text-neon-purple font-semibold mb-2">Kullanıcı Yönetimi</h3>
+                    <h3 className="text-neon-purple font-semibold mb-2">
+                      Kullanıcı Yönetimi
+                    </h3>
                     <p className="text-neon-purple text-sm">
-                      🔧 Gelecek özellikler: Yasaklama, yetki verme, profil düzenleme
+                      🔧 Gelecek özellikler: Yasaklama, yetki verme, profil
+                      düzenleme
                     </p>
                   </div>
                 </div>
@@ -1753,21 +2209,30 @@ One Piece`}
             {/* Settings */}
             <TabsContent value="settings" className="mt-6">
               <div className="bg-anime-card p-6 rounded-lg border border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-4">Sistem Ayarları</h2>
+                <h2 className="text-2xl font-bold text-white mb-4">
+                  Sistem Ayarları
+                </h2>
                 <p className="text-gray-400 mb-4">
-                  Site ayarları, güvenlik seçenekleri ve sistem konfigürasyonu burada yönetilecek.
+                  Site ayarları, güvenlik seçenekleri ve sistem konfigürasyonu
+                  burada yönetilecek.
                 </p>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="p-4 bg-neon-pink/10 border border-neon-pink/20 rounded-lg">
-                    <h3 className="text-neon-pink font-semibold mb-2">Site Ayarları</h3>
+                    <h3 className="text-neon-pink font-semibold mb-2">
+                      Site Ayarları
+                    </h3>
                     <p className="text-neon-pink text-sm">
-                      ⚙️ Gelecek özellikler: Genel ayarlar, tema seçenekleri, dil ayarları
+                      ⚙️ Gelecek özellikler: Genel ayarlar, tema seçenekleri,
+                      dil ayarları
                     </p>
                   </div>
                   <div className="p-4 bg-yellow-400/10 border border-yellow-400/20 rounded-lg">
-                    <h3 className="text-yellow-400 font-semibold mb-2">Güvenlik</h3>
+                    <h3 className="text-yellow-400 font-semibold mb-2">
+                      Güvenlik
+                    </h3>
                     <p className="text-yellow-400 text-sm">
-                      🔒 Gelecek özellikler: Güvenlik ayarları, backup yönetimi, API ayarları
+                      🔒 Gelecek özellikler: Güvenlik ayarları, backup yönetimi,
+                      API ayarları
                     </p>
                   </div>
                 </div>

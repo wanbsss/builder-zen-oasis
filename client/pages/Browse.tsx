@@ -45,8 +45,22 @@ export default function Browse() {
     : ["Aksiyon", "Macera", "Komedi", "Drama", "Fantastik", "Romantik", "Spor"];
   const years = ["2024", "2023", "2022", "2021", "2020", "2019", "2018"];
 
+  // Filter functions for categories
+  const getAnimeByCategory = (category: "anime" | "movie" | "trending" | "all" = "all") => {
+    switch (category) {
+      case "anime":
+        return animes.filter(anime => anime.category === "anime");
+      case "movie":
+        return animes.filter(anime => anime.category === "movie");
+      case "trending":
+        return animes.filter(anime => anime.rating >= 8.6).sort((a, b) => b.rating - a.rating);
+      default:
+        return animes;
+    }
+  };
+
   // Get base anime list based on category
-  const baseAnimes = category === 'all' ? sampleAnimes : getAnimeByCategory(category as any);
+  const baseAnimes = category === 'all' ? animes : getAnimeByCategory(category as any);
 
   // Filter animes
   const filteredAnimes = baseAnimes.filter(anime => {

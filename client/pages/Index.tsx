@@ -23,7 +23,7 @@ export default function Index() {
       title: language === 'en' ? "Attack on Titan Final Season" : "Shingeki no Kyojin Final Season",
       description: language === 'en' 
         ? "Humanity's last stand against the titans. The truth behind the walls is finally revealed in this epic conclusion to the legendary series."
-        : "İnsanlığın titanlara karşı son duruşu. Duvarların arkasındaki gerçek, bu efsanevi serinin destansı finalinde sonunda ortaya çıkıyor.",
+        : "İnsanl��ğın titanlara karşı son duruşu. Duvarların arkasındaki gerçek, bu efsanevi serinin destansı finalinde sonunda ortaya çıkıyor.",
       poster: "https://cdn.myanimelist.net/images/anime/10/47347.jpg",
       banner: "https://wallpaperaccess.com/full/1088163.jpg",
       rating: 9.0,
@@ -119,7 +119,7 @@ export default function Index() {
       <section className="relative h-screen overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src={currentFeature.poster}
+            src={currentFeature.banner || currentFeature.poster}
             alt={currentFeature.title}
             className="w-full h-full object-cover"
           />

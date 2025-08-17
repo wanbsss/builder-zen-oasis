@@ -15,7 +15,7 @@ export interface Translations {
   signUp: string;
   register: string;
   welcomeBack: string;
-  joinAnimewa: string;
+  joinAniwa: string;
   signInMessage: string;
   createAccountMessage: string;
   username: string;
@@ -109,7 +109,7 @@ export const tr: Translations = {
   signUp: "Kayıt Ol",
   register: "Kayıt Ol",
   welcomeBack: "Tekrar Hoş Geldin",
-  joinAnimewa: "Animewa'ya Katıl",
+  joinAniwa: "Aniwa'ya Katıl",
   signInMessage: "Anime yolculuğuna devam etmek için giriş yap",
   createAccountMessage: "Sınırsız anime izlemek için hesap oluştur",
   username: "Kullanıcı Adı",
@@ -203,7 +203,7 @@ export const en: Translations = {
   signUp: "Sign Up", 
   register: "Register",
   welcomeBack: "Welcome Back",
-  joinAnimewa: "Join Animewa",
+  joinAniwa: "Join Aniwa",
   signInMessage: "Sign in to continue your anime journey",
   createAccountMessage: "Create an account to unlock unlimited anime streaming",
   username: "Username",

@@ -20,8 +20,12 @@ export default function Header({ onAuthClick }: HeaderProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showNotifications, setShowNotifications] = useState(false);
   const { language, setLanguage, t } = useLanguage();
   const { isAuthenticated, user, logout } = useAuth();
+  const { notifications, markNotificationRead } = useAnimeStore();
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   const navItems = [
     { name: t.home, href: "/" },

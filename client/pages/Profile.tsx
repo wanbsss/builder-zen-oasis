@@ -47,7 +47,11 @@ export default function Profile() {
     updateWatchProgress 
   } = useAnimeStore();
 
-  const [selectedTab, setSelectedTab] = useState("overview");
+  const [searchParams] = useSearchParams();
+  const [selectedTab, setSelectedTab] = useState(() => {
+    const tab = searchParams.get('tab');
+    return tab || "overview";
+  });
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState(user);
 

@@ -8,7 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/lib/i18n";
-import { AuthProvider, ProtectedRoute } from "@/lib/auth";
+import { AuthProvider, ProtectedRoute, useAuth } from "@/lib/auth";
 import { AnimeStoreProvider } from "@/lib/animeStore";
 import LoadingScreen from "@/components/LoadingScreen";
 import Index from "./pages/Index";

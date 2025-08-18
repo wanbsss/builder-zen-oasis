@@ -21,76 +21,92 @@ import AnimeRequest from "./pages/AnimeRequest";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  const [isLoading, setIsLoading] = useState(() => {
-    // Only show loading on first visit per session
+const AppContent = () => {
+  const { loading } = useAuth();
+  const [initialLoading, setInitialLoading] = useState(() => {
     return !sessionStorage.getItem("aniwa_app_loaded");
   });
 
-  if (isLoading) {
+  if (initialLoading) {
     return (
       <LoadingScreen
         onComplete={() => {
-          setIsLoading(false);
+          setInitialLoading(false);
           sessionStorage.setItem("aniwa_app_loaded", "true");
         }}
       />
     );
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-anime-dark flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-neon-blue mx-auto mb-4"></div>
+          <p className="text-white">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <AnimeStoreProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route
+              path="/anime/:id"
+              element={
+                <ProtectedRoute>
+                  <AnimeDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/anime" element={<Browse />} />
+            <Route path="/movies" element={<Browse />} />
+            <Route path="/trending" element={<Browse />} />
+            <Route path="/anime-request" element={<AnimeRequest />} />
+            <Route
+              path="/my-list"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AnimeStoreProvider>
+  );
+};
+
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <AuthProvider>
-          <AnimeStoreProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route
-                    path="/anime/:id"
-                    element={
-                      <ProtectedRoute>
-                        <AnimeDetails />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route path="/anime" element={<Browse />} />
-                  <Route path="/movies" element={<Browse />} />
-                  <Route path="/trending" element={<Browse />} />
-                  <Route path="/anime-request" element={<AnimeRequest />} />
-                  <Route
-                    path="/my-list"
-                    element={
-                      <ProtectedRoute>
-                        <Profile />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/profile"
-                    element={
-                      <ProtectedRoute>
-                        <Profile />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin"
-                    element={
-                      <ProtectedRoute requireAdmin={true}>
-                        <Admin />
-                      </ProtectedRoute>
-                    }
-                  />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-            </TooltipProvider>
-          </AnimeStoreProvider>
+          <AppContent />
         </AuthProvider>
       </LanguageProvider>
     </QueryClientProvider>

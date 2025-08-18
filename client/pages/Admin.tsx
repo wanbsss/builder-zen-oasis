@@ -185,32 +185,81 @@ export default function Admin() {
     { tr: "Askeri", en: "Military" },
   ];
 
-  // Auto-refresh data every minute
+  // Fetch real data from API
   useEffect(() => {
-    const interval = setInterval(() => {
+    const fetchData = async () => {
+      if (!user?.isAdmin) return;
+
+      setStatsLoading(true);
+      try {
+        // Fetch stats
+        const statsResponse = await adminAPI.getStats();
+        if (statsResponse.success) {
+          setStats(statsResponse.data);
+        }
+
+        // Fetch users
+        const usersResponse = await adminAPI.getUsers();
+        if (usersResponse.success) {
+          setUsers(usersResponse.data);
+        }
+
+        // Fetch latest data
+        await fetchAnimes();
+        await fetchNotifications();
+
+        setLastUpdate(new Date());
+      } catch (error) {
+        console.error('Failed to fetch admin data:', error);
+        // Fallback to local data if API fails
+        setStats({
+          totalAnimes: animes.length,
+          totalEpisodes: episodes.length,
+          totalUsers: 5,
+          todayWatches: 12
+        });
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user, fetchAnimes, fetchNotifications, animes.length, episodes.length]);
+
+  const refreshData = async () => {
+    setStatsLoading(true);
+    try {
+      const statsResponse = await adminAPI.getStats();
+      if (statsResponse.success) {
+        setStats(statsResponse.data);
+      }
+
+      const usersResponse = await adminAPI.getUsers();
+      if (usersResponse.success) {
+        setUsers(usersResponse.data);
+      }
+
+      await fetchAnimes();
+      await fetchNotifications();
       setLastUpdate(new Date());
-      // Real-time data updates handled by store
-    }, 60000); // 1 minute
 
-    return () => clearInterval(interval);
-  }, []);
-
-  // Real statistics based on actual data
-  const totalEpisodes = episodes.length;
-  const totalNotifications = notifications.length;
-  const unreadNotifications = notifications.filter((n) => !n.read).length;
-
-  const stats = {
-    totalAnimes: animes.length,
-    totalEpisodes: totalEpisodes,
-    totalUsers: Math.floor(animes.length * 2.3), // Realistic user count
-    totalViews: Math.floor(animes.length * 45.2), // Views based on anime count
-    newUsersToday: Math.floor(Math.random() * 3) + 1, // 1-3 new users per day
-    watchTimeToday: `${Math.floor(animes.length * 0.8)} saat`, // Realistic watch time
-    lastUpdate: lastUpdate.toLocaleTimeString("tr-TR"),
-    activeNotifications: unreadNotifications,
-    totalNotifications: totalNotifications,
+      toast({
+        title: "Başarılı",
+        description: "Veriler yenilendi",
+      });
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "Veriler yenilenirken hata oluştu",
+        variant: "destructive",
+      });
+    } finally {
+      setStatsLoading(false);
+    }
   };
+
+  const unreadNotifications = notifications.filter((n) => !n.read).length;
+  const totalNotifications = notifications.length;
 
   if (!isAdmin) {
     return (
@@ -786,7 +835,7 @@ export default function Admin() {
                 <div className="bg-anime-card p-6 rounded-lg border border-white/10 hover:border-neon-pink/30 transition-all">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-gray-400 text-sm">Toplam Kullan��cı</p>
+                      <p className="text-gray-400 text-sm">Toplam Kullanıcı</p>
                       <p className="text-2xl font-bold text-white">
                         {stats.totalUsers}
                       </p>

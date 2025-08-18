@@ -112,7 +112,7 @@ export default function Admin() {
     totalAnimes: 0,
     totalEpisodes: 0,
     totalUsers: 0,
-    todayWatches: 0
+    todayWatches: 0,
   });
   const [users, setUsers] = useState<any[]>([]);
   const [statsLoading, setStatsLoading] = useState(false);
@@ -210,13 +210,13 @@ export default function Admin() {
 
         setLastUpdate(new Date());
       } catch (error) {
-        console.error('Failed to fetch admin data:', error);
+        console.error("Failed to fetch admin data:", error);
         // Fallback to local data if API fails
         setStats({
           totalAnimes: animes.length,
           totalEpisodes: episodes.length,
           totalUsers: 5,
-          todayWatches: 12
+          todayWatches: 12,
         });
       } finally {
         setStatsLoading(false);
